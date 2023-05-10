@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "Model.h"
-#include "WorldTransform.h"
+#include <Model.h>
+#include <WorldTransform.h>
 
 /// <summary>
 /// 自キャラ
@@ -35,5 +35,5 @@ private:
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 
-	ViewProjection viewProjection_;
+	Player* player_ = nullptr;	
 };
