@@ -53,7 +53,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	axisIndicator = AxisIndicator::GetInstance();
 	axisIndicator->Initialize();
 
-	primitiveDrawer = PrimitiveDrawer::GetInstance();
+	primitiveDrawer = PrimitiveDrawer::GetInstance(); // primitveDrawer が NULL らしい
 	primitiveDrawer->Initialize();
 #pragma endregion
 
