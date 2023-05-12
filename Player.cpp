@@ -1,6 +1,8 @@
 ﻿#include "Player.h"
 #include <cassert>
 
+#include "ImGuiManager.h"
+
 
 void Player::Initialize(Model* model, uint32_t textureHandle) {
 
@@ -48,12 +50,35 @@ void Player::Update() {
 	}
 
 
+	// 移動限界座標
+	const float kMoveLimitX = 33.0f;
+	const float kMoveLimitY = 18.0f;
+
+	// 範囲を超えない処理
+	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
+	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
+	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
+	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
+
+
 	// 移動行列に移動ベクトルを加算
 	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
 
 	// アフィン変換行列
 	worldTransform_.matWorld_ = MakeAffineMatrix(
 	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+
+
+	ImGui::Begin("PlayerDebug1");
+
+	// float3入力ボックス
+	ImGui::InputFloat3("PlayerPosition", &worldTransform_.translation_.x);
+	// float3スライダー
+	ImGui::SliderFloat3("PlayerSlider", &worldTransform_.translation_.x, 0.0f, 40.0f);
+
+	ImGui::Text("isDebugCameraActive_->Enter");
+
+	ImGui::End();
 
 	}
 
