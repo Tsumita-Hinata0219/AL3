@@ -2,6 +2,8 @@
 
 #include <Model.h>
 #include <WorldTransform.h>
+#include <Input.h>
+#include <Function.h>
 
 /// <summary>
 /// 自キャラ
@@ -26,14 +28,12 @@ public:
 	void Draw(ViewProjection viewProjection);
 
 private:
-	// ワールド変換データ
-	WorldTransform worldTransform_;
 
-	// モデル
-	Model* model_ = nullptr;
+	WorldTransform worldTransform_; // ワールド変換データ
 
-	// テクスチャハンドル
-	uint32_t textureHandle_ = 0u;
+	Model* model_ = nullptr; // モデル
 
-	Player* player_ = nullptr;	
+	uint32_t textureHandle_ = 0u; // テクスチャハンドル
+
+	Input* input_ = nullptr; // キーボード入力
 };

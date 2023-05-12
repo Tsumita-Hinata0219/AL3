@@ -23,7 +23,7 @@ void GameScene::Initialize() {
 
 
 	// ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("sample.png");
+	textureHandle_ = TextureManager::Load("BlueTile.png");
 
 	// 3Dモデルの生成
 	model_ = Model::Create();
