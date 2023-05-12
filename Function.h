@@ -7,7 +7,23 @@
 
 
 
-// 行列の積
+// 加算
+Vector3 Add(const Vector3 v1, const Vector3 v2);
+
+// 減算
+Vector3 Subtract(const Vector3 v1, const Vector3 v2);
+
+// 内積
+float Dot(const Vector3 v1, const Vector3 v2);
+
+// 長さ
+float Length(const Vector3 v);
+
+// 正規化
+Vector3 Normalize(const Vector3 v);
+
+
+//　行列の積
 Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
 
 

@@ -24,9 +24,10 @@ void Player::Update() {
 	// 行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
 
-	Vector3 move = {0, 0, 0}; // 移動ベクトル
+	Vector3 move = {0.0f, 0.0f, 0.0f}; // 移動ベクトル
 
-	const float kCharacterSpeed = 2.0f; // 移動速度
+	const float kCharacterSpeed = 0.3f; // 移動速度
+
 
 	// 押した方向で移動ベクトルを変更
 	if (input_->PushKey(DIK_LEFT)) // 左移動
@@ -37,7 +38,7 @@ void Player::Update() {
 	{
 		move.x += kCharacterSpeed;
 	}
-	else if (input_->PushKey(DIK_UP)) // 上移動
+	if (input_->PushKey(DIK_UP)) // 上移動
 	{
 		move.y += kCharacterSpeed;
 	}
@@ -47,13 +48,14 @@ void Player::Update() {
 	}
 
 
-	
+	// 移動行列に移動ベクトルを加算
+	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
+
 	// アフィン変換行列
 	worldTransform_.matWorld_ = MakeAffineMatrix(
-	    worldTransform_.scale_, worldTransform_.rotation_, move);
+	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
-
-}
+	}
 
 
 
