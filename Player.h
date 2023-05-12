@@ -37,4 +37,7 @@ private:
 	uint32_t textureHandle_ = 0u; // テクスチャハンドル
 
 	Input* input_ = nullptr; // キーボード入力
+
+	float inputFloat3[3] = {0, 0, 0}; // ImGuiで値を入力する変数
+
 };
