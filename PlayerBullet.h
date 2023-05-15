@@ -1,16 +1,12 @@
 ﻿#pragma once
 
 #include <Model.h>
+#include <cassert>
 #include <WorldTransform.h>
-#include <Input.h>
-#include <ImGuiManager.h>
-#include <Function.h>
-#include <PlayerBullet.h>
+#include <Vector3.h>
 
-/// <summary>
-/// 自キャラ
-/// </summary>
-class Player {
+
+class PlayerBullet {
 
 public:
 
@@ -18,7 +14,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(Model* model, uint32_t textureHandle);
+	void Initialize(Model* model, const Vector3& position);
 
 	/// <summary>
 	/// 更新処理
@@ -29,29 +25,19 @@ public:
 	/// 描画処理
 	/// </summary>
 	/// <param name = "viewProjection">ビュープロジェクション (参照渡し) </pram>
-	void Draw(ViewProjection viewProjection);
+	void Draw(const ViewProjection& viewProjection);
 
-		/// <summary>
-	/// 旋回(回転)
-	/// </summary>
-	void Rotate();
-		
-	/// <summary>
-	/// 攻撃
-	/// </summary>
-	void Attack();
-
+	
+	
 
 
 private:
 
+	
 	WorldTransform worldTransform_; // ワールド変換データ
 
 	Model* model_ = nullptr; // モデル
 
 	uint32_t textureHandle_ = 0u; // テクスチャハンドル
 
-	Input* input_ = nullptr; // キーボード入力
-
-	PlayerBullet* bullet_ = nullptr; // 弾
 };

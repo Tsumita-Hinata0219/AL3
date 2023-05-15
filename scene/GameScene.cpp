@@ -26,7 +26,7 @@ void GameScene::Initialize() {
 
 
 	// ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("BlueTile.png");
+	textureHandle_ = TextureManager::Load("/picture/BlueTile.png");
 
 	// 3Dモデルの生成
 	model_ = Model::Create();
@@ -56,10 +56,12 @@ void GameScene::Update() {
 	// 自キャラの更新
 	player_->Update();
 
+
 	#ifdef _DEBUG
 
-	if (input_->TriggerKey(DIK_RETURN)) {
-		isDebugCameraActive_ = true;	
+	if (input_->TriggerKey(DIK_RETURN)) 
+	{
+		isDebugCameraActive_ = true;
 	}
 
 #endif // DEBUG
