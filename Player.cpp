@@ -7,7 +7,7 @@
 
 
 /// <summary>
-/// インストラクタ
+/// コンストラクタ
 /// </summary>
 Player::Player() {
 

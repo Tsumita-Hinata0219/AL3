@@ -17,7 +17,7 @@ public:
 
 
 	/// <summary>
-	/// インストラクタ
+	/// コンストラクタ
 	/// </summary>
 	Player();
 

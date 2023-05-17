@@ -3,7 +3,7 @@
 
 
 /// <summary>
-/// インストラクタ
+/// コンストラクタ
 /// </summary>
 PlayerBullet::PlayerBullet() {}
 

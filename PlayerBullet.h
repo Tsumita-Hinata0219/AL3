@@ -14,7 +14,7 @@ class PlayerBullet {
 public:
 
 	/// <summary>
-	/// インストラクタ
+	/// コンストラクタ
 	/// </summary>
 	PlayerBullet();
 
