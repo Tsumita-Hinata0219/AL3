@@ -12,6 +12,8 @@
 #include "Player.h"
 #include "DebugCamera.h"
 
+#include "Enemy.h"
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -45,12 +47,12 @@ public: // メンバ関数
 
 
 private: // メンバ変数
+
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
-	
-	
+		
 
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0;
@@ -70,6 +72,9 @@ private: // メンバ変数
 
 	// デバッグカメラ有効
 	bool isDebugCameraActive_ = false;
+
+	// 敵キャラ
+	Enemy* enemy_ = nullptr;
 
 
 	/// <summary>

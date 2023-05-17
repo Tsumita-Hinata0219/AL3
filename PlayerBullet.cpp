@@ -2,19 +2,6 @@
 
 
 
-/// <summary>
-/// コンストラクタ
-/// </summary>
-PlayerBullet::PlayerBullet() {}
-
-
-
-/// <summary>
-/// デストラクタ
-/// </summary>
-PlayerBullet::~PlayerBullet() {}
-
-
 
 /// <summary>
 /// 初期化
@@ -25,7 +12,7 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vecto
 	assert(model);
 
 	model_ = model;
-	textureHandle_ = TextureManager::Load("/picture/BlackBall.png");
+	textureHandle_ = TextureManager::Load("/picture/Bullet.png");
 
 	worldTransform_.Initialize();
 

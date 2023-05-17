@@ -14,16 +14,7 @@ class PlayerBullet {
 
 public:
 
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	PlayerBullet();
-
-
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~PlayerBullet();
+	
 	
 
 	/// <summary>

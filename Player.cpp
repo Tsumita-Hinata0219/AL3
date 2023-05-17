@@ -26,13 +26,13 @@ Player::~Player() {}
 
 
 
-void Player::Initialize(Model* model, uint32_t textureHandle) {
+void Player::Initialize(Model* model) {
 
 	// NULLポインタチェック
 	assert(model);
 
 	this->model_ = model;
-	this->textureHandle_ = textureHandle;
+	textureHandle_ = TextureManager::Load("/picture/Player.png");
 
 	worldTransform_.Initialize();
 
@@ -67,14 +67,16 @@ void Player::Update() {
 	if (input_->PushKey(DIK_LEFT)) // 左移動
 	{
 		move.x -= kCharacterSpeed;
-	} else if (input_->PushKey(DIK_RIGHT)) // 右移動
+	} 
+	else if (input_->PushKey(DIK_RIGHT)) // 右移動
 	{
 		move.x += kCharacterSpeed;
 	}
 	if (input_->PushKey(DIK_UP)) // 上移動
 	{
 		move.y += kCharacterSpeed;
-	} else if (input_->PushKey(DIK_DOWN)) // 下移動
+	} 
+	else if (input_->PushKey(DIK_DOWN)) // 下移動
 	{
 		move.y -= kCharacterSpeed;
 	}
@@ -158,7 +160,7 @@ void Player::Attack() {
 
 void Player::Draw(ViewProjection viewProjection) { 
 	
-	model_->Draw(this->worldTransform_, viewProjection, this->textureHandle_);
+	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 
 
 	// 弾描画
