@@ -3,20 +3,6 @@
 
 
 /// <summary>
-/// コンストラクタ
-/// </summary>
-PlayerBullet::PlayerBullet() {}
-
-
-
-/// <summary>
-/// デストラクタ
-/// </summary>
-PlayerBullet::~PlayerBullet() {}
-
-
-
-/// <summary>
 /// 初期化
 /// </summary>
 void PlayerBullet::Initialize(Model* model, const Vector3& position) {
