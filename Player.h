@@ -6,6 +6,7 @@
 #include <ImGuiManager.h>
 #include <Function.h>
 #include <PlayerBullet.h>
+#include <list>
 
 /// <summary>
 /// 自キャラ
@@ -69,5 +70,6 @@ private:
 
 	Input* input_ = nullptr; // キーボード入力
 
-	PlayerBullet* bullet_ = nullptr; // 弾
+	std::list<PlayerBullet*> bullets_; // 弾
+
 };

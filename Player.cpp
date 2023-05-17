@@ -12,8 +12,9 @@
 Player::Player() {
 
 	// bullet_の解放
-	delete bullet_;
-
+	for (PlayerBullet* bullet : bullets_) {
+		delete bullet;
+	}
 }
 
 
@@ -96,9 +97,9 @@ void Player::Update() {
 
 
 	// 弾更新
-	if (bullet_) {
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Update();
 		
-		bullet_->Update();
 	}
 
 
@@ -137,12 +138,13 @@ void Player::Attack() {
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 
+		
 		// 弾を生成し、初期化
 		PlayerBullet* newBullet = new PlayerBullet();
 		newBullet->Initialize(model_, worldTransform_.translation_);
 
 		// 弾を登録する
-		bullet_ = newBullet;
+		bullets_.push_back(newBullet);
 	}
 }
 
@@ -154,8 +156,8 @@ void Player::Draw(ViewProjection viewProjection) {
 
 
 	// 弾描画
-	if (bullet_) {
-		bullet_->Draw(viewProjection);
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Draw(viewProjection);
 	}
 }
 
