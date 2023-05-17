@@ -4,6 +4,7 @@
 #include <cassert>
 #include <WorldTransform.h>
 #include <Vector3.h>
+#include <Function.h>
 
 
 
@@ -14,7 +15,7 @@ class PlayerBullet {
 public:
 
 	/// <summary>
-	/// インストラクタ
+	/// コンストラクタ
 	/// </summary>
 	PlayerBullet();
 
@@ -28,7 +29,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(Model* model, const Vector3& position);
+	void Initialize(Model* model, const Vector3& position, const Vector3& velocity);
 
 	/// <summary>
 	/// 更新処理
@@ -38,11 +39,11 @@ public:
 	/// <summary>
 	/// 描画処理
 	/// </summary>
-	/// <param name = "viewProjection">ビュープロジェクション (参照渡し) </pram>
 	void Draw(const ViewProjection& viewProjection);
 
-	
-	
+
+
+	bool IsDead() const { return isDead_; }
 
 
 private:
@@ -53,5 +54,13 @@ private:
 	Model* model_ = nullptr; // モデル
 
 	uint32_t textureHandle_ = 0u; // テクスチャハンドル
+
+	Vector3 velocity_; // 速度
+
+	static const int32_t kLifeTimer = 60 * 5; // 寿命<frm>
+
+	int32_t deathTimer_ = kLifeTimer; // デスタイマー
+
+	bool isDead_ = false; // デスフラグ
 
 };

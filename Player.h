@@ -8,6 +8,7 @@
 #include <PlayerBullet.h>
 #include <list>
 
+
 /// <summary>
 /// 自キャラ
 /// </summary>
@@ -17,7 +18,7 @@ public:
 
 
 	/// <summary>
-	/// インストラクタ
+	/// コンストラクタ
 	/// </summary>
 	Player();
 

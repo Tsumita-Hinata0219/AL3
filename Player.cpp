@@ -7,7 +7,7 @@
 
 
 /// <summary>
-/// インストラクタ
+/// コンストラクタ
 /// </summary>
 Player::Player() {
 
@@ -44,14 +44,22 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 
 void Player::Update() {
 
+	// デスフラグの立った弾を削除
+	bullets_.remove_if([](PlayerBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+	});
+
 	// 自機の旋回処理
 	Rotate();
 
 	// 行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
 
-
-			Vector3 move = {0.0f, 0.0f, 0.0f}; // 移動ベクトル
+	Vector3 move = {0.0f, 0.0f, 0.0f}; // 移動ベクトル
 
 	const float kCharacterSpeed = 0.3f; // 移動速度
 
@@ -59,16 +67,14 @@ void Player::Update() {
 	if (input_->PushKey(DIK_LEFT)) // 左移動
 	{
 		move.x -= kCharacterSpeed;
-	}
-	else if (input_->PushKey(DIK_RIGHT)) // 右移動
+	} else if (input_->PushKey(DIK_RIGHT)) // 右移動
 	{
 		move.x += kCharacterSpeed;
 	}
 	if (input_->PushKey(DIK_UP)) // 上移動
 	{
 		move.y += kCharacterSpeed;
-	}
-	else if (input_->PushKey(DIK_DOWN)) // 下移動
+	} else if (input_->PushKey(DIK_DOWN)) // 下移動
 	{
 		move.y -= kCharacterSpeed;
 	}
@@ -88,20 +94,15 @@ void Player::Update() {
 
 	// アフィン変換行列
 	worldTransform_.matWorld_ = MakeAffineMatrix(
-	    worldTransform_.scale_, 
-		worldTransform_.rotation_, worldTransform_.translation_);
-
+	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
 	// 攻撃
 	Attack();
 
-
 	// 弾更新
 	for (PlayerBullet* bullet : bullets_) {
 		bullet->Update();
-		
 	}
-
 
 
 	// プレイヤーデバッグ
@@ -115,8 +116,7 @@ void Player::Update() {
 	ImGui::Text("isDebugCameraActive_->Enter");
 
 	ImGui::End();
-
-	}
+}
 
 
 
@@ -138,10 +138,16 @@ void Player::Attack() {
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 
+		// 弾の速度
+		const float kBulletSpeed = 1.0f;
+		Vector3 velocity(0, 0, kBulletSpeed);
+
+		// 速度ベクトルを自機の向きに合わせて回転させる
+		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
 		
 		// 弾を生成し、初期化
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(model_, worldTransform_.translation_);
+		newBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
 		// 弾を登録する
 		bullets_.push_back(newBullet);
