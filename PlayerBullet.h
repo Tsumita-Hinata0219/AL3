@@ -13,11 +13,18 @@ class PlayerBullet {
 
 public:
 
-
+	/// <summary>
+	/// インストラクタ
+	/// </summary>
 	PlayerBullet();
 
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~PlayerBullet();
 	
+
 	/// <summary>
 	/// 初期化
 	/// </summary>

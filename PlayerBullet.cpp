@@ -2,13 +2,23 @@
 
 
 
-
+/// <summary>
+/// インストラクタ
+/// </summary>
 PlayerBullet::PlayerBullet() {}
 
+
+
+/// <summary>
+/// デストラクタ
+/// </summary>
 PlayerBullet::~PlayerBullet() {}
 
 
 
+/// <summary>
+/// 初期化
+/// </summary>
 void PlayerBullet::Initialize(Model* model, const Vector3& position) {
 
 	// NULLポインタチェック
@@ -25,6 +35,9 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position) {
 
 
 
+/// <summary>
+/// 更新処理
+/// </summary>
 void PlayerBullet::Update() {
 
 	// ワールドトラスフォームの更新
@@ -33,6 +46,10 @@ void PlayerBullet::Update() {
 }
 
 
+
+/// <summary>
+/// 描画処理
+/// </summary>
 void PlayerBullet::Draw(const ViewProjection& viewProjection) {
 
 	// モデルの描画

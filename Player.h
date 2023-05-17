@@ -15,8 +15,15 @@ class Player {
 public:
 
 
+	/// <summary>
+	/// インストラクタ
+	/// </summary>
 	Player();
 
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Player();
 
 	
@@ -25,10 +32,12 @@ public:
 	/// </summary>
 	void Initialize(Model* model, uint32_t textureHandle);
 
+
 	/// <summary>
 	/// 更新処理
 	/// </summary>
 	void Update();
+
 
 	/// <summary>
 	/// 描画処理
@@ -36,11 +45,13 @@ public:
 	/// <param name = "viewProjection">ビュープロジェクション (参照渡し) </pram>
 	void Draw(ViewProjection viewProjection);
 
-		/// <summary>
+
+	/// <summary>
 	/// 旋回(回転)
 	/// </summary>
 	void Rotate();
 		
+
 	/// <summary>
 	/// 攻撃
 	/// </summary>

@@ -5,8 +5,22 @@
 
 
 
-Player::Player() {}
 
+/// <summary>
+/// インストラクタ
+/// </summary>
+Player::Player() {
+
+	// bullet_の解放
+	delete bullet_;
+
+}
+
+
+
+/// <summary>
+/// デストラクタ
+/// </summary>
 Player::~Player() {}
 
 
