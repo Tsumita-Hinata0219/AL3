@@ -10,6 +10,7 @@ GameScene::GameScene() {
 GameScene::~GameScene() {
 
 	delete model_; 
+
 	// 自キャラの解放
 	delete player_;
 

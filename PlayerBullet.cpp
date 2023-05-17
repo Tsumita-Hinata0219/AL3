@@ -2,13 +2,20 @@
 
 
 
+
+PlayerBullet::PlayerBullet() {}
+
+PlayerBullet::~PlayerBullet() {}
+
+
+
 void PlayerBullet::Initialize(Model* model, const Vector3& position) {
 
 	// NULLポインタチェック
 	assert(model);
 
-	this->model_ = model;
-	this->textureHandle_ = TextureManager::Load("/picture/BlackBall.png");
+	model_ = model;
+	textureHandle_ = TextureManager::Load("/picture/BlackBall.png");
 
 	worldTransform_.Initialize();
 
