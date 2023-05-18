@@ -15,19 +15,9 @@ public:
 
 
 	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	Enemy();
-
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~Enemy();
-
-	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(Model* model, const Vector3& position, const Vector3& velocity);
+	void Initialize(Model* model, const Vector3 velocity);
 
 	/// <summary>
 	/// 更新処理
@@ -42,8 +32,6 @@ public:
 
 
 	// インライン関数
-	Vector3 Position() const { return position_; };
-
 	Vector3 Velocity() const { return velocity_; };
 
 
@@ -55,8 +43,8 @@ private:
 
 	uint32_t textureHandle_ = 0u; // テクスチャハンドル
 
-	Vector3 position_;
+	const float kCharacterSpeed = 0.3f; // 移動速度
 
-	Vector3 velocity_; // 速度
+	Vector3 velocity_; // 弾の速度を設定
 
 };

@@ -67,14 +67,15 @@ private: // メンバ変数
 	// 自キャラ
 	Player* player_ = nullptr;
 
+	// 敵キャラ
+	Enemy* enemy_ = nullptr;
+
+
 	// デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
 
 	// デバッグカメラ有効
 	bool isDebugCameraActive_ = false;
-
-	// 敵キャラ
-	Enemy* enemy_ = nullptr;
 
 
 	/// <summary>

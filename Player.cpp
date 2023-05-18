@@ -124,7 +124,7 @@ void Player::Update() {
 
 void Player::Rotate() {
 	// 回転速さ[ラジアン / frame]
-	const float kRotSpeed = 0.02f;
+	const float kRotSpeed = 0.05f;
 
 	// 押した方向で移動ベクトルを変更
 	if (input_->PushKey(DIK_A)) {

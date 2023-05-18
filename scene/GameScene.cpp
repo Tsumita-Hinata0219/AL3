@@ -37,16 +37,17 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 
 
-	// 自キャラの生成
-	player_ = new Player();
-	// 自キャラの初期化
-	player_->Initialize(model_);
 
-
-	// 敵キャラの生成
+	
+	// キャラクターの生成
+	player_ = new Player(); 
 	enemy_ = new Enemy();
-	// 敵キャラの初期化
-	enemy_->Initialize(model_, enemy_->Position(), enemy_->Velocity());
+
+	// キャラクターの初期化
+	player_->Initialize(model_); 
+	enemy_->Initialize(model_, enemy_->Velocity());
+	
+
 
 
 	// デバッグカメラの生成

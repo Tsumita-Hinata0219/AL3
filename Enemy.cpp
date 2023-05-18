@@ -6,25 +6,9 @@
 
 
 /// <summary>
-/// コンストラクタ
-/// </summary>
-Enemy::Enemy() {
-
-}
-
-
-
-/// <summary>
-/// デストラクタ
-/// </summary>
-Enemy::~Enemy() {}
-
-
-
-/// <summary>
 /// 初期化
 /// </summary>
-void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& velocity) {
+void Enemy::Initialize(Model* model, const Vector3 velocity) {
 
 	// NULLポインタチェック
 	assert(model);
@@ -33,13 +17,10 @@ void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& vel
 	this->textureHandle_ = TextureManager::Load("/picture/Enemy.png");
 
 	worldTransform_.Initialize();
+	worldTransform_.translation_.y = 2.0f;
+	worldTransform_.translation_.z = 30.0f;
 		
-	// 引数で受け取った初期座標をリセット
-	worldTransform_.translation_ = position;
-
-	// 引数で受け取った速度をメンバ変数に代入
-	velocity_ = velocity;
-	
+	this->velocity_ = velocity;
 }
 
 
@@ -49,21 +30,15 @@ void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& vel
 /// </summary>
 void Enemy::Update() {
 
-	
-	// 弾の速度を設定
-	const float kBulletSpeed = -1.0f;
-	Vector3 velocity(0, 0, kBulletSpeed);
+	// 敵の移動速度
+	velocity_ = {0, 0, kCharacterSpeed};
 
 	// 座標を移動させる(1フレーム分の移動量を足しこむ)
-	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
+	worldTransform_.translation_ = Subtract(worldTransform_.translation_, velocity_);
+	
 
-	// 行列を定数バッファに転送
-	worldTransform_.TransferMatrix();
-		
-	// アフィン変換行列
-	worldTransform_.matWorld_ = MakeAffineMatrix(
-	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
-
+	// ワールドトラスフォームの更新
+	worldTransform_.UpdateMatrix();
 
 }
 
