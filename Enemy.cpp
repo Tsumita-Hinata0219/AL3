@@ -30,16 +30,63 @@ void Enemy::Initialize(Model* model, const Vector3 velocity) {
 /// </summary>
 void Enemy::Update() {
 
-	// 敵の移動速度
-	velocity_ = {0, 0, kCharacterSpeed};
-
-	// 座標を移動させる(1フレーム分の移動量を足しこむ)
-	worldTransform_.translation_ = Subtract(worldTransform_.translation_, velocity_);
-	
 
 	// ワールドトラスフォームの更新
 	worldTransform_.UpdateMatrix();
 
+	// 移動(ベクトルを加算)
+	velocity_ = {0, 0, kCharacterSpeed}; // 敵の移動速度
+
+	switch ( phease_) 
+	{
+	case Phease::Approach:
+	default:
+		
+		Approach();
+
+		break;
+
+
+	case Phease::Leave:
+		
+		Leave();
+
+		break;
+
+	}
+
+}
+
+
+
+/// <summary>
+/// 行動フェーズ : 接近
+/// </summary>
+void Enemy::Approach() {
+
+	// 座標を移動させる(1フレーム分の移動量を足しこむ)
+	worldTransform_.translation_ = Subtract(worldTransform_.translation_, velocity_);
+
+	// 規定の位置に到達したら離脱
+	if (worldTransform_.translation_.z < -30.0f) {
+		phease_ = Phease::Leave;
+	}
+}
+
+
+
+/// <summary>
+/// 行動フェーズ : 離脱
+/// </summary>
+void Enemy::Leave() {
+
+	// 座標を移動させる(1フレーム分の移動量を足しこむ)
+	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
+
+	// 規定の位置に到達したら離脱
+	if (worldTransform_.translation_.z > 30.0f) {
+		phease_ = Phease::Approach;
+	}
 }
 
 

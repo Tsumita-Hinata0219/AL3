@@ -6,6 +6,14 @@
 #include <ImGuiManager.h>
 #include <Function.h>
 
+
+// 行動フェーズ
+enum class Phease {
+	Approach, // 接近する
+	Leave,  // 離脱する
+};
+
+
 /// <summary>
 /// 敵キャラ
 /// </summary>
@@ -27,8 +35,17 @@ public:
 	/// <summary>
 	/// 描画処理
 	/// </summary>
-	/// <param name = "viewProjection">ビュープロジェクション (参照渡し) </pram>
 	void Draw(ViewProjection viewProjection);
+
+	/// <summary>
+	/// 行動フェーズ : 接近
+	/// </summary>
+	void Approach();
+
+	/// <summary>
+	/// 行動フェーズ : 離脱
+	/// </summary>
+	void Leave();
 
 
 	// インライン関数
@@ -36,6 +53,8 @@ public:
 
 
 private:
+
+	Phease phease_ = Phease::Approach; // フェーズ
 
 	WorldTransform worldTransform_; // ワールド変換データ
 
@@ -46,5 +65,6 @@ private:
 	const float kCharacterSpeed = 0.3f; // 移動速度
 
 	Vector3 velocity_; // 弾の速度を設定
+
 
 };
