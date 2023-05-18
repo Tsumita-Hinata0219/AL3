@@ -27,7 +27,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(Model* model);
+	void Initialize(Model* model, const Vector3& position, const Vector3& velocity);
 
 	/// <summary>
 	/// 更新処理
@@ -40,6 +40,13 @@ public:
 	/// <param name = "viewProjection">ビュープロジェクション (参照渡し) </pram>
 	void Draw(ViewProjection viewProjection);
 
+
+	// インライン関数
+	Vector3 Position() const { return position_; };
+
+	Vector3 Velocity() const { return velocity_; };
+
+
 private:
 
 	WorldTransform worldTransform_; // ワールド変換データ
@@ -47,5 +54,9 @@ private:
 	Model* model_ = nullptr; // モデル
 
 	uint32_t textureHandle_ = 0u; // テクスチャハンドル
+
+	Vector3 position_;
+
+	Vector3 velocity_; // 速度
 
 };

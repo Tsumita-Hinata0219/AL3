@@ -42,7 +42,6 @@ void PlayerBullet::Update() {
 
 		isDead_ = true;
 	}
-
 }
 
 
