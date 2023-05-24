@@ -7,20 +7,12 @@
 #include <Function.h>
 
 
-// 行動フェーズ
-enum class Phease {
-	Approach, // 接近する
-	Leave,  // 離脱する
-};
-
-
 /// <summary>
 /// 敵キャラ
 /// </summary>
 class Enemy {
 
 public:
-
 
 	/// <summary>
 	/// 初期化
@@ -53,8 +45,17 @@ public:
 
 
 private:
+	
+	// 行動フェーズ
+	enum class Phease {
+		Approach, // 接近する
+		Leave,    // 離脱する
+	};
+	Phease phease_ = Phease(); // フェーズ
 
-	Phease phease_ = Phease::Approach; // フェーズ
+	// フェーズのstaticメンバ変数
+	static void (Enemy::*pPheaseTable[])();
+
 
 	WorldTransform worldTransform_; // ワールド変換データ
 
@@ -65,6 +66,5 @@ private:
 	const float kCharacterSpeed = 0.3f; // 移動速度
 
 	Vector3 velocity_; // 弾の速度を設定
-
 
 };

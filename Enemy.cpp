@@ -4,6 +4,11 @@
 #include "ImGuiManager.h"
 
 
+// フェーズの関数テーブルの実体
+void (Enemy::*Enemy::pPheaseTable[])() = {
+	&Enemy::Approach, 
+	&Enemy::Leave
+};
 
 /// <summary>
 /// 初期化
@@ -30,6 +35,8 @@ void Enemy::Initialize(Model* model, const Vector3 velocity) {
 /// </summary>
 void Enemy::Update() {
 
+	// メンバ関数を呼び出す
+	(this->*pPheaseTable[static_cast<size_t>(phease_)])();
 
 	// ワールドトラスフォームの更新
 	worldTransform_.UpdateMatrix();
@@ -37,7 +44,15 @@ void Enemy::Update() {
 	// 移動(ベクトルを加算)
 	velocity_ = {0, 0, kCharacterSpeed}; // 敵の移動速度
 
-	switch ( phease_) 
+	// プレイヤーデバッグ
+	ImGui::Begin("EnemyDebug");
+
+	// Textボックス
+	ImGui::Text("Phease = %c", phease_);
+
+	ImGui::End();
+
+	/*switch ( phease_) 
 	{
 	case Phease::Approach:
 	default:
@@ -53,7 +68,7 @@ void Enemy::Update() {
 
 		break;
 
-	}
+	}*/
 
 }
 
