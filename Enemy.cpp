@@ -43,17 +43,7 @@ void Enemy::Update() {
 
 	// 移動(ベクトルを加算)
 	velocity_ = {0, 0, kCharacterSpeed}; // 敵の移動速度
-
-	// プレイヤーデバッグ
-	ImGui::Begin("EnemyDebug");
-
-	// Textボックス
-	ImGui::Text("Phease = %s", phease_);
-
-	ImGui::End();
-
-
-}
+	}
 
 
 
@@ -65,8 +55,8 @@ void Enemy::Approach() {
 	// 座標を移動させる(1フレーム分の移動量を足しこむ)
 	worldTransform_.translation_ = Subtract(worldTransform_.translation_, velocity_);
 
-	// 規定の位置に到達したら離脱
-	if (worldTransform_.translation_.z < -30.0f) {
+	// 規定の位置に到達したら離脱フェーズへ
+	if (worldTransform_.translation_.z <= -30.0f) {
 		phease_ = Phease::Leave;
 	}
 }
@@ -81,8 +71,8 @@ void Enemy::Leave() {
 	// 座標を移動させる(1フレーム分の移動量を足しこむ)
 	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
 
-	// 規定の位置に到達したら離脱
-	if (worldTransform_.translation_.z > 30.0f) {
+	// 規定の位置に到達したら接近フェーズへ
+	if (worldTransform_.translation_.z >= 30.0f) {
 		phease_ = Phease::Approach;
 	}
 }
