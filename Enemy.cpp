@@ -48,27 +48,10 @@ void Enemy::Update() {
 	ImGui::Begin("EnemyDebug");
 
 	// Textボックス
-	ImGui::Text("Phease = %c", phease_);
+	ImGui::Text("Phease = %s", phease_);
 
 	ImGui::End();
 
-	/*switch ( phease_) 
-	{
-	case Phease::Approach:
-	default:
-		
-		Approach();
-
-		break;
-
-
-	case Phease::Leave:
-		
-		Leave();
-
-		break;
-
-	}*/
 
 }
 
