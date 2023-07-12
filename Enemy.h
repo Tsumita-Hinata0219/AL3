@@ -7,12 +7,21 @@
 #include <Function.h>
 
 
+
+class EnemyState;
+class EnemyApproach;
+class EnemyLeave;
+
+
 /// <summary>
 /// 敵キャラ
 /// </summary>
 class Enemy {
 
 public:
+
+	Enemy();
+	~Enemy();
 
 	/// <summary>
 	/// 初期化
@@ -30,32 +39,34 @@ public:
 	void Draw(ViewProjection viewProjection);
 
 	/// <summary>
-	/// 行動フェーズ : 接近
+	/// 挙動処理
 	/// </summary>
 	void Approach();
+	void Leave();
 
 	/// <summary>
-	/// 行動フェーズ : 離脱
+	/// 行動フェーズを変更する
 	/// </summary>
-	void Leave();
+	void ChanegeState(EnemyState* newState);
 
 
 	// インライン関数
 	Vector3 Velocity() const { return velocity_; };
 
 
+	// アクセッサ
+	WorldTransform GetWorldTransform() { return worldTransform_; };
+	Vector3 GetVelocity() { return velocity_; };
+	EnemyState* GetState() { return state_; };
+
+	void SetWorldTranslation(Vector3 translation);
+
+
+
 private:
-	
+
 	// 行動フェーズ
-	enum class Phease {
-		Approach, // 接近する
-		Leave,    // 離脱する
-	};
-	Phease phease_ = Phease(); // フェーズ
-
-	// フェーズのstaticメンバ変数
-	static void (Enemy::*pPheaseTable[])();
-
+	EnemyState* state_ = nullptr;
 
 	WorldTransform worldTransform_; // ワールド変換データ
 
@@ -67,4 +78,38 @@ private:
 
 	Vector3 velocity_; // 弾の速度を設定
 
+};
+
+
+
+
+
+/// <summary>
+/// EnemyStateクラス
+/// </summary>
+class EnemyState {
+
+public:
+	// 純粋仮想関数　※派生クラスに実装を強制する
+	virtual void Update(Enemy* pEnemy) = 0;
+};
+
+
+/// <summary>
+/// EnemyApproachクラス : 接近
+/// </summary>
+class EnemyApproach : public EnemyState {
+
+public:
+	void Update(Enemy* pEnemy) override;
+};
+
+
+/// <summary>
+/// EnemyLeaveクラス : 離脱
+/// </summary>
+class EnemyLeave : public EnemyState {
+
+public:
+	void Update(Enemy* pEnemy) override;
 };
