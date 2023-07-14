@@ -73,6 +73,23 @@ void Enemy::Update() {
 		
 		Approach();
 
+		// 発射タイマーカウントダウン
+		fireTimer_--;
+
+		// 指定時間に達した
+		if (fireTimer_ <= 0) {
+
+			// 弾を発射
+			Fire();
+
+			for (EnemyBullet* bullet : bullets_) {
+				bullet->Update();
+			}
+
+			// 発射タイマーを初期化
+			fireTimer_ = kFireInterval_;
+		}
+
 		break;
 
 
@@ -93,7 +110,7 @@ void Enemy::Update() {
 void Enemy::Fire() {
 
 	// 弾の速度
-	const float kBulletSpeed = 1.5f;
+	const float kBulletSpeed = 5.5f;
 	Vector3 velocity(0, 0, kBulletSpeed);
 
 	// 速度ベクトルを自機の向きに合わせて回転させる
@@ -101,7 +118,7 @@ void Enemy::Fire() {
 
 	// 弾を生成し、初期化
 	EnemyBullet* newBullet = new EnemyBullet();
-	newBullet->Initialize(model_, worldTransform_.translation_, velocity_);
+	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
 	bullets_.push_back(newBullet);
 }
@@ -116,20 +133,6 @@ void Enemy::Approach() {
 	// 座標を移動させる(1フレーム分の移動量を足しこむ)
 	worldTransform_.translation_ = Subtract(worldTransform_.translation_, velocity_);
 
-	
-	// 発射タイマーカウントダウン
-	fireTimer_--;
-
-	// 指定時間に達した
-	if (fireTimer_ <= 0) {
-
-		// 弾を発射
-		Fire();
-
-		// 発射タイマーを初期化
-		fireTimer_ = kFireInterval_;
-	}
-	
 
 	// 規定の位置に到達し
 	if (worldTransform_.translation_.z < -30.0f) {

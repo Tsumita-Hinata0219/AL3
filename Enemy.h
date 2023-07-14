@@ -79,7 +79,7 @@ private:
 
 	const float kCharacterSpeed = 0.1f; // 移動速度
 
-	Vector3 velocity_; // 弾の速度を設定
+	Vector3 velocity_; // 敵の速度を設定
 
 	std::list<EnemyBullet*> bullets_; // 弾
 

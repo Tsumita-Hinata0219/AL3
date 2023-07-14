@@ -28,7 +28,10 @@ public:
 	/// </summary>
 	void Draw(const ViewProjection& viewProjection);
 
+
+
 	bool IsDead() const { return isDead_; }
+
 
 private:
 	WorldTransform worldTransform_; // ワールド変換データ
@@ -45,3 +48,4 @@ private:
 
 	bool isDead_ = false; // デスフラグ
 };
+
