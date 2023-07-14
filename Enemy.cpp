@@ -33,6 +33,8 @@ void Enemy::Initialize(Model* model, const Vector3 velocity) {
 	input_ = Input::GetInstance();
 		
 	this->velocity_ = velocity;
+
+	phease_ = Phease::Approach;
 }
 
 
@@ -120,9 +122,14 @@ void Enemy::Approach() {
 
 	// 指定時間に達した
 	if (fireTimer_ <= 0) {
+
 		// 弾を発射
 		Fire();
+
+		// 発射タイマーを初期化
+		fireTimer_ = kFireInterval_;
 	}
+	
 
 	// 規定の位置に到達し
 	if (worldTransform_.translation_.z < -30.0f) {
@@ -139,8 +146,7 @@ void Enemy::Approach() {
 /// </summary>
 void Enemy::ApproachIni() {
 
-	// 発射タイマーを初期化
-	fireTimer_ = kFireInterval_;
+	
 }
 
 
@@ -168,9 +174,7 @@ void Enemy::Draw(ViewProjection viewProjection) {
 
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 
-	if (bullet_) {
-	bullet_->Draw(viewProjection);
-	}
+
 	for (EnemyBullet* bullet : bullets_) {
 	bullet->Draw(viewProjection);	
 	}

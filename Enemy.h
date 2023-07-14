@@ -77,7 +77,7 @@ private:
 
 	uint32_t textureHandle_ = 0u; // テクスチャハンドル
 
-	const float kCharacterSpeed = 0.3f; // 移動速度
+	const float kCharacterSpeed = 0.1f; // 移動速度
 
 	Vector3 velocity_; // 弾の速度を設定
 
