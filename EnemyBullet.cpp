@@ -1,11 +1,11 @@
-﻿#include <PlayerBullet.h>
+﻿#include "EnemyBullet.h"
 
 
 
 /// <summary>
 /// 初期化
 /// </summary>
-void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity) {
+void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity) {
 
 	// NULLポインタチェック
 	assert(model);
@@ -27,13 +27,14 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vecto
 /// <summary>
 /// 更新処理
 /// </summary>
-void PlayerBullet::Update() {
-
-	// 座標を移動させる(1フレーム分の移動量を足しこむ)
-	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
+void EnemyBullet::Update() {
 
 	// ワールドトラスフォームの更新
 	worldTransform_.UpdateMatrix();
+
+	
+	// 座標を移動させる(1フレーム分の移動量を足しこむ)
+	worldTransform_.translation_ = Subtract(worldTransform_.translation_, velocity_);
 
 
 	// 時間経過でデス
@@ -48,7 +49,7 @@ void PlayerBullet::Update() {
 /// <summary>
 /// 描画処理
 /// </summary>
-void PlayerBullet::Draw(const ViewProjection& viewProjection) {
+void EnemyBullet::Draw(const ViewProjection& viewProjection) {
 
 	// モデルの描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);

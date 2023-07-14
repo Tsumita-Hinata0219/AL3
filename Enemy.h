@@ -5,6 +5,8 @@
 #include <Input.h>
 #include <ImGuiManager.h>
 #include <Function.h>
+#include <EnemyBullet.h>
+#include <list>
 
 
 // 行動フェーズ
@@ -21,6 +23,10 @@ class Enemy {
 
 public:
 
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~Enemy();
 
 	/// <summary>
 	/// 初期化
@@ -38,9 +44,16 @@ public:
 	void Draw(ViewProjection viewProjection);
 
 	/// <summary>
+	/// 攻撃
+	/// </summary>
+	void Fire();
+
+	/// <summary>
 	/// 行動フェーズ : 接近
 	/// </summary>
 	void Approach();
+
+	void ApproachIni();
 
 	/// <summary>
 	/// 行動フェーズ : 離脱
@@ -54,7 +67,9 @@ public:
 
 private:
 
-	Phease phease_ = Phease::Approach; // フェーズ
+	EnemyBullet* bullet_ = nullptr;
+
+	Phease phease_; // フェーズ
 
 	WorldTransform worldTransform_; // ワールド変換データ
 
@@ -66,5 +81,11 @@ private:
 
 	Vector3 velocity_; // 弾の速度を設定
 
+	std::list<EnemyBullet*> bullets_; // 弾
 
+	static const int kFireInterval_ = 60; // 発射間隔の設定
+
+	int32_t fireTimer_ = 0; // 発射タイマー
+
+	Input* input_ = nullptr; // キーボード入力
 };
