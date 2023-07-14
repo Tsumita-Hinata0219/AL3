@@ -10,6 +10,7 @@ void (Enemy::*Enemy::pPheaseTable[])() = {
 	&Enemy::Leave
 };
 
+
 /// <summary>
 /// 初期化
 /// </summary>
