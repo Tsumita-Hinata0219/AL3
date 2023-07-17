@@ -301,11 +301,7 @@ Vector3 Normalize(const Vector3& v) {
 	float length = sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
 
 	// 正規化後ベクトル
-	Vector3 newVector { 
-		newVector.x = v.x,
-	    newVector.y = v.y,
-	    newVector.z = v.z,
-	};
+	Vector3 newVector = v;
 
 	// 長さが0出ない場合に各成分を割る。長さが0の場合は元のベクトルのまま
 	if (length != 0.0f) {

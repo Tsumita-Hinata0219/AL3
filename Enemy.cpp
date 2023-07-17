@@ -129,7 +129,7 @@ void Enemy::Fire() {
 	Normalize(EnePlaVector);
 
 	// ベクトルの長さを、速さに合わせる
-	Vector3 velocity(0, 0, kBulletSpeed * EnePlaVector.z);
+	Vector3 velocity(0, 0, kBulletSpeed);
 
 	// 速度ベクトルを自機の向きに合わせて回転させる
 	velocity = TransformNormal(velocity, worldTransform_.matWorld_);
