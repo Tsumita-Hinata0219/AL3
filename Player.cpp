@@ -35,9 +35,12 @@ void Player::Initialize(Model* model) {
 	textureHandle_ = TextureManager::Load("/picture/Player.png");
 
 	worldTransform_.Initialize();
+	worldTransform_.translation_.y = -10.0f;
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
+
+	fireTimer_ = kFireInterval_;
 }
 
 
@@ -80,6 +83,9 @@ void Player::Update() {
 		move.y -= kCharacterSpeed;
 	}
 
+	if (input_->PushKey(DIK_R)) {
+		worldTransform_.rotation_.y = 0.0f;
+	}
 
 	// 移動限界座標
 	const float kMoveLimitX = 33.0f;
@@ -102,9 +108,18 @@ void Player::Update() {
 	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
 
-	// 攻撃
-	Attack();
+	
+	if (input_->PushKey(DIK_SPACE)) {
+		fireTimer_--;
+	} 
+	if (fireTimer_ <= 0) {
+		
+		// 攻撃
+		Attack();
 
+		// タイマーをリセット
+		fireTimer_ = kFireInterval_;
+	}
 
 	// 弾更新
 	for (PlayerBullet* bullet : bullets_) {
@@ -121,6 +136,7 @@ void Player::Update() {
 	ImGui::SliderFloat3("PlayerSlider", &worldTransform_.translation_.x, 0.0f, 40.0f);
 
 	ImGui::Text("isDebugCameraActive_->Enter");
+	ImGui::Text("R -> rotation.y Reset");
 
 	ImGui::End();
 }
@@ -143,22 +159,19 @@ void Player::Rotate() {
 
 void Player::Attack() {
 
-	if (input_->TriggerKey(DIK_SPACE)) {
+	// 弾の速度
+	const float kBulletSpeed = 5.0f;
+	Vector3 velocity(0, 0, kBulletSpeed);
 
-		// 弾の速度
-		const float kBulletSpeed = 1.0f;
-		Vector3 velocity(0, 0, kBulletSpeed);
+	// 速度ベクトルを自機の向きに合わせて回転させる
+	velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+	
+	// 弾を生成し、初期化
+	PlayerBullet* newBullet = new PlayerBullet();
+	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
-		// 速度ベクトルを自機の向きに合わせて回転させる
-		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
-		
-		// 弾を生成し、初期化
-		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(model_, worldTransform_.translation_, velocity);
-
-		// 弾を登録する
-		bullets_.push_back(newBullet);
-	}
+	// 弾を登録する
+	bullets_.push_back(newBullet);
 }
 
 

@@ -78,4 +78,8 @@ private:
 
 	std::list<PlayerBullet*> bullets_; // 弾
 
+	int32_t fireTimer_ = 0; // 発射タイマー
+
+	static const int kFireInterval_ = 10; // 発射間隔の設定
+
 };
