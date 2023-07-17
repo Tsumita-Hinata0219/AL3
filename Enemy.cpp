@@ -26,8 +26,9 @@ void Enemy::Initialize(Model* model, const Vector3 velocity) {
 	this->textureHandle_ = TextureManager::Load("/picture/Enemy.png");
 
 	worldTransform_.Initialize();
+	worldTransform_.translation_.x = 20.0f;
 	worldTransform_.translation_.y = 2.0f;
-	worldTransform_.translation_.z = 30.0f;
+	worldTransform_.translation_.z = 50.0f;
 
 
 	// シングルトンインスタンスを取得する
@@ -126,10 +127,14 @@ void Enemy::Fire() {
 	Vector3 EnePlaVector = Subtract(enemyWorldPos, playerWorldPos);
 
 	// ベクトルの正規化
-	Normalize(EnePlaVector);
+	EnePlaVector = Normalize(EnePlaVector);
 
 	// ベクトルの長さを、速さに合わせる
-	Vector3 velocity(0, 0, kBulletSpeed);
+	Vector3 velocity = {
+	    EnePlaVector.x,
+	    EnePlaVector.y,
+	    EnePlaVector.z * kBulletSpeed,
+	};
 
 	// 速度ベクトルを自機の向きに合わせて回転させる
 	velocity = TransformNormal(velocity, worldTransform_.matWorld_);
@@ -154,7 +159,7 @@ void Enemy::Approach() {
 
 
 	// 規定の位置に到達し
-	if (worldTransform_.translation_.z < -30.0f) {
+	if (worldTransform_.translation_.z < -10.0f) {
 
 		// 行動フェーズを離脱へ
 		phease_ = Phease::Leave;
@@ -182,7 +187,7 @@ void Enemy::Leave() {
 	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
 
 	// 規定の位置に到達したら離脱
-	if (worldTransform_.translation_.z > 30.0f) {
+	if (worldTransform_.translation_.z > 50.0f) {
 		phease_ = Phease::Approach;
 	}
 }
