@@ -2,6 +2,7 @@
 #include <cassert>
 
 #include "ImGuiManager.h"
+#include "Player.h"
 
 
 
@@ -35,6 +36,7 @@ void Enemy::Initialize(Model* model, const Vector3 velocity) {
 	this->velocity_ = velocity;
 
 	phease_ = Phease::Approach;
+
 }
 
 
@@ -109,9 +111,25 @@ void Enemy::Update() {
 /// </summary>
 void Enemy::Fire() {
 
+	assert(player_);
+
 	// 弾の速度
-	const float kBulletSpeed = 5.5f;
-	Vector3 velocity(0, 0, kBulletSpeed);
+	const float kBulletSpeed = 1.0f;
+
+	// 自キャラのワールド座標を取得する
+	Vector3 playerWorldPos = player_->GetWorldPosion(); 
+
+	// 敵キャラのワールド座標を取得
+	Vector3 enemyWorldPos = GetWorldPosition();
+
+	// 敵キャラ->自キャラの差分ベクトルを求める
+	Vector3 EnePlaVector = Subtract(enemyWorldPos, playerWorldPos);
+
+	// ベクトルの正規化
+	Normalize(EnePlaVector);
+
+	// ベクトルの長さを、速さに合わせる
+	Vector3 velocity(0, 0, kBulletSpeed * EnePlaVector.z);
 
 	// 速度ベクトルを自機の向きに合わせて回転させる
 	velocity = TransformNormal(velocity, worldTransform_.matWorld_);
@@ -120,6 +138,7 @@ void Enemy::Fire() {
 	EnemyBullet* newBullet = new EnemyBullet();
 	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
+	// 弾を登録する
 	bullets_.push_back(newBullet);
 }
 
@@ -185,3 +204,20 @@ void Enemy::Draw(ViewProjection viewProjection) {
 }
 
 
+
+void Enemy::SetPlayer(Player* player) { player_ = player; }
+
+
+
+Vector3 Enemy::GetWorldPosition() {
+	
+	// ワールド座標を入れる変数
+	Vector3 worldPos{};
+
+	// ワールド行列の平行移動成分を取得(ワールド座標)
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+
+	return worldPos;
+}

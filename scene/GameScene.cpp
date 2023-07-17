@@ -39,13 +39,16 @@ void GameScene::Initialize() {
 
 
 	
-	// キャラクターの生成
-	player_ = new Player(); 
-	enemy_ = new Enemy();
+	// キャラクターの生成・初期化
+	// Player
+	player_ = new Player();
+	player_->Initialize(model_);
 
-	// キャラクターの初期化
-	player_->Initialize(model_); 
+	// Enemy
+	enemy_ = new Enemy();
 	enemy_->Initialize(model_, enemy_->Velocity());
+	// 敵キャラに自キャラのアドレスを渡す
+	enemy_->SetPlayer(player_);
 	
 
 

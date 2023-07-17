@@ -9,6 +9,11 @@
 #include <list>
 
 
+
+// 自機クラスの前方宣言
+class Player;
+
+
 // 行動フェーズ
 enum class Phease {
 	Approach, // 接近する
@@ -65,7 +70,17 @@ public:
 	Vector3 Velocity() const { return velocity_; };
 
 
+	// EnemyにPlayerのポインタを持つ
+	void SetPlayer(Player* player);
+
+	// ワールド座標を取得
+	Vector3 GetWorldPosition();
+
+
 private:
+
+	// 自キャラ
+	Player* player_ = nullptr;
 
 	EnemyBullet* bullet_ = nullptr;
 
