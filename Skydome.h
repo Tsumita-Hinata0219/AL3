@@ -1,39 +1,43 @@
-#pragma once
+ï»¿#pragma once
 #include "Model.h"
 #include "WorldTransform.h"
+#include <cassert>
+#include <ImGuiManager.h>
+#include "Function.h"
+
 
 
 
 /// <summary>
-/// “V‹…
+/// å¤©çƒ
 /// </summary>
 class Skydome {
 public:
 
 	/// <summary>
-	/// ‰Šú‰»ˆ—
+	/// åˆæœŸåŒ–å‡¦ç†
 	/// </summary>
-	void Initialize();
+	void Initialize(Model* model);
 
 
 	/// <summary>
-	/// XVˆ—
+	/// æ›´æ–°å‡¦ç†
 	/// </summary>
 	void Update();
 
 
 	/// <summary>
-	/// •`‰æˆ—
+	/// æç”»å‡¦ç†
 	/// </summary>
 	void Draw(ViewProjection viewProjection);
 
 
 private:
 
-	// ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 	WorldTransform worldTransform_;
 
-	// ƒ‚ƒfƒ‹
+	// ãƒ¢ãƒ‡ãƒ«
 	Model* model_ = nullptr;
 
 };

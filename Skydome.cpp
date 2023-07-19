@@ -1,21 +1,40 @@
-#include "Skydome.h"
+ï»¿#include "Skydome.h"
 
 
 
-// ‰Šú‰»ˆ—
-void Skydome::Initialize() {
+// åˆæœŸåŒ–å‡¦ç†
+void Skydome::Initialize(Model* model) {
 
+	// NULLãƒã‚¤ãƒ³ã‚¿ãƒã‚§ãƒƒã‚¯
+	assert(model);
+
+	this->model_ = model;
+
+	worldTransform_.scale_.x = 100.0f;
+	worldTransform_.scale_.y = 100.0f;
+	worldTransform_.scale_.z = 100.0f;
+	worldTransform_.Initialize();
 }
 
-// XVˆ—
+// æ›´æ–°å‡¦ç†
 void Skydome::Update() {
 
+	
+	// ã‚¢ãƒ•ã‚£ãƒ³å¤‰æ›è¡Œåˆ—
+	worldTransform_.matWorld_ = MakeAffineMatrix(
+	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+
+
+
+	// è¡Œåˆ—ã‚’å®šæ•°ãƒãƒƒãƒ•ã‚¡ã«è»¢é€
+	worldTransform_.TransferMatrix();
 }
 
 
-// •`‰æˆ—
+// æç”»å‡¦ç†
 void Skydome::Draw(ViewProjection viewProjection) {
 
-	// 3Dƒ‚ƒfƒ‹‚Ì•`‰æ
+	// 3Dãƒ¢ãƒ‡ãƒ«ã®æç”»
 	model_->Draw(worldTransform_, viewProjection);
 }
+

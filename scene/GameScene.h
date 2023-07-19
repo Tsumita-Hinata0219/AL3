@@ -58,7 +58,6 @@ private: // メンバ変数
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
-		
 
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0;
@@ -92,3 +91,5 @@ private: // メンバ変数
 	/// ゲームシーン用
 	/// </summary>
 };
+
+

@@ -1,4 +1,4 @@
-#include "GameScene.h"
+﻿#include "GameScene.h"
 #include "TextureManager.h"
 #include <cassert>
 #include "AxisIndicator.h"
@@ -22,6 +22,7 @@ GameScene::~GameScene() {
 
 	// 天球の解放
 	delete modelSkydome_;
+	delete skydome_;
 
 }
 
@@ -42,21 +43,26 @@ void GameScene::Initialize() {
 
 
 	
-	// キャラクターの生成・初期化
+	/* ----- キャラクターの生成・初期化 ----- */
+
 	// Player
 	player_ = new Player();
 	player_->Initialize(model_);
 
+	
 	// Enemy
 	enemy_ = new Enemy();
 	enemy_->Initialize(model_, enemy_->Velocity());
 	// 敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
 	
+
 	// Skydome
-	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
-	//skydome_ = new Skydome();
-	//skydome_->Initialize();
+	modelSkydome_ = Model::CreateFromOBJ("Skydome", true);
+	skydome_ = new Skydome();
+	skydome_->Initialize(modelSkydome_);
+	// ビュープロジェクションの初期化
+
 
 
 
@@ -273,3 +279,4 @@ void GameScene::Draw() {
 
 #pragma endregion
 }
+
