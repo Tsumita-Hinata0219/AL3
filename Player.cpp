@@ -40,7 +40,7 @@ void Player::Initialize(Model* model) {
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
 
-	fireTimer_ = kFireInterval_;
+	fireTimer_ = IniFireTimer;
 }
 
 

@@ -92,7 +92,8 @@ private:
 
 	int32_t fireTimer_ = 0; // 発射タイマー
 
-	static const int kFireInterval_ = 10; // 発射間隔の設定
+	static const int IniFireTimer = 3;
+	static const int kFireInterval_ = 7; // 発射間隔の設定
 
 	const float radius_ = 2.0f; // 半径
 
