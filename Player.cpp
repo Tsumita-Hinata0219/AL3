@@ -176,6 +176,11 @@ void Player::Attack() {
 
 
 
+void Player::onCollision() {
+
+}
+
+
 void Player::Draw(ViewProjection viewProjection) { 
 	
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
@@ -189,7 +194,7 @@ void Player::Draw(ViewProjection viewProjection) {
 
 
 
-Vector3 Player::GetWorldPosion() {
+Vector3 Player::GetWorldPosition() {
 
 	// ワールド座標を取得
 	Vector3 worldPos{};

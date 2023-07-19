@@ -118,7 +118,7 @@ void Enemy::Fire() {
 	const float kBulletSpeed = 1.0f;
 
 	// 自キャラのワールド座標を取得する
-	Vector3 playerWorldPos = player_->GetWorldPosion(); 
+	Vector3 playerWorldPos = player_->GetWorldPosition(); 
 
 	// 敵キャラのワールド座標を取得
 	Vector3 enemyWorldPos = GetWorldPosition();
@@ -149,6 +149,12 @@ void Enemy::Fire() {
 
 
 
+void Enemy::onCollision() {
+
+}
+
+
+
 /// <summary>
 /// 行動フェーズ : 接近
 /// </summary>
@@ -164,16 +170,6 @@ void Enemy::Approach() {
 		// 行動フェーズを離脱へ
 		phease_ = Phease::Leave;
 	}
-}
-
-
-
-/// <summary>
-/// 接近フェーズ初期化
-/// </summary>
-void Enemy::ApproachIni() {
-
-	
 }
 
 

@@ -33,37 +33,47 @@ public:
 	/// </summary>
 	~Enemy();
 
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	void Initialize(Model* model, const Vector3 velocity);
+
 
 	/// <summary>
 	/// 更新処理
 	/// </summary>
 	void Update();
 
+
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	void Draw(ViewProjection viewProjection);
+
 
 	/// <summary>
 	/// 攻撃
 	/// </summary>
 	void Fire();
 
+
 	/// <summary>
 	/// 行動フェーズ : 接近
 	/// </summary>
 	void Approach();
 
-	void ApproachIni();
 
 	/// <summary>
 	/// 行動フェーズ : 離脱
 	/// </summary>
 	void Leave();
+
+
+	/// <summary>
+	/// 衝突を検出したら呼び出されるコールバッグ関数
+	/// </summary>
+	void onCollision();
 
 
 	// インライン関数
@@ -75,6 +85,9 @@ public:
 
 	// ワールド座標を取得
 	Vector3 GetWorldPosition();
+
+	// 弾リストを取得
+	const std::list<EnemyBullet*>& GetBullet() { return bullets_; };
 
 
 private:
@@ -103,4 +116,6 @@ private:
 	int32_t fireTimer_ = 0; // 発射タイマー
 
 	Input* input_ = nullptr; // キーボード入力
+
+	const float radius_ = 2.0f; // 半径
 };

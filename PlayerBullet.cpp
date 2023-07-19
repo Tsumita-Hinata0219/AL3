@@ -45,6 +45,14 @@ void PlayerBullet::Update() {
 
 
 
+void PlayerBullet::onCollision() {
+
+	// デスフラグを立てる
+	isDead_ = true;
+}
+
+
+
 /// <summary>
 /// 描画処理
 /// </summary>
@@ -54,3 +62,17 @@ void PlayerBullet::Draw(const ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 }
 
+
+
+Vector3 PlayerBullet::GetWorldPosition() {
+
+	// ワールド座標を取得
+	Vector3 worldPos{};
+
+	// ワールド行列の平行移動成分を取得(ワールド座標)
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+
+	return worldPos;
+}

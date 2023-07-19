@@ -315,3 +315,14 @@ Vector3 Normalize(const Vector3& v) {
 	return result;
 }
 
+
+// 2オブジェクト間の距離を求める
+float ClacDistance(const Vector3& posA, const Vector3& posB) {
+
+	float dist = 
+		(posB.x - posA.x) * (posB.x - posA.x) + 
+		(posB.y - posA.y) * (posB.y - posA.y) +
+		(posB.z - posA.z) * (posB.z - posA.z);
+
+	return dist;
+}

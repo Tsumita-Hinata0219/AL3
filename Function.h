@@ -53,3 +53,7 @@ Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
 // 正規化
 Vector3 Normalize(const Vector3& v);
+
+
+// 2オブジェクト間の距離を求める
+float ClacDistance(const Vector3& posA, const Vector3& posB);

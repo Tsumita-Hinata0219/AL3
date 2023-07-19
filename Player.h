@@ -60,9 +60,21 @@ public:
 	void Attack();
 
 
+	/// <summary>
+	/// 衝突を検出したら呼び出されるコールバッグ関数
+	/// </summary>
+	void onCollision();
+
 
 	// ワールド座標を取得
-	Vector3 GetWorldPosion();
+	Vector3 GetWorldPosition();
+
+	// 半径を取得
+	float GetRadius() { return radius_; };
+
+
+	// 弾リストを取得
+	const std::list<PlayerBullet*>& GetBullet() { return bullets_; };
 
 
 
@@ -81,5 +93,7 @@ private:
 	int32_t fireTimer_ = 0; // 発射タイマー
 
 	static const int kFireInterval_ = 10; // 発射間隔の設定
+
+	const float radius_ = 2.0f; // 半径
 
 };
