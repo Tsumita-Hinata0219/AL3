@@ -52,11 +52,29 @@
     <Filter Include="ソース ファイル\2d">
       <UniqueIdentifier>{814a0f6d-f847-4c45-856d-4688fa4c9e6c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\character">
-      <UniqueIdentifier>{e758cd08-44dc-4546-80a1-b113c8405f30}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\GameObject">
+      <UniqueIdentifier>{d38fab2d-f3d4-4119-864c-988a57e1fec6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\character">
-      <UniqueIdentifier>{38d57917-bc80-44ae-8f96-f0e492f32be6}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\GameObject\Player">
+      <UniqueIdentifier>{fb0e723a-0c9c-431a-9884-7bd96c244981}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObject\Enemy">
+      <UniqueIdentifier>{39b57373-22f9-4a96-bc61-8918b744a1e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObject\Skydome">
+      <UniqueIdentifier>{99302bff-9ef0-4ba0-97bf-6fddc5b08742}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameObject">
+      <UniqueIdentifier>{83665d78-4b13-4309-ab9e-7c43bb24788b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameObject\Player">
+      <UniqueIdentifier>{fbf05f65-11b5-45bd-b764-6edf4db891d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameObject\Enemy">
+      <UniqueIdentifier>{cdf5938a-c14a-45a5-a488-ebe50048bd35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameObject\Skydome">
+      <UniqueIdentifier>{1cca46e4-8ec4-4595-9631-93a9c8ef1b79}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -75,26 +93,26 @@
     <ClCompile Include="2d\ImGuiManager.cpp">
       <Filter>ソース ファイル\2d</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル\character</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerBullet.cpp">
-      <Filter>ソース ファイル\character</Filter>
-    </ClCompile>
-    <ClCompile Include="Function.cpp">
+    <ClCompile Include="math\WorldTransformEx.cpp">
       <Filter>ソース ファイル\math</Filter>
     </ClCompile>
-    <ClCompile Include="WorldTransformEx.cpp">
+    <ClCompile Include="math\Function.cpp">
       <Filter>ソース ファイル\math</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>ソース ファイル\character</Filter>
+    <ClCompile Include="GameObject\Enemy\Enemy.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyBullet.cpp">
-      <Filter>ソース ファイル\character</Filter>
+    <ClCompile Include="GameObject\Enemy\EnemyBullet.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Skydome.cpp">
-      <Filter>ソース ファイル\scene</Filter>
+    <ClCompile Include="GameObject\Player\Player.cpp">
+      <Filter>ソース ファイル\GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Player\PlayerBullet.cpp">
+      <Filter>ソース ファイル\GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Skydome\Skydome.cpp">
+      <Filter>ソース ファイル\GameObject\Skydome</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,23 +200,23 @@
     <ClInclude Include="2d\ImGuiManager.h">
       <Filter>ヘッダー ファイル\2d</Filter>
     </ClInclude>
-    <ClInclude Include="Function.h">
+    <ClInclude Include="math\Function.h">
       <Filter>ヘッダー ファイル\math</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>ヘッダー ファイル\character</Filter>
+    <ClInclude Include="GameObject\Enemy\Enemy.h">
+      <Filter>ヘッダー ファイル\GameObject\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerBullet.h">
-      <Filter>ヘッダー ファイル\character</Filter>
+    <ClInclude Include="GameObject\Enemy\EnemyBullet.h">
+      <Filter>ヘッダー ファイル\GameObject\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>ヘッダー ファイル\character</Filter>
+    <ClInclude Include="GameObject\Player\Player.h">
+      <Filter>ヘッダー ファイル\GameObject\Player</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyBullet.h">
-      <Filter>ヘッダー ファイル\character</Filter>
+    <ClInclude Include="GameObject\Player\PlayerBullet.h">
+      <Filter>ヘッダー ファイル\GameObject\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Skydome.h">
-      <Filter>ヘッダー ファイル\scene</Filter>
+    <ClInclude Include="GameObject\Skydome\Skydome.h">
+      <Filter>ヘッダー ファイル\GameObject\Skydome</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
