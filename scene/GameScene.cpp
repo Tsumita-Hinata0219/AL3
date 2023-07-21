@@ -67,8 +67,9 @@ void GameScene::Initialize() {
 
 
 	// RailCamera
+	Vector3 rotation = {0.0f, 0.0f, 0.0f};
 	railCamera_ = new RailCamera();
-	railCamera_->Initialize();
+	railCamera_->Initialize(player_->GetWorldPosition(), rotation);
 
 
 

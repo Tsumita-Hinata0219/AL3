@@ -17,7 +17,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize();
+	void Initialize(Vector3 transkation, Vector3 rotation);
 
 
 	/// <summary>

@@ -3,12 +3,11 @@
 
 
 // 初期化処理
-void RailCamera::Initialize() {
+void RailCamera::Initialize(Vector3 translation, Vector3 rotation) {
 
 	// ワールドトランスフォームの初期設定
-	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
-	worldTransform_.rotation_ = {0.0f, 0.0f, 0.0f};
-	worldTransform_.translation_ = {0.0f, 0.0f, -50.0f};
+	worldTransform_.rotation_ = translation;
+	worldTransform_.translation_ = rotation;
 	worldTransform_.Initialize();
 
 	// ビュープロジェクションの初期化
