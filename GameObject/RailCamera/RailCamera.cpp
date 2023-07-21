@@ -6,8 +6,8 @@
 void RailCamera::Initialize(Vector3 translation, Vector3 rotation) {
 
 	// ワールドトランスフォームの初期設定
-	worldTransform_.rotation_ = translation;
-	worldTransform_.translation_ = rotation;
+	worldTransform_.rotation_ = rotation;
+	worldTransform_.translation_ = translation ;
 	worldTransform_.Initialize();
 
 	// ビュープロジェクションの初期化
@@ -35,11 +35,6 @@ void RailCamera::Update() {
 	worldTransform_.UpdateMatrix();
 
 	
-	//// アフィン変換行列
-	//worldTransform_.matWorld_ = MakeAffineMatrix(
-	//    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
-
-
 	// カメラオブジェクトのワールド行列からビュー行列を計算する
 	viewProjection_.matView = Inverse(worldTransform_.matWorld_);
 
