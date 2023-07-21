@@ -111,10 +111,10 @@ void GameScene::Update() {
 	// カメラの処理
 	if (isDebugCameraActive_) {
 
-		// デバッグカメラの更新
-		//debugCamera_->Update();
-		//viewProjection_.matView = debugCamera_->GetViewProjection().matView;
-		//viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		 //デバッグカメラの更新
+		debugCamera_->Update();
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
 
 		
 	}
@@ -126,7 +126,6 @@ void GameScene::Update() {
 		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	}
-
 }
 
 void GameScene::CheckAllCollision() {
