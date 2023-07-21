@@ -10,3 +10,4 @@ void WorldTransform::UpdateMatrix() {
 	// 定数バッファに転送する
 	TransferMatrix();
 }
+
