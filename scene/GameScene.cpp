@@ -17,6 +17,10 @@ GameScene::~GameScene() {
 	// 敵キャラの解放
 	delete enemy_;
 
+	for (EnemyBullet* bullet : enemyBullets) {
+		bullet->Draw(viewProjection_);
+	}
+
 	// デバッグカメラの解放
 	delete debugCamera_;
 
@@ -59,7 +63,9 @@ void GameScene::Initialize() {
 	enemy_->Initialize(model_, enemy_->Velocity());
 	// 敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
-	
+	enemy_->SetGameScene(this);
+	// 敵弾リストの取得
+	const std::list<EnemyBullet*>& enemyBullets = GetEnemyBullet();
 
 	// Skydome
 	modelSkydome_ = Model::CreateFromOBJ("Skydome", true);
@@ -246,6 +252,22 @@ void GameScene::CheckAllCollision() {
 	#pragma endregion
 }
 
+void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
+
+	// 敵弾リストの取得
+	const std::list<EnemyBullet*>& enemyBullets = GetEnemyBullet();
+
+	for (EnemyBullet* bullet : enemyBullets) {
+
+		// リストに登録する
+		enemyBullets_.push_back(enemyBullet);
+
+	}
+
+
+	
+}
+
 void GameScene::Draw() {
 
 	// コマンドリストの取得
@@ -279,9 +301,19 @@ void GameScene::Draw() {
 
 	// 敵キャラの描画
 	enemy_->Draw(viewProjection_);
+	
+	for (EnemyBullet* bullet : enemyBullets) {
+		bullet->Draw(viewProjection_);
+	}
 
 	// 天球の描画
 	skydome_->Draw(viewProjection_);
+
+	
+
+
+
+
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

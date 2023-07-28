@@ -43,14 +43,24 @@ public: // メンバ関数
 	void Update();
 
 	/// <summary>
+	/// 描画
+	/// </summary>
+	void Draw();
+
+	/// <summary>
 	/// 衝突判定と応答
 	/// </summary>
 	void CheckAllCollision();
 
 	/// <summary>
-	/// 描画
+	/// 敵弾を追加する
 	/// </summary>
-	void Draw();
+	/// <param name="enemyBullet">敵弾</param>
+	void AddEnemyBullet(EnemyBullet* enemyBullet);
+
+
+	// 弾リストを取得
+	const std::list<EnemyBullet*>& GetEnemyBullet() { return enemyBullets_; };
 
 
 private: // メンバ変数
@@ -75,6 +85,8 @@ private: // メンバ変数
 
 	// 敵キャラ
 	Enemy* enemy_ = nullptr;
+	EnemyBullet* enemyBullet_ = nullptr;
+	std::list<EnemyBullet*> enemyBullets_;
 
 	// 天球
 	Skydome* skydome_ = nullptr;

@@ -3,6 +3,7 @@
 
 #include "ImGuiManager.h"
 #include "Player.h"
+#include "GameScene.h"
 
 
 

@@ -13,6 +13,9 @@
 // 自機クラスの前方宣言
 class Player;
 
+// gameSceneの前方宣言
+class GameScene;
+
 
 // 行動フェーズ
 enum class Phease {
@@ -79,10 +82,6 @@ public:
 	// インライン関数
 	Vector3 Velocity() const { return velocity_; };
 
-
-	// EnemyにPlayerのポインタを持つ
-	void SetPlayer(Player* player);
-
 	// ワールド座標を取得
 	Vector3 GetWorldPosition();
 
@@ -90,10 +89,20 @@ public:
 	const std::list<EnemyBullet*>& GetBullet() { return bullets_; };
 
 
+	
+	void SetPlayer(Player* player) { player_ = player; }
+
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
+
 private:
 
 	// 自キャラ
 	Player* player_ = nullptr;
+
+	// ゲームシーン
+	GameScene* gameScene_ = nullptr;
+
 
 	EnemyBullet* bullet_ = nullptr;
 
