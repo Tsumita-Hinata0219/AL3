@@ -11,6 +11,7 @@ void RailCamera::Initialize(Vector3 translation, Vector3 rotation) {
 	worldTransform_.Initialize();
 
 	// ビュープロジェクションの初期化
+	viewProjection_.farZ = 1200.0f;
 	viewProjection_.Initialize();
 
 }
@@ -20,11 +21,8 @@ void RailCamera::Initialize(Vector3 translation, Vector3 rotation) {
 // 更新処理
 void RailCamera::Update() {
 
-
 	// ワールドトランスフォームの加算
-	Vector3 move = {0.0f, 0.0f, 0.0f};
-	//const float kRailCameraSpeed = -0.3f;
-	//move.z -= kRailCameraSpeed;
+	Vector3 move = {0.0f, 0.0f, -0.05f};
 	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
 
 	Vector3 rotate = {0.0f, 0.0f, 0.0f};
@@ -43,9 +41,10 @@ void RailCamera::Update() {
 	ImGui::Begin("RailCamera");
 
 	// スライダーでtranslationとratationを表示
-	ImGui::SliderFloat3("translation", &worldTransform_.translation_.x, -50.0f, 50.0f);
+	ImGui::SliderFloat3("translation", &worldTransform_.translation_.x, -100.0f, 100.0f);
 	ImGui::SliderFloat3("rotation", &worldTransform_.rotation_.x, -50.0f, 50.0f);
 
 	ImGui::End();
 }
+
 

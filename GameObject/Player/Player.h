@@ -32,7 +32,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(Model* model);
+	void Initialize(Model* model, Vector3 position);
 
 
 	/// <summary>
@@ -75,6 +75,13 @@ public:
 
 	// 弾リストを取得
 	const std::list<PlayerBullet*>& GetBullet() { return bullets_; };
+
+
+	/// <summary>
+	/// 親となるワールドトランスフォームをセット
+	/// </summary>
+	/// <param name="parent"></param>
+	void SetParent(const WorldTransform* parent);
 
 
 

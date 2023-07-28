@@ -26,7 +26,7 @@ Player::~Player() {
 
 
 
-void Player::Initialize(Model* model) {
+void Player::Initialize(Model* model, Vector3 position) {
 
 	// NULLポインタチェック
 	assert(model);
@@ -34,8 +34,8 @@ void Player::Initialize(Model* model) {
 	this->model_ = model;
 	textureHandle_ = TextureManager::Load("/picture/Player.png");
 
+	worldTransform_.translation_ = position;
 	worldTransform_.Initialize();
-	worldTransform_.translation_.y = -10.0f;
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
@@ -107,6 +107,8 @@ void Player::Update() {
 	worldTransform_.matWorld_ = MakeAffineMatrix(
 	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
+	worldTransform_.UpdateMatrix();
+
 
 	
 	if (input_->PushKey(DIK_SPACE)) {
@@ -168,7 +170,7 @@ void Player::Attack() {
 	
 	// 弾を生成し、初期化
 	PlayerBullet* newBullet = new PlayerBullet();
-	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
+	newBullet->Initialize(model_, GetWorldPosition(), velocity);
 
 	// 弾を登録する
 	bullets_.push_back(newBullet);
@@ -200,9 +202,18 @@ Vector3 Player::GetWorldPosition() {
 	Vector3 worldPos{};
 
 	// ワールド行列の平行移動成分を取得(ワールド座標)
-	worldPos.x = worldTransform_.translation_.x;
-	worldPos.y = worldTransform_.translation_.y;
-	worldPos.z = worldTransform_.translation_.z;
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
 }
+
+
+
+void Player::SetParent(const WorldTransform* parent) { 
+	
+	// 親子関係を結ぶ
+	worldTransform_.parent_ = parent;
+}
+

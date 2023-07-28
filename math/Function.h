@@ -60,4 +60,4 @@ float ClacDistance(const Vector3& posA, const Vector3& posB);
 
 
 // Matrix4x4の逆行列計算
-Matrix4x4 Inverse(const Matrix4x4& m);
+Matrix4x4 Inverse(const Matrix4x4 m);

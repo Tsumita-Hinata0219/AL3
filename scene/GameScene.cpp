@@ -41,16 +41,17 @@ void GameScene::Initialize() {
 	model_ = Model::Create();
 
 	// ビュープロジェクションの初期化
+	viewProjection_.farZ = 1000.0f;
 	viewProjection_.Initialize();
-
-
+	
 
 	
 	/* ----- キャラクターの生成・初期化 ----- */
 
 	// Player
 	player_ = new Player();
-	player_->Initialize(model_);
+	Vector3 playerPosition(0.0f, -5.0f, 20.0f);
+	player_->Initialize(model_, playerPosition);
 
 	
 	// Enemy
@@ -68,9 +69,14 @@ void GameScene::Initialize() {
 
 	// RailCamera
 	Vector3 rotation = {0.0f, 0.0f, 0.0f};
-	Vector3 translation = {0.0f, 0.0f, -50.0f};
 	railCamera_ = new RailCamera();
-	railCamera_->Initialize(translation, rotation);
+	railCamera_->Initialize(player_->GetWorldPosition(), rotation);
+
+
+	// 親子関係を結ぶ
+	// 自キャラとレールカメラの親子関係を結ぶ
+	player_->SetParent(&railCamera_->GetWorldTransform());
+	
 
 
 
@@ -104,7 +110,12 @@ void GameScene::Update() {
 
 	if (input_->TriggerKey(DIK_RETURN)) 
 	{
-		isDebugCameraActive_ = true;
+		if (isDebugCameraActive_ == false)
+		{
+			isDebugCameraActive_ = true;
+		} else {
+			isDebugCameraActive_ = false;
+		}
 	}
 
 #endif // DEBUG
@@ -117,8 +128,9 @@ void GameScene::Update() {
 		debugCamera_->Update();
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-
 		
+		// ビュープロジェクション行列の転送
+		viewProjection_.TransferMatrix();
 	}
 	else {
 		railCamera_->Update();

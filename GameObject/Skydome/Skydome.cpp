@@ -10,9 +10,9 @@ void Skydome::Initialize(Model* model) {
 
 	this->model_ = model;
 
-	worldTransform_.scale_.x = 100.0f;
-	worldTransform_.scale_.y = 100.0f;
-	worldTransform_.scale_.z = 100.0f;
+	worldTransform_.scale_.x = 500.0f;
+	worldTransform_.scale_.y = 500.0f;
+	worldTransform_.scale_.z = 500.0f;
 	worldTransform_.Initialize();
 }
 

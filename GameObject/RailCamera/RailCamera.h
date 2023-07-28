@@ -32,6 +32,13 @@ public:
 	ViewProjection& GetViewProjection() { return viewProjection_; }
 
 
+	/// <summary>
+	/// ワールド変換データを取得
+	/// </summary>
+	WorldTransform& GetWorldTransform()  { return worldTransform_; };
+
+
+
 private:
 
 	// ワールド変換データ

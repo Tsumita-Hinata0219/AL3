@@ -53,3 +53,4 @@ struct WorldTransform {
 	/// </summary>
 	void UpdateMatrix();
 };
+
