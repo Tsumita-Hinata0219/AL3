@@ -66,10 +66,6 @@ void Enemy::Update() {
 	});
 
 
-	for (EnemyBullet* bullet : bullets_) {
-		bullet->Update();
-	}
-
 	switch ( phease_) 
 	{
 	case Phease::Approach:
@@ -144,8 +140,8 @@ void Enemy::Fire() {
 	EnemyBullet* newBullet = new EnemyBullet();
 	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
-	// 弾を登録する
-	bullets_.push_back(newBullet);
+	// 弾をGameSceneに登録する
+	gameScene_->AddEnemyBullet(newBullet);
 }
 
 

@@ -86,7 +86,9 @@ private: // メンバ変数
 	// 敵キャラ
 	Enemy* enemy_ = nullptr;
 	EnemyBullet* enemyBullet_ = nullptr;
+	// 敵弾リストをEnemyからGameSceneに引っ越す
 	std::list<EnemyBullet*> enemyBullets_;
+	
 
 	// 天球
 	Skydome* skydome_ = nullptr;

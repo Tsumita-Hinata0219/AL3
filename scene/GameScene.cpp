@@ -1,24 +1,22 @@
 ﻿#include "GameScene.h"
+#include "AxisIndicator.h"
 #include "TextureManager.h"
 #include <cassert>
-#include "AxisIndicator.h"
 
-
-GameScene::GameScene() {
-}
+GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 
-	delete model_; 
+	delete model_;
 
 	// 自キャラの解放
 	delete player_;
-	
+
 	// 敵キャラの解放
 	delete enemy_;
-
-	for (EnemyBullet* bullet : enemyBullets) {
-		bullet->Draw(viewProjection_);
+	// 敵弾リストの解放
+	for (EnemyBullet* bullet : enemyBullets_) {
+		delete bullet;
 	}
 
 	// デバッグカメラの解放
@@ -30,7 +28,6 @@ GameScene::~GameScene() {
 
 	// レールカメラの解放
 	delete railCamera_;
-
 }
 
 void GameScene::Initialize() {
@@ -39,17 +36,15 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-
-
 	// 3Dモデルの生成
 	model_ = Model::Create();
 
 	// ビュープロジェクションの初期化
 	viewProjection_.farZ = 1000.0f;
 	viewProjection_.Initialize();
-	
 
-	
+
+
 	/* ----- キャラクターの生成・初期化 ----- */
 
 	// Player
@@ -57,15 +52,17 @@ void GameScene::Initialize() {
 	Vector3 playerPosition(0.0f, -5.0f, 20.0f);
 	player_->Initialize(model_, playerPosition);
 
-	
+
 	// Enemy
 	enemy_ = new Enemy();
 	enemy_->Initialize(model_, enemy_->Velocity());
+	// 敵キャラにゲームシーンを渡す
+	enemy_->SetGameScene(this);
 	// 敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
-	enemy_->SetGameScene(this);
 	// 敵弾リストの取得
 	const std::list<EnemyBullet*>& enemyBullets = GetEnemyBullet();
+
 
 	// Skydome
 	modelSkydome_ = Model::CreateFromOBJ("Skydome", true);
@@ -78,13 +75,9 @@ void GameScene::Initialize() {
 	railCamera_ = new RailCamera();
 	railCamera_->Initialize(player_->GetWorldPosition(), rotation);
 
-
 	// 親子関係を結ぶ
 	// 自キャラとレールカメラの親子関係を結ぶ
 	player_->SetParent(&railCamera_->GetWorldTransform());
-	
-
-
 
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
@@ -93,7 +86,6 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetVisible(true);
 	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
-
 }
 
 void GameScene::Update() {
@@ -104,20 +96,21 @@ void GameScene::Update() {
 	// 敵キャラの更新
 	enemy_->Update();
 
+	// 敵弾リストの更新処理
+	for (EnemyBullet* bullet : enemyBullets_) {
+		bullet->Update();
+	}
+
 	// 天球の更新処理
 	skydome_->Update();
-
 
 	// 衝突判定処理
 	CheckAllCollision();
 
+#ifdef _DEBUG
 
-	#ifdef _DEBUG
-
-	if (input_->TriggerKey(DIK_RETURN)) 
-	{
-		if (isDebugCameraActive_ == false)
-		{
+	if (input_->TriggerKey(DIK_RETURN)) {
+		if (isDebugCameraActive_ == false) {
 			isDebugCameraActive_ = true;
 		} else {
 			isDebugCameraActive_ = false;
@@ -126,24 +119,22 @@ void GameScene::Update() {
 
 #endif // DEBUG
 
-
 	// カメラの処理
 	if (isDebugCameraActive_) {
 
-		 //デバッグカメラの更新
+		// デバッグカメラの更新
 		debugCamera_->Update();
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-		
+
 		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
-	}
-	else {
+	} else {
 		railCamera_->Update();
 		viewProjection_.matView = railCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
 
-		// ビュープロジェクション行列の転送
+		// ビュープロジェクション行列の
 		viewProjection_.TransferMatrix();
 	}
 }
@@ -159,9 +150,7 @@ void GameScene::CheckAllCollision() {
 	// 敵弾リストの取得
 	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullet();
 
-
-
-	#pragma region 自キャラと敵弾の当たり判定
+#pragma region 自キャラと敵弾の当たり判定
 
 	// 自キャラの座標
 	posA = player_->GetWorldPosition();
@@ -187,10 +176,9 @@ void GameScene::CheckAllCollision() {
 		}
 	}
 
-	#pragma endregion
+#pragma endregion
 
-
-	#pragma region 自弾と敵キャラの当たり判定
+#pragma region 自弾と敵キャラの当たり判定
 
 	// 敵キャラの座標
 	posA = enemy_->GetWorldPosition();
@@ -217,10 +205,9 @@ void GameScene::CheckAllCollision() {
 		}
 	}
 
-	#pragma endregion
+#pragma endregion
 
-
-	#pragma region 自弾と敵弾の当たり判定
+#pragma region 自弾と敵弾の当たり判定
 
 	// 自キャラと敵弾のすべての当たり判定
 	for (PlayerBullet* plaBullet : playerBullets) {
@@ -249,23 +236,16 @@ void GameScene::CheckAllCollision() {
 		}
 	}
 
-	#pragma endregion
+#pragma endregion
 }
 
 void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
 
-	// 敵弾リストの取得
-	const std::list<EnemyBullet*>& enemyBullets = GetEnemyBullet();
-
-	for (EnemyBullet* bullet : enemyBullets) {
+	for (EnemyBullet* bullet : enemyBullets_) {
 
 		// リストに登録する
 		enemyBullets_.push_back(enemyBullet);
-
 	}
-
-
-	
 }
 
 void GameScene::Draw() {
@@ -280,7 +260,6 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
-
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -301,19 +280,14 @@ void GameScene::Draw() {
 
 	// 敵キャラの描画
 	enemy_->Draw(viewProjection_);
-	
-	for (EnemyBullet* bullet : enemyBullets) {
+
+	// 敵弾リストの描画処理
+	for (EnemyBullet* bullet : enemyBullets_) {
 		bullet->Draw(viewProjection_);
 	}
 
 	// 天球の描画
 	skydome_->Draw(viewProjection_);
-
-	
-
-
-
-
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
@@ -332,4 +306,3 @@ void GameScene::Draw() {
 
 #pragma endregion
 }
-
