@@ -7,18 +7,14 @@
 
 
 
-Enemy::~Enemy() {
-	for (EnemyBullet* bullet : bullets_) {
-		delete bullet;
-	}
-}
+Enemy::~Enemy() {}
 
 
 
 /// <summary>
 /// 初期化
 /// </summary>
-void Enemy::Initialize(Model* model, const Vector3 velocity) {
+void Enemy::Initialize(Model* model, Vector3 pos) {
 
 	// NULLポインタチェック
 	assert(model);
@@ -27,16 +23,14 @@ void Enemy::Initialize(Model* model, const Vector3 velocity) {
 	this->textureHandle_ = TextureManager::Load("/picture/Enemy.png");
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_.x = 20.0f;
-	worldTransform_.translation_.y = 2.0f;
-	worldTransform_.translation_.z = 50.0f;
+	worldTransform_.translation_.x = pos.x;
+	worldTransform_.translation_.y = pos.y;
+	worldTransform_.translation_.z = pos.z;
 
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
 		
-	this->velocity_ = velocity;
-
 	phease_ = Phease::Approach;
 
 }
@@ -49,22 +43,9 @@ void Enemy::Initialize(Model* model, const Vector3 velocity) {
 void Enemy::Update() {
 
 
-	// ワールドトラスフォームの更新
-	worldTransform_.UpdateMatrix();
-
 	// 移動(ベクトルを加算)
 	velocity_ = {0, 0, kCharacterSpeed}; // 敵の移動速度
-
-
-	// デスフラグの立った弾を削除
-	bullets_.remove_if([](EnemyBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
-
+	
 
 	switch ( phease_) 
 	{
@@ -82,10 +63,6 @@ void Enemy::Update() {
 			// 弾を発射
 			Fire();
 
-			for (EnemyBullet* bullet : bullets_) {
-				bullet->Update();
-			}
-
 			// 発射タイマーを初期化
 			fireTimer_ = kFireInterval_;
 		}
@@ -100,6 +77,21 @@ void Enemy::Update() {
 		break;
 
 	}
+
+	
+	// ワールドトラスフォームの更新
+	worldTransform_.UpdateMatrix();
+
+
+	// Enemyデバッグ
+	ImGui::Begin("EnemyDebug1");
+
+	// float3入力ボックス
+	ImGui::InputFloat3("EnemyPosition", &worldTransform_.translation_.x);
+	// float3スライダー
+	ImGui::SliderFloat3("EnemySlider", &worldTransform_.translation_.x, 0.0f, 40.0f);
+
+	ImGui::End();
 }
 
 
@@ -148,6 +140,8 @@ void Enemy::Fire() {
 
 void Enemy::onCollision() {
 
+	// デスフラグを立てる
+	isDead_ = true;
 }
 
 
@@ -194,16 +188,7 @@ void Enemy::Draw(ViewProjection viewProjection) {
 
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 
-
-	for (EnemyBullet* bullet : bullets_) {
-	bullet->Draw(viewProjection);	
-	}
-
 }
-
-
-
-void Enemy::SetPlayer(Player* player) { player_ = player; }
 
 
 

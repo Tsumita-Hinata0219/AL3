@@ -8,6 +8,9 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include <sstream>
+#include <fstream>
+#include <string>
 
 #include "Player.h"
 #include "DebugCamera.h"
@@ -58,52 +61,80 @@ public: // メンバ関数
 	/// <param name="enemyBullet">敵弾</param>
 	void AddEnemyBullet(EnemyBullet* enemyBullet);
 
+	/// <summary>
+	/// 敵発生データの読み込み
+	/// </summary>
+	void LoadEnemyPopDate();
 
-	// 弾リストを取得
-	const std::list<EnemyBullet*>& GetEnemyBullet() { return enemyBullets_; };
+	/// <summary>
+	/// スクリプト実行
+	/// </summary>
+	void UpdateEnemyPopCommands();
+
+	void generatedEnemy(Vector3 pos);
 
 
 private: // メンバ変数
+
+	/* ----- Player 自キャラ ----- */
+
+	Player* player_ = nullptr;
+
+
+
+	/* ----- Enemy 敵キャラ ----- */
+
+	// 敵キャラ
+	Enemy* enemy_ = nullptr;
+	// 敵リスト
+	std::list<Enemy*> enemys_;
+	// 敵発生コマンド
+	std::stringstream enemyPopCommands;
+	// 待機フラグ
+	bool isEnemyStay = false;
+	// 待機タイマー
+	uint32_t enemyStayTimer = 0;
+
+	// 敵弾
+	EnemyBullet* enemyBullet_ = nullptr;
+	// 敵弾リスト
+	std::list<EnemyBullet*> enemyBullets_;
+
+
+
+	/* ----- SkyDome 天球 ----- */
+
+	// 天球
+	Skydome* skydome_ = nullptr;
+	Model* modelSkydome_ = nullptr;
+
+
+
+	/* ----- Camera カメラ ----- */
+
+	// レールカメラ
+	RailCamera* railCamera_ = nullptr;
+
+	// デバッグカメラ
+	DebugCamera* debugCamera_ = nullptr;
+	// デバッグカメラ有効
+	bool isDebugCameraActive_ = false;
 
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
 
+
+
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0;
-
 
 	// 3Dモデル
 	Model* model_ = nullptr;
 
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
-
-	// 自キャラ
-	Player* player_ = nullptr;
-
-	// 敵キャラ
-	Enemy* enemy_ = nullptr;
-	EnemyBullet* enemyBullet_ = nullptr;
-	// 敵弾リストをEnemyからGameSceneに引っ越す
-	std::list<EnemyBullet*> enemyBullets_;
-	
-
-	// 天球
-	Skydome* skydome_ = nullptr;
-	Model* modelSkydome_ = nullptr;
-
-	// レールカメラ
-	RailCamera* railCamera_ = nullptr;
-
-
-	// デバッグカメラ
-	DebugCamera* debugCamera_ = nullptr;
-
-	// デバッグカメラ有効
-	bool isDebugCameraActive_ = false;
-
 
 	/// <summary>
 	/// ゲームシーン用

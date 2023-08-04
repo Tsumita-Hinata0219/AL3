@@ -40,7 +40,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(Model* model, const Vector3 velocity);
+	void Initialize(Model* model, Vector3 pos);
 
 
 	/// <summary>
@@ -88,12 +88,15 @@ public:
 	// 弾リストを取得
 	const std::list<EnemyBullet*>& GetBullet() { return bullets_; };
 
-
+	// 半径を取得
+	float GetRadius() { return radius_; };
 	
 	void SetPlayer(Player* player) { player_ = player; }
 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
+	bool IsDead() const { return isDead_; }
+	
 
 private:
 
@@ -103,8 +106,9 @@ private:
 	// ゲームシーン
 	GameScene* gameScene_ = nullptr;
 
-
 	EnemyBullet* bullet_ = nullptr;
+
+	std::list<EnemyBullet*> bullets_; // 弾
 
 	Phease phease_; // フェーズ
 
@@ -118,8 +122,6 @@ private:
 
 	Vector3 velocity_; // 敵の速度を設定
 
-	std::list<EnemyBullet*> bullets_; // 弾
-
 	static const int kFireInterval_ = 60; // 発射間隔の設定
 
 	int32_t fireTimer_ = 0; // 発射タイマー
@@ -127,4 +129,6 @@ private:
 	Input* input_ = nullptr; // キーボード入力
 
 	const float radius_ = 2.0f; // 半径
+
+	bool isDead_ = false; // デスフラグ
 };
