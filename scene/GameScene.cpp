@@ -76,7 +76,7 @@ void GameScene::Initialize() {
 	// 親子関係を結ぶ
 	// 自キャラとレールカメラの親子関係を結ぶ
 	player_->SetParent(&railCamera_->GetWorldTransform());
-	
+
 
 
 
