@@ -107,7 +107,7 @@ void Enemy::Fire() {
 	const float kBulletSpeed = 1.0f;
 
 	// 自キャラのワールド座標を取得する
-	Vector3 playerWorldPos = player_->GetWorldPosition(); 
+	Vector3 playerWorldPos = player_->playerGetWorldPosition(); 
 
 	// 敵キャラのワールド座標を取得
 	Vector3 enemyWorldPos = GetWorldPosition();

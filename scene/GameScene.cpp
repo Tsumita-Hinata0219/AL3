@@ -77,7 +77,7 @@ void GameScene::Initialize() {
 	// RailCamera
 	Vector3 rotation = {0.0f, 0.0f, 0.0f};
 	railCamera_ = new RailCamera();
-	railCamera_->Initialize(player_->GetWorldPosition(), rotation);
+	railCamera_->Initialize(player_->playerGetWorldPosition(), rotation);
 
 	// 親子関係を結ぶ
 	// 自キャラとレールカメラの親子関係を結ぶ
@@ -194,7 +194,7 @@ void GameScene::CheckAllCollision() {
 #pragma region 自キャラと敵弾の当たり判定
 
 	// 自キャラの座標
-	posA = player_->GetWorldPosition();
+	posA = player_->playerGetWorldPosition();
 
 	// 自キャラと敵弾のすべての当たり判定
 	for (EnemyBullet* enemyBullet : enemyBullets_) {

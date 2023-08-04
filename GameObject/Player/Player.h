@@ -66,11 +66,20 @@ public:
 	void onCollision();
 
 
+	/// <summary>
+	/// 3Dレティクルの更新処理
+	/// </summary>
+	void ReticleUpdate();
+
+
 	// ワールド座標を取得
-	Vector3 GetWorldPosition();
+	Vector3 playerGetWorldPosition();
+
+	Vector3 reticleGetWorldPosition();
 
 	// 半径を取得
 	float GetRadius() { return radius_; };
+
 
 
 	// 弾リストを取得
@@ -91,7 +100,7 @@ private:
 
 	Model* model_ = nullptr; // モデル
 
-	uint32_t textureHandle_ = 0u; // テクスチャハンドル
+	uint32_t playerTextureHandle_ = 0u; // テクスチャハンドル
 
 	Input* input_ = nullptr; // キーボード入力
 
@@ -103,6 +112,23 @@ private:
 	static const int kFireInterval_ = 7; // 発射間隔の設定
 
 	const float radius_ = 2.0f; // 半径
+
+
+
+	/* ----- 3DReticle 3Dレティクル ----- */
+
+	// テクスチャハンドル
+	uint32_t ReticleTextureHandle_ = 0u;
+
+
+	// 3Dレティクル用ワールドトランスフォーム
+	WorldTransform worldTransform3DReticle_;
+
+	// 自機から3Dレティクルへの距離
+	const float kDistancePlayerTo3DReticle = 50.0f;
+
+	// 自機から3Dレティクルへのオフセット(Z+向き)
+	Vector3 offset = {0.0f, 0.0f, 1.0f};
 
 };
 
