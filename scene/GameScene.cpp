@@ -355,7 +355,7 @@ void GameScene::LoadEnemyPopDate() {
 
 	// ファイルを開く
 	std::ifstream file;
-	file.open("Resources/script/enemyPop.csv");
+	file.open("Resources/parameter/enemyPop.csv");
 	assert(file.is_open());
 
 	// ファイルの内容を文字列ストリームにコピー
