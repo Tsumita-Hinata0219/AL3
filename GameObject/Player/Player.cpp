@@ -224,7 +224,8 @@ void Player::ReticleUpdate(ViewProjection viewProjection) {
 	//worldTransform3DReticle_.TransferMatrix();
 
 
-
+	// 自機のワールド行列の回転を反映
+	offset = TransformNormal(offset, worldTransform_.matWorld_);
 	// ベクトルの長さを整える
 	offset = {
 	    Normalize(offset).x * kDistancePlayerTo3DReticle,
