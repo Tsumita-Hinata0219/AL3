@@ -134,6 +134,7 @@ void Player::Update(ViewProjection viewProjection) {
 	ImGui::InputFloat3("PlayerPosition", &worldTransform_.translation_.x);
 	// float3スライダー
 	ImGui::SliderFloat3("PlayerSlider", &worldTransform_.translation_.x, 0.0f, 40.0f);
+	ImGui::SliderFloat3("Playerrotation", &worldTransform_.rotation_.x, 0.0f, 40.0f);
 
 	ImGui::Text("isDebugCameraActive_->Enter");
 	ImGui::Text("R -> rotation.y Reset");
@@ -209,22 +210,42 @@ void Player::onCollision() {
 
 void Player::ReticleUpdate(ViewProjection viewProjection) {
 
+	Vector3 pos{};
+
+	pos.x = worldTransform_.matWorld_.m[3][0];
+	pos.y = worldTransform_.matWorld_.m[3][1];
+	pos.z = worldTransform_.matWorld_.m[3][2];
+
 	// 自機のワールド行列の回転を反映
 	offset = TransformNormal(offset, worldTransform_.matWorld_);
 
 	// ベクトルの長さを整える
-	offset = {
-	    Normalize(offset).x * kDistancePlayerTo3DReticle,
-		Normalize(offset).y * kDistancePlayerTo3DReticle,
-		Normalize(offset).z * kDistancePlayerTo3DReticle,
-	};
+	//offset = {
+	//    Normalize(offset).x * kDistancePlayerTo3DReticle,
+	//	Normalize(offset).y * kDistancePlayerTo3DReticle,
+	//	Normalize(offset).z * kDistancePlayerTo3DReticle,
+	//};
 
-	Vector3 newOffset = Add(offset, GetPlayerWorldPosition());
+	offset = Normalize(offset);
+	offset.x *= kDistancePlayerTo3DReticle;
+	offset.y *= kDistancePlayerTo3DReticle;
+	offset.z *= kDistancePlayerTo3DReticle;
+	
+
+	//Vector3 newOffset = Add(offset, GetPlayerWorldPosition());
+
+	worldTransform3DReticle_.translation_.x = offset.x + pos.x;
+	worldTransform3DReticle_.translation_.y = offset.y + pos.y;
+	worldTransform3DReticle_.translation_.z = offset.z + pos.z;
 
 	// 3Dベクトルの座標を設定
-	worldTransform3DReticle_.translation_ = newOffset;
+	//worldTransform3DReticle_.translation_ = newOffset;
+
+
 
 	worldTransform3DReticle_.UpdateMatrix();
+	worldTransform3DReticle_.TransferMatrix();
+
 
 
 
