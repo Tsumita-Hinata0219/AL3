@@ -41,8 +41,8 @@ void RailCamera::Update() {
 	ImGui::Begin("RailCamera");
 
 	// スライダーでtranslationとratationを表示
-	ImGui::SliderFloat3("translation", &worldTransform_.translation_.x, -100.0f, 100.0f);
-	ImGui::SliderFloat3("rotation", &worldTransform_.rotation_.x, -50.0f, 50.0f);
+	ImGui::SliderFloat3("translation", &worldTransform_.translation_.x, 0.0f, 100.0f);
+	ImGui::SliderFloat3("rotation", &worldTransform_.rotation_.x, 0.0f, 50.0f);
 
 	ImGui::End();
 }

@@ -6,6 +6,14 @@
 #include <cmath>
 
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <string>
+#include <cmath>
+
+float Length(const Vector3& v);
+float Dot(const Vector3& v1, const Vector3& v2);
+
 
 // 加算
 Vector3 Add(const Vector3 v1, const Vector3 v2);

@@ -60,9 +60,6 @@ void Player::Update(ViewProjection viewProjection) {
 
 
 
-	// 自機の旋回処理
-	Rotate();
-
 
 	// 行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
@@ -110,8 +107,14 @@ void Player::Update(ViewProjection viewProjection) {
 	worldTransform_.matWorld_ = MakeAffineMatrix(
 	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
+
+
+
 	worldTransform_.UpdateMatrix();
 
+	
+	// 自機の旋回処理
+	Rotate();
 
 
 	if (input_->PushKey(DIK_SPACE)) {
@@ -181,12 +184,6 @@ void Player::Attack() {
 	    Normalize(velocity_).y * kBulletSpeed_,
 	    Normalize(velocity_).z * kBulletSpeed_,	   
 	};
-
-	velocity_ = {
-	    velocity_.x,
-	    velocity_.y,
-	    velocity_.z * kBulletSpeed_,
-	};
 		
 
 	// 速度ベクトルを自機の向きに合わせて回転させる
@@ -210,42 +207,36 @@ void Player::onCollision() {
 
 void Player::ReticleUpdate(ViewProjection viewProjection) {
 
-	Vector3 pos{};
+	//Vector3 pos{};
+	//pos.x = worldTransform_.matWorld_.m[3][0];
+	//pos.y = worldTransform_.matWorld_.m[3][1];
+	//pos.z = worldTransform_.matWorld_.m[3][2];
+	//// 自機のワールド行列の回転を反映
+	//offset = TransformNormal(offset, worldTransform_.matWorld_);
+	//offset = Normalize(offset);
+	//offset.x *= kDistancePlayerTo3DReticle;
+	//offset.y *= kDistancePlayerTo3DReticle;
+	//offset.z *= kDistancePlayerTo3DReticle;
+	//worldTransform3DReticle_.translation_.x = offset.x + pos.x;
+	//worldTransform3DReticle_.translation_.y = offset.y + pos.y;
+	//worldTransform3DReticle_.translation_.z = offset.z + pos.z;
+	//worldTransform3DReticle_.UpdateMatrix();
+	//worldTransform3DReticle_.TransferMatrix();
 
-	pos.x = worldTransform_.matWorld_.m[3][0];
-	pos.y = worldTransform_.matWorld_.m[3][1];
-	pos.z = worldTransform_.matWorld_.m[3][2];
 
-	// 自機のワールド行列の回転を反映
-	offset = TransformNormal(offset, worldTransform_.matWorld_);
 
 	// ベクトルの長さを整える
-	//offset = {
-	//    Normalize(offset).x * kDistancePlayerTo3DReticle,
-	//	Normalize(offset).y * kDistancePlayerTo3DReticle,
-	//	Normalize(offset).z * kDistancePlayerTo3DReticle,
-	//};
-
-	offset = Normalize(offset);
-	offset.x *= kDistancePlayerTo3DReticle;
-	offset.y *= kDistancePlayerTo3DReticle;
-	offset.z *= kDistancePlayerTo3DReticle;
-	
-
-	//Vector3 newOffset = Add(offset, GetPlayerWorldPosition());
-
-	worldTransform3DReticle_.translation_.x = offset.x + pos.x;
-	worldTransform3DReticle_.translation_.y = offset.y + pos.y;
-	worldTransform3DReticle_.translation_.z = offset.z + pos.z;
-
+	offset = {
+	    Normalize(offset).x * kDistancePlayerTo3DReticle,
+	    Normalize(offset).y * kDistancePlayerTo3DReticle,
+	    Normalize(offset).z * kDistancePlayerTo3DReticle,
+	};
+	Vector3 newOffset = Add(offset, GetPlayerWorldPosition());
 	// 3Dベクトルの座標を設定
-	//worldTransform3DReticle_.translation_ = newOffset;
-
-
-
+	worldTransform3DReticle_.translation_ = newOffset;
 	worldTransform3DReticle_.UpdateMatrix();
 	worldTransform3DReticle_.TransferMatrix();
-
+	
 
 
 
