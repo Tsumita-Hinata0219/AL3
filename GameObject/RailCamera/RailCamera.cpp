@@ -22,7 +22,7 @@ void RailCamera::Initialize(Vector3 translation, Vector3 rotation) {
 void RailCamera::Update() {
 
 	// ワールドトランスフォームの加算
-	Vector3 move = {0.0f, 0.0f, -0.5f};
+	Vector3 move = {0.0f, 0.0f, 0.0f};
 	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
 
 	Vector3 rotate = {0.0f, 0.0f, 0.0f};

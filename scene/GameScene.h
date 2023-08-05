@@ -13,8 +13,10 @@
 #include <string>
 
 #include "Player.h"
-#include "DebugCamera.h"
+#include "PlayerBullet.h"
 #include "Enemy.h"
+#include "EnemyBullet.h"
+#include "DebugCamera.h"
 #include "Skydome.h"
 #include "RailCamera.h"
 
@@ -56,6 +58,12 @@ public: // メンバ関数
 	void CheckAllCollision();
 
 	/// <summary>
+	/// 自弾を追加する
+	/// </summary>
+	/// <param name="playerBullet">自弾</param>
+	void AddPlayerBullet(PlayerBullet* playerBullet);
+
+	/// <summary>
 	/// 敵弾を追加する
 	/// </summary>
 	/// <param name="enemyBullet">敵弾</param>
@@ -76,9 +84,25 @@ public: // メンバ関数
 
 private: // メンバ変数
 
+	/* ----- テクスチャハンドル ----- */
+
+	uint32_t playerTextureHandle_ = 0;
+	uint32_t playerBulletTextureHandle_ = 0;
+	uint32_t playerReticleTextureHandle_ = 0;
+
+	uint32_t enemyTextureHandle_ = 0;
+	uint32_t enemyBulletTextureHandle_ = 0;
+
+
+
 	/* ----- Player 自キャラ ----- */
 
+	// 自キャラ
 	Player* player_ = nullptr;
+
+	// 自弾
+	PlayerBullet* playerBullet_ = nullptr;
+	std::list<PlayerBullet*> playerBullets_;
 
 
 
@@ -125,10 +149,6 @@ private: // メンバ変数
 	Audio* audio_ = nullptr;
 
 
-
-
-	// テクスチャハンドル
-	uint32_t textureHandle_ = 0;
 
 	// 3Dモデル
 	Model* model_ = nullptr;

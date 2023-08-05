@@ -50,7 +50,7 @@ public:
 
 
 
-
+	//void SetTextureHandle(uint32_t textureHandle) { textureHandle_ = textureHandle; }
 	
 
 

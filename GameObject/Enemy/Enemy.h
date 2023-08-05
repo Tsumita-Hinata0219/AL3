@@ -95,6 +95,8 @@ public:
 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
+	//void SetTextureHandle(uint32_t textureHandle) { textureHandle_ = textureHandle; }
+
 	bool IsDead() const { return isDead_; }
 	
 

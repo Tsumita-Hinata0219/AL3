@@ -7,6 +7,13 @@
 #include <Function.h>
 #include <PlayerBullet.h>
 #include <list>
+#include <Sprite.h>
+
+
+
+// gameSceneの前方宣言
+class GameScene;
+
 
 
 /// <summary>
@@ -38,15 +45,19 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update();
+	void Update(ViewProjection viewProjection);
 
 
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	/// <param name = "viewProjection">ビュープロジェクション (参照渡し) </pram>
-	void Draw(ViewProjection viewProjection);
+	void Draw3D(ViewProjection viewProjection);
 
+	/// <summary>
+	/// UI描画
+	/// </summary>
+	void DrawUI();
 
 	/// <summary>
 	/// 旋回(回転)
@@ -69,18 +80,16 @@ public:
 	/// <summary>
 	/// 3Dレティクルの更新処理
 	/// </summary>
-	void ReticleUpdate();
+	void ReticleUpdate(ViewProjection viewProjection);
 
 
 	// ワールド座標を取得
-	Vector3 playerGetWorldPosition();
+	Vector3 GetPlayerWorldPosition();
 
-	Vector3 reticleGetWorldPosition();
+	Vector3 GetReticleWorldPosition();
 
 	// 半径を取得
 	float GetRadius() { return radius_; };
-
-
 
 	// 弾リストを取得
 	const std::list<PlayerBullet*>& GetBullet() { return bullets_; };
@@ -93,8 +102,21 @@ public:
 	void SetParent(const WorldTransform* parent);
 
 
+	PlayerBullet* GetPlayerBullet() { return playerBullet_; };
+
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
+
+	/*void SetTextureHandle(uint32_t playerTexture, uint32_t reticleTextuer) {
+		playerTextureHandle_ = playerTexture;
+		ReticleTextureHandle_ = reticleTextuer;
+	}*/
+
 
 private:
+
+	// ゲームシーン
+	GameScene* gameScene_ = nullptr;
 
 	WorldTransform worldTransform_; // ワールド変換データ
 
@@ -104,7 +126,13 @@ private:
 
 	Input* input_ = nullptr; // キーボード入力
 
+	PlayerBullet* playerBullet_ = nullptr;
+
 	std::list<PlayerBullet*> bullets_; // 弾
+
+	// 弾の速度
+	const float kBulletSpeed_ = 5.0f;
+	Vector3 velocity_ = {0.0f, 0.0f, 0.0f};
 
 	int32_t fireTimer_ = 0; // 発射タイマー
 
@@ -129,6 +157,22 @@ private:
 
 	// 自機から3Dレティクルへのオフセット(Z+向き)
 	Vector3 offset = {0.0f, 0.0f, 1.0f};
+
+
+
+	/* ----- 2DReticle 2Dレティクル ----- */
+
+	// スプライト生成
+	Sprite* sprite2DReticle_ = nullptr;
+
+	// レティクルの2D座標
+	Vector3 position2DReticle_;
+
+	// ビューポート行列
+	Matrix4x4 matViewport_;
+
+	// ビュー行列とプロジェクション行列
+	Matrix4x4 matViewProjectionViewport_;
 
 };
 

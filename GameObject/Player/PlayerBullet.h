@@ -46,9 +46,15 @@ public:
 	/// </summary>
 	void onCollision();
 
+	//void SetTextureHandle(uint32_t textureHandle) { textureHandle_ = textureHandle; }
+
 
 	bool IsDead() const { return isDead_; }
 
+
+public:
+
+	uint32_t textureHandle_ = 0u; // テクスチャハンドル
 
 private:
 
@@ -57,7 +63,6 @@ private:
 
 	Model* model_ = nullptr; // モデル
 
-	uint32_t textureHandle_ = 0u; // テクスチャハンドル
 
 	Vector3 velocity_; // 速度
 

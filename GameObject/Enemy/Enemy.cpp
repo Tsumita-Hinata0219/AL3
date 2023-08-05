@@ -20,7 +20,7 @@ void Enemy::Initialize(Model* model, Vector3 pos) {
 	assert(model);
 
 	this->model_ = model;
-	this->textureHandle_ = TextureManager::Load("/picture/Enemy.png");
+	textureHandle_ = TextureManager::Load("/picture/Enemy.png");
 
 	worldTransform_.Initialize();
 	worldTransform_.translation_.x = pos.x;
@@ -107,7 +107,7 @@ void Enemy::Fire() {
 	const float kBulletSpeed = 1.0f;
 
 	// 自キャラのワールド座標を取得する
-	Vector3 playerWorldPos = player_->playerGetWorldPosition(); 
+	Vector3 playerWorldPos = player_->GetPlayerWorldPosition(); 
 
 	// 敵キャラのワールド座標を取得
 	Vector3 enemyWorldPos = GetWorldPosition();
