@@ -77,7 +77,7 @@ void GameScene::Initialize() {
 
 	// Player
 	player_ = new Player();
-	Vector3 playerPosition(0.0f, -5.0f, 40.0f);
+	Vector3 playerPosition(0.0f, 0.0f, 30.0f);
 	player_->Initialize(model_, playerPosition);
 	// 自キャラにゲームシーンを渡す
 	player_->SetGameScene(this);

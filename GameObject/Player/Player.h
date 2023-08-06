@@ -82,6 +82,18 @@ public:
 	/// </summary>
 	void ReticleUpdate(ViewProjection viewProjection);
 
+	/// <summary>
+	/// 自キャラの移動処理
+	/// </summary>
+	void PlayerMove();
+
+	/// <summary>
+	/// レティクルの移動処理
+	/// </summary>
+	void ReticleMove();
+
+
+
 
 	// ワールド座標を取得
 	Vector3 GetPlayerWorldPosition();
@@ -153,10 +165,16 @@ private:
 	WorldTransform worldTransform3DReticle_;
 
 	// 自機から3Dレティクルへの距離
-	const float kDistancePlayerTo3DReticle = 50.0f;
+	const float kDistancePlayerTo3DReticle = 70.0f;
 
 	// 自機から3Dレティクルへのオフセット(Z+向き)
 	Vector3 offset = {0.0f, 0.0f, 1.0f};
+
+	// マウス例の方向
+	Vector3 mouseDirection_;
+
+	// カメラから照準オブジェクトの距離
+	const float kDistanceTestObject = 100.0f;
 
 
 
@@ -173,6 +191,34 @@ private:
 
 	// ビュー行列とプロジェクション行列
 	Matrix4x4 matViewProjectionViewport_;
+
+	// ビュープロジェクションビューポート合成行列
+	Matrix4x4 matVPV_;
+
+	// 合成行列の逆行列
+	Matrix4x4 matInverseVPV_;
+
+	// スクリーン座標
+	Vector3 posNear_;
+	Vector3 posFar_;
+
+	// スプライトの座標取得用
+	Vector2 spritePosition_;
+
+
+	/* ----- Mouse マウス ----- */
+
+	// マウス座標
+	POINT mousePosition_;
+
+	HWND hwnd = nullptr;
+
+
+	/* ----- GamePad ゲームパッド ----- */
+
+	// ゲームパッドの状態を得る変数(XINPUT)
+	XINPUT_STATE joyState_;
+
 
 };
 

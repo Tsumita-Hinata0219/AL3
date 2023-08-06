@@ -7,7 +7,7 @@ void RailCamera::Initialize(Vector3 translation, Vector3 rotation) {
 
 	// ワールドトランスフォームの初期設定
 	worldTransform_.rotation_ = rotation;
-	worldTransform_.translation_ = translation ;
+	worldTransform_.translation_ = translation;
 	worldTransform_.Initialize();
 
 	// ビュープロジェクションの初期化

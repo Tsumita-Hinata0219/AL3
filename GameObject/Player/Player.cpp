@@ -54,10 +54,17 @@ void Player::Initialize(Model* model, Vector3 position) {
 
 
 void Player::Update(ViewProjection viewProjection) {
+
 	
+	// 自キャラの移動処理
+	PlayerMove();
+
+	// レティクルの移動処理
+	ReticleMove();
+
+
 	// 3Dレティクルの更新処理
 	ReticleUpdate(viewProjection);
-
 
 
 
@@ -65,48 +72,9 @@ void Player::Update(ViewProjection viewProjection) {
 	worldTransform_.TransferMatrix();
 
 
-	Vector3 move = {0.0f, 0.0f, 0.0f}; // 移動ベクトル
-
-	const float kCharacterSpeed = 0.3f; // 移動速度
-
-	// 押した方向で移動ベクトルを変更
-	if (input_->PushKey(DIK_LEFT))	{
-		move.x -= kCharacterSpeed;
-	} 
-	else if (input_->PushKey(DIK_RIGHT)) {
-		move.x += kCharacterSpeed;
-	}
-	if (input_->PushKey(DIK_UP)) {
-		move.y += kCharacterSpeed;
-	} 
-	else if (input_->PushKey(DIK_DOWN)) {
-		move.y -= kCharacterSpeed;
-	}
-
-	if (input_->PushKey(DIK_R)) {
-		worldTransform_.rotation_.y = 0.0f;
-	}
-
-	// 移動限界座標
-	const float kMoveLimitX = 27.0f;
-	const float kMoveLimitY = 14.0f;
-
-
-	// 範囲を超えない処理
-	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
-	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
-	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
-	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
-
-
-	// 移動行列に移動ベクトルを加算
-	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
-
-
 	// アフィン変換行列
 	worldTransform_.matWorld_ = MakeAffineMatrix(
 	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
-
 
 
 
@@ -117,7 +85,13 @@ void Player::Update(ViewProjection viewProjection) {
 	Rotate();
 
 
-	if (input_->PushKey(DIK_SPACE)) {
+	// 攻撃処理
+	// ゲームパッドを未接続なら何もせず抜ける
+	if (!Input::GetInstance()->GetJoystickState(0, joyState_)) {
+		return;
+	}
+
+	if (input_->PushKey(DIK_SPACE) || joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
 		fireTimer_--;
 	} 
 	if (fireTimer_ <= 0) {
@@ -133,14 +107,15 @@ void Player::Update(ViewProjection viewProjection) {
 	// プレイヤーデバッグ
 	ImGui::Begin("PlayerDebug1");
 
-	// float3入力ボックス
-	ImGui::InputFloat3("PlayerPosition", &worldTransform_.translation_.x);
-	// float3スライダー
-	ImGui::SliderFloat3("PlayerSlider", &worldTransform_.translation_.x, 0.0f, 40.0f);
-	ImGui::SliderFloat3("Playerrotation", &worldTransform_.rotation_.x, 0.0f, 40.0f);
+	ImGui::Text(
+	    "Player:(%+.2f, %+.2f, %+.2f)", worldTransform_.translation_.x,
+	    worldTransform_.translation_.y, worldTransform_.translation_.z);
 
-	ImGui::Text("isDebugCameraActive_->Enter");
-	ImGui::Text("R -> rotation.y Reset");
+	ImGui::Text("3DReticle:(%+.2f, %+.2f, %+.2f)", worldTransform3DReticle_.translation_.x, 
+		worldTransform3DReticle_.translation_.y, worldTransform3DReticle_.translation_.z);
+	ImGui::Text("2DReticle:(%f, %f)", position2DReticle_.x, position2DReticle_.y);
+	ImGui::Text("Near:(%+.2f, %+.2f, %+.2f)", posNear_.x, posNear_.y, posNear_.z);
+	ImGui::Text("Far:(%+.2f, %+.2f, %+.2f)", posFar_.x, posFar_.y, posFar_.z);
 
 	ImGui::End();
 
@@ -199,31 +174,73 @@ void Player::Attack() {
 
 
 
-void Player::onCollision() {
+void Player::onCollision() {}
 
+
+
+void Player::PlayerMove() {
+
+	Vector3 move = {0.0f, 0.0f, 0.0f}; // 移動ベクトル
+
+	const float kCharacterSpeed = 0.3f; // 移動速度
+
+	// 押した方向で移動ベクトルを変更
+	if (input_->PushKey(DIK_LEFT)) {
+		move.x -= kCharacterSpeed;
+	} else if (input_->PushKey(DIK_RIGHT)) {
+		move.x += kCharacterSpeed;
+	}
+	if (input_->PushKey(DIK_UP)) {
+		move.y += kCharacterSpeed;
+	} else if (input_->PushKey(DIK_DOWN)) {
+		move.y -= kCharacterSpeed;
+	}
+
+	if (input_->PushKey(DIK_R)) {
+		worldTransform_.rotation_.y = 0.0f;
+	}
+
+	// ゲームパッド状態取得
+	if (Input::GetInstance()->GetJoystickState(0, joyState_)) {
+		move.x += (float)joyState_.Gamepad.sThumbLX / SHRT_MAX * kCharacterSpeed;
+		move.y += (float)joyState_.Gamepad.sThumbLY / SHRT_MAX * kCharacterSpeed;
+	}
+
+	// 移動限界座標
+	const float kMoveLimitX = 27.0f;
+	const float kMoveLimitY = 14.0f;
+
+	// 範囲を超えない処理
+	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
+	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
+	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
+	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
+
+	// 移動行列に移動ベクトルを加算
+	worldTransform_.translation_ = Add(worldTransform_.translation_, move);
+}
+
+
+
+void Player::ReticleMove() { 
+
+	// スプライトの現在の座標を取得
+	spritePosition_ = sprite2DReticle_->GetPosition();
+
+	// ジョイスティック状態取得
+	if (Input::GetInstance()->GetJoystickState(0, joyState_)) {
+		spritePosition_.x += (float)joyState_.Gamepad.sThumbRX / SHRT_MAX * 12.0f;
+		spritePosition_.y -= (float)joyState_.Gamepad.sThumbRY / SHRT_MAX * 12.0f;
+
+		// スプライトの座標変更を反映
+		sprite2DReticle_->SetPosition(spritePosition_);
+	}
 }
 
 
 
 void Player::ReticleUpdate(ViewProjection viewProjection) {
-
-	//Vector3 pos{};
-	//pos.x = worldTransform_.matWorld_.m[3][0];
-	//pos.y = worldTransform_.matWorld_.m[3][1];
-	//pos.z = worldTransform_.matWorld_.m[3][2];
-	//// 自機のワールド行列の回転を反映
-	//offset = TransformNormal(offset, worldTransform_.matWorld_);
-	//offset = Normalize(offset);
-	//offset.x *= kDistancePlayerTo3DReticle;
-	//offset.y *= kDistancePlayerTo3DReticle;
-	//offset.z *= kDistancePlayerTo3DReticle;
-	//worldTransform3DReticle_.translation_.x = offset.x + pos.x;
-	//worldTransform3DReticle_.translation_.y = offset.y + pos.y;
-	//worldTransform3DReticle_.translation_.z = offset.z + pos.z;
-	//worldTransform3DReticle_.UpdateMatrix();
-	//worldTransform3DReticle_.TransferMatrix();
-
-
+	
 	// 自機のワールド行列の回転を反映
 	offset = TransformNormal(offset, worldTransform_.matWorld_);
 	// ベクトルの長さを整える
@@ -237,7 +254,7 @@ void Player::ReticleUpdate(ViewProjection viewProjection) {
 	worldTransform3DReticle_.translation_ = newOffset;
 	worldTransform3DReticle_.UpdateMatrix();
 	worldTransform3DReticle_.TransferMatrix();
-	
+
 
 
 
@@ -258,6 +275,63 @@ void Player::ReticleUpdate(ViewProjection viewProjection) {
 	// スプライトにレティクルに座標指定
 	sprite2DReticle_->SetPosition(Vector2(position2DReticle_.x, position2DReticle_.y));
 
+
+
+
+	// マウス座標(スクリーン座標)を取得する
+	GetCursorPos(&mousePosition_);
+
+	// クライアントエリア座標に変換する
+	hwnd = WinApp::GetInstance()->GetHwnd();
+	ScreenToClient(hwnd, &mousePosition_);
+
+
+	Vector2 reticlePosition = {
+		float(position2DReticle_.x), 
+		float(position2DReticle_.y),
+	};
+	// マウス座標をを2Dレティクルのスプライトに代入する
+	sprite2DReticle_->SetPosition(Vector2(float(spritePosition_.x), float(spritePosition_.y)));
+
+
+	// ビュープロジェクションビューポート合成行列
+	matVPV_ = Multiply(
+	    viewProjection.matView,
+	    Multiply(
+	        viewProjection.matProjection,
+	        MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1)));
+
+	// 合成行列の逆行列を計算する
+	matInverseVPV_ = Inverse(matVPV_);
+
+
+	// スクリーン座標
+	posNear_ = Vector3(float(spritePosition_.x), float(spritePosition_.y), 0);
+	posFar_ = Vector3(float(spritePosition_.x), float(spritePosition_.y), 1);
+
+	// スクリーン座標系からワールド座標系へ
+	posNear_ = Transform(posNear_, matInverseVPV_);
+	posFar_ = Transform(posFar_, matInverseVPV_);
+
+
+
+	// 3Dレティクルの座標計算
+	// マウスレイの方向
+	mouseDirection_ = Subtract(posNear_, posFar_);
+	mouseDirection_ = Add(posNear_, posFar_);
+	mouseDirection_ = Normalize(mouseDirection_);
+
+	// カメラから照準オブジェクトの距離
+	worldTransform3DReticle_.translation_ = { 
+		posNear_.x + mouseDirection_.x * kDistanceTestObject, 
+		posNear_.y + mouseDirection_.y * kDistanceTestObject,
+		posNear_.z + mouseDirection_.z * kDistanceTestObject,
+	};
+
+
+	// worldTransform3DReticleのワールド行列の更新と転送
+	worldTransform3DReticle_.UpdateMatrix();
+	worldTransform3DReticle_.TransferMatrix();
 }
 
 
@@ -266,7 +340,7 @@ void Player::Draw3D(ViewProjection viewProjection) {
 	
 	model_->Draw(worldTransform_, viewProjection, playerTextureHandle_);
 
-	model_->Draw(worldTransform3DReticle_, viewProjection, ReticleTextureHandle_);
+	//model_->Draw(worldTransform3DReticle_, viewProjection, ReticleTextureHandle_);
 
 }
 
