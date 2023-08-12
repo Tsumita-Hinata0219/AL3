@@ -4,9 +4,12 @@
 #include <WorldTransform.h>
 #include <Input.h>
 #include <ImGuiManager.h>
-#include <Function.h>
-#include <EnemyBullet.h>
 #include <list>
+#include "Function.h"
+#include "EnemyBullet.h"
+#include "EnemyStates.h"
+#include "EnemyStateApproach.h"
+#include "EnemystateLeave.h"
 
 
 
@@ -16,12 +19,12 @@ class Player;
 // gameSceneの前方宣言
 class GameScene;
 
-
-// 行動フェーズ
-enum class Phease {
-	Approach, // 接近する
-	Leave,  // 離脱する
-};
+//
+//// 行動フェーズ
+//enum class Phease {
+//	Approach, // 接近する
+//	Leave,  // 離脱する
+//};
 
 
 /// <summary>
@@ -61,7 +64,7 @@ public:
 	void Fire();
 
 
-	/// <summary>
+	/*/// <summary>
 	/// 行動フェーズ : 接近
 	/// </summary>
 	void Approach();
@@ -70,13 +73,26 @@ public:
 	/// <summary>
 	/// 行動フェーズ : 離脱
 	/// </summary>
-	void Leave();
+	void Leave();*/
 
 
 	/// <summary>
 	/// 衝突を検出したら呼び出されるコールバッグ関数
 	/// </summary>
 	void onCollision();
+
+
+	/// <summary>
+	/// フェーズを変更する
+	/// </summary>
+	void ChangeState(EnemyStates* newState);
+
+
+	/// <summary>
+	/// ステートパターン内で使用する移動用関数(加算 減算) 
+	/// </summary>
+	void AddTransform(const Vector3& velocity);
+	void SubtructTransform(const Vector3& velocity);
 
 
 	// インライン関数
@@ -91,30 +107,24 @@ public:
 	// 半径を取得
 	float GetRadius() { return radius_; };
 	
+	// プレイヤーの取得
 	void SetPlayer(Player* player) { player_ = player; }
 
+	// ゲームシーンを取得
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
-	//void SetTextureHandle(uint32_t textureHandle) { textureHandle_ = textureHandle; }
-
+	// 死亡判定
 	bool IsDead() const { return isDead_; }
 	
 
+
+
 private:
 
-	// 自キャラ
-	Player* player_ = nullptr;
-
-	// ゲームシーン
-	GameScene* gameScene_ = nullptr;
-
-	EnemyBullet* bullet_ = nullptr;
-
-	std::list<EnemyBullet*> bullets_; // 弾
-
-	Phease phease_; // フェーズ
-
+	// 敵キャラ
 	WorldTransform worldTransform_; // ワールド変換データ
+
+	Vector3 enemyWorldPos_; // ワールド座標
 
 	Model* model_ = nullptr; // モデル
 
@@ -122,15 +132,39 @@ private:
 
 	const float kCharacterSpeed = 0.1f; // 移動速度
 
-	Vector3 velocity_; // 敵の速度を設定
-
-	static const int kFireInterval_ = 60; // 発射間隔の設定
-
-	int32_t fireTimer_ = 0; // 発射タイマー
+	Vector3 velocity_; // 敵キャラの移動量
 
 	Input* input_ = nullptr; // キーボード入力
 
 	const float radius_ = 2.0f; // 半径
 
 	bool isDead_ = false; // デスフラグ
+
+	Vector3 EnePlaVector_; // 敵キャラと自キャラの差分ベクトル
+
+
+	// 自キャラ
+	Player* player_ = nullptr;
+
+	Vector3 playerWorldPos_; // ワールド座標
+
+
+	// ゲームシーン
+	GameScene* gameScene_ = nullptr;
+
+
+	// 弾
+	EnemyBullet* bullet_ = nullptr; // 弾
+
+	std::list<EnemyBullet*> bullets_; // 弾リスト
+
+	static const int kFireInterval_ = 60; // 発射間隔の設定
+
+	int32_t fireTimer_ = 0; // 発射タイマー
+
+
+	// ステートパターン
+	EnemyStates* state_;
+	//Phease phease_;
+
 };

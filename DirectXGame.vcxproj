@@ -113,7 +113,6 @@
     <ClCompile Include="GameObject\Enemy\Enemy.cpp" />
     <ClCompile Include="GameObject\Enemy\States\EnemyStateApproach.cpp" />
     <ClCompile Include="GameObject\Enemy\States\EnemyStateLeave.cpp" />
-    <ClCompile Include="GameObject\Enemy\States\EnemyStates.cpp" />
     <ClCompile Include="GameObject\Player\Bullet\PlayerBullet.cpp" />
     <ClCompile Include="GameObject\Player\Player.cpp" />
     <ClCompile Include="GameObject\RailCamera\RailCamera.cpp" />
