@@ -96,7 +96,7 @@ public:
 
 
 	// インライン関数
-	Vector3 Velocity() const { return velocity_; };
+	Vector3 GetVelocity() { return velocity_; };
 
 	// ワールド座標を取得
 	Vector3 GetWorldPosition();

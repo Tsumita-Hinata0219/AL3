@@ -8,6 +8,6 @@
 class EnemyStateApproach : public EnemyStates {
 
 public:
-	void Update(Enemy* pEnemy, const Vector3& velocity) override;
+	void Update(Enemy* pEnemy) override;
 };
 

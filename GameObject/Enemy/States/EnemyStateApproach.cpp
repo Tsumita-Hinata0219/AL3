@@ -2,10 +2,10 @@
 #include "Enemy.h"
 
 
-void EnemyStateApproach::Update(Enemy* pEnemy, const Vector3& velocity) {
+void EnemyStateApproach::Update(Enemy* pEnemy) {
 
 	// 座標を移動させる(1フレーム分の移動量を足しこむ)
-	pEnemy->SubtructTransform(velocity);
+	pEnemy->SubtructTransform(pEnemy->GetVelocity());
 
 
 	// 規定の位置に到達したらstate_変更
@@ -15,3 +15,4 @@ void EnemyStateApproach::Update(Enemy* pEnemy, const Vector3& velocity) {
 		pEnemy->ChangeState(new EnemyStateLeave());
 	}
 }
+

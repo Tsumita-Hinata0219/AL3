@@ -82,6 +82,24 @@
     <Filter Include="ヘッダー ファイル\GameObject\RailCamera">
       <UniqueIdentifier>{d2b278c3-76c0-46cb-8f3c-b3b4dcc03487}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameObject\Enemy\Bullet">
+      <UniqueIdentifier>{8dd5f791-a515-4eb7-978d-a5afc9bcfdba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObject\Player\Bullet">
+      <UniqueIdentifier>{136030bd-c196-4dbc-94f2-76663544b950}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameObject\Enemy\Bullet">
+      <UniqueIdentifier>{dead5d67-e5df-4546-b103-68e54a42a99e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameObject\Enemy\States">
+      <UniqueIdentifier>{485387b9-2a7f-4f45-b148-95dcbd8ed6da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObject\Enemy\States">
+      <UniqueIdentifier>{e13b81dc-4499-4cef-acf6-6a1a5f97966f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameObject\Player\Bullet">
+      <UniqueIdentifier>{8c2dc370-88fc-4511-9238-6881fc88719f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -108,13 +126,7 @@
     <ClCompile Include="GameObject\Enemy\Enemy.cpp">
       <Filter>ソース ファイル\GameObject\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject\Enemy\EnemyBullet.cpp">
-      <Filter>ソース ファイル\GameObject\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject\Player\Player.cpp">
-      <Filter>ソース ファイル\GameObject\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject\Player\PlayerBullet.cpp">
       <Filter>ソース ファイル\GameObject\Player</Filter>
     </ClCompile>
     <ClCompile Include="GameObject\Skydome\Skydome.cpp">
@@ -122,6 +134,21 @@
     </ClCompile>
     <ClCompile Include="GameObject\RailCamera\RailCamera.cpp">
       <Filter>ソース ファイル\GameObject\RailCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Enemy\Bullet\EnemyBullet.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Enemy\States\EnemyStateApproach.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy\States</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Enemy\States\EnemyStateLeave.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy\States</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Player\Bullet\PlayerBullet.cpp">
+      <Filter>ソース ファイル\GameObject\Player\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Enemy\States\EnemyStates.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy\States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -215,13 +242,7 @@
     <ClInclude Include="GameObject\Enemy\Enemy.h">
       <Filter>ヘッダー ファイル\GameObject\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject\Enemy\EnemyBullet.h">
-      <Filter>ヘッダー ファイル\GameObject\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject\Player\Player.h">
-      <Filter>ヘッダー ファイル\GameObject\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject\Player\PlayerBullet.h">
       <Filter>ヘッダー ファイル\GameObject\Player</Filter>
     </ClInclude>
     <ClInclude Include="GameObject\Skydome\Skydome.h">
@@ -229,6 +250,21 @@
     </ClInclude>
     <ClInclude Include="GameObject\RailCamera\RailCamera.h">
       <Filter>ヘッダー ファイル\GameObject\RailCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Enemy\Bullet\EnemyBullet.h">
+      <Filter>ヘッダー ファイル\GameObject\Enemy\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Enemy\States\EnemyStateApproach.h">
+      <Filter>ヘッダー ファイル\GameObject\Enemy\States</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Enemy\States\EnemystateLeave.h">
+      <Filter>ヘッダー ファイル\GameObject\Enemy\States</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Enemy\States\EnemyStates.h">
+      <Filter>ヘッダー ファイル\GameObject\Enemy\States</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Player\Bullet\PlayerBullet.h">
+      <Filter>ヘッダー ファイル\GameObject\Player\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
