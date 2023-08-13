@@ -100,6 +100,12 @@
     <Filter Include="ヘッダー ファイル\GameObject\Player\Bullet">
       <UniqueIdentifier>{8c2dc370-88fc-4511-9238-6881fc88719f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\utilities">
+      <UniqueIdentifier>{691760fe-bf89-4606-aa3f-96c9c3c5f98b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\utilities">
+      <UniqueIdentifier>{cb17e1d4-42f0-448f-84b0-e33da01604fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -146,6 +152,9 @@
     </ClCompile>
     <ClCompile Include="GameObject\Player\Bullet\PlayerBullet.cpp">
       <Filter>ソース ファイル\GameObject\Player\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities\TimedCall.cpp">
+      <Filter>ソース ファイル\utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -262,6 +271,9 @@
     </ClInclude>
     <ClInclude Include="GameObject\Player\Bullet\PlayerBullet.h">
       <Filter>ヘッダー ファイル\GameObject\Player\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\TimedCall.h">
+      <Filter>ヘッダー ファイル\utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
