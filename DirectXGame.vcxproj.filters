@@ -147,9 +147,6 @@
     <ClCompile Include="GameObject\Player\Bullet\PlayerBullet.cpp">
       <Filter>ソース ファイル\GameObject\Player\Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject\Enemy\States\EnemyStates.cpp">
-      <Filter>ソース ファイル\GameObject\Enemy\States</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\ViewProjection.h">

@@ -7,6 +7,9 @@
 
 
 
+/// <summary>
+/// デストラクタ
+/// </summary>
 Enemy::~Enemy() {}
 
 
@@ -33,7 +36,6 @@ void Enemy::Initialize(Model* model, Vector3 pos) {
 		
 	//phease_ = Phease::Approach;
 	state_ = new EnemyStateApproach();
-
 }
 
 
@@ -47,41 +49,9 @@ void Enemy::Update() {
 	// 移動(ベクトルを加算)
 	velocity_ = {0, 0, kCharacterSpeed}; // 敵の移動速度
 
-	state_->Update(this, velocity_);
-	
-
-	//switch ( phease_) 
-	//{
-	//case Phease::Approach:
-	//default:
-	//	
-	//	Approach();
-
-	//	// 発射タイマーカウントダウン
-	//	fireTimer_--;
-
-	//	// 指定時間に達した
-	//	if (fireTimer_ <= 0) {
-
-	//		// 弾を発射
-	//		Fire();
-
-	//		// 発射タイマーを初期化
-	//		fireTimer_ = kFireInterval_;
-	//	}
-
-	//	break;
+	state_->Update(this);
 
 
-	//case Phease::Leave:
-	//	
-	//	Leave();
-
-	//	break;
-
-	//}
-
-	
 	// ワールドトラスフォームの更新
 	worldTransform_.UpdateMatrix();
 
@@ -91,8 +61,6 @@ void Enemy::Update() {
 
 	// float3入力ボックス
 	ImGui::InputFloat3("EnemyPosition", &worldTransform_.translation_.x);
-	// float3スライダー
-	ImGui::SliderFloat3("EnemySlider", &worldTransform_.translation_.x, 0.0f, 40.0f);
 
 	ImGui::End();
 }
@@ -102,12 +70,34 @@ void Enemy::Update() {
 /// <summary>
 /// 攻撃
 /// </summary>
+void Enemy::Attack() {
+
+	// 発射タイマーカウントダウン
+	fireTimer_--;
+
+	// 指定時間に達した
+	if (fireTimer_ <= 0) {
+
+		// プレイヤーより前にいたら攻撃
+		if (player_->GetPlayerWorldPosition().z <= worldTransform_.translation_.z) {
+			
+			// 弾を発射
+			Fire();
+		}
+
+		// 発射タイマーを初期化
+		fireTimer_ = kFireInterval_;
+	}
+}
+
+
+
+/// <summary>
+/// 弾の射撃処理
+/// </summary>
 void Enemy::Fire() {
 
 	assert(player_);
-
-	// 弾の速度
-	const float kBulletSpeed = 1.0f;
 
 	// 自キャラのワールド座標を取得する
 	playerWorldPos_ = player_->GetPlayerWorldPosition(); 
@@ -125,7 +115,7 @@ void Enemy::Fire() {
 	velocity_ = {
 	    EnePlaVector_.x,
 	    EnePlaVector_.y,
-	    EnePlaVector_.z * kBulletSpeed,
+	    EnePlaVector_.z * kBulletSpeed_,
 	};
 
 	// 速度ベクトルを自機の向きに合わせて回転させる
@@ -152,12 +142,14 @@ void Enemy::onCollision() {
 
 
 
+/// <summary>
+/// フェーズを変更する
+/// </summary>
 void Enemy::ChangeState(EnemyStates* newState) {
 
-	// 元のstate_を削除してnewStateを入れる
-	delete state_;
 	state_ = newState;
 }
+
 
 
 /// <summary>
@@ -171,41 +163,6 @@ void Enemy::SubtructTransform(const Vector3& velocity) {
 
 	worldTransform_.translation_ = Subtract(worldTransform_.translation_, velocity);
 }
-
-
-
-///// <summary>
-///// 行動フェーズ : 接近
-///// </summary>
-//void Enemy::Approach() {
-//
-//	// 座標を移動させる(1フレーム分の移動量を足しこむ)
-//	worldTransform_.translation_ = Subtract(worldTransform_.translation_, velocity_);
-//
-//
-//	// 規定の位置に到達し
-//	if (worldTransform_.translation_.z < -10.0f) {
-//
-//		// 行動フェーズを離脱へ
-//		phease_ = Phease::Leave;
-//	}
-//}
-
-
-
-///// <summary>
-///// 行動フェーズ : 離脱
-///// </summary>
-//void Enemy::Leave() {
-//
-//	// 座標を移動させる(1フレーム分の移動量を足しこむ)
-//	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
-//
-//	// 規定の位置に到達したら離脱
-//	if (worldTransform_.translation_.z > 50.0f) {
-//		phease_ = Phease::Approach;
-//	}
-//}
 
 
 

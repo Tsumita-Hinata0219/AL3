@@ -19,13 +19,6 @@ class Player;
 // gameSceneの前方宣言
 class GameScene;
 
-//
-//// 行動フェーズ
-//enum class Phease {
-//	Approach, // 接近する
-//	Leave,  // 離脱する
-//};
-
 
 /// <summary>
 /// 敵キャラ
@@ -58,22 +51,19 @@ public:
 	void Draw(ViewProjection viewProjection);
 
 
+
 	/// <summary>
 	/// 攻撃
 	/// </summary>
-	void Fire();
+	void Attack();
 
-
-	/*/// <summary>
-	/// 行動フェーズ : 接近
-	/// </summary>
-	void Approach();
 
 
 	/// <summary>
-	/// 行動フェーズ : 離脱
+	/// 弾の射撃処理
 	/// </summary>
-	void Leave();*/
+	void Fire();
+
 
 
 	/// <summary>
@@ -86,6 +76,7 @@ public:
 	/// フェーズを変更する
 	/// </summary>
 	void ChangeState(EnemyStates* newState);
+	
 
 
 	/// <summary>
@@ -108,6 +99,7 @@ public:
 	float GetRadius() { return radius_; };
 	
 	// プレイヤーの取得
+	Player* GetPlayer() { return player_; }
 	void SetPlayer(Player* player) { player_ = player; }
 
 	// ゲームシーンを取得
@@ -162,9 +154,9 @@ private:
 
 	int32_t fireTimer_ = 0; // 発射タイマー
 
+	const float kBulletSpeed_ = 1.0f; // 弾の速度
+
 
 	// ステートパターン
 	EnemyStates* state_;
-	//Phease phease_;
-
 };
