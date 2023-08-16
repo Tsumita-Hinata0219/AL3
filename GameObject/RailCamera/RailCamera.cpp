@@ -35,16 +35,6 @@ void RailCamera::Update() {
 	
 	// カメラオブジェクトのワールド行列からビュー行列を計算する
 	viewProjection_.matView = Inverse(worldTransform_.matWorld_);
-
-	
-	// カメラの座標を画面表示する処理
-	ImGui::Begin("RailCamera");
-
-	// スライダーでtranslationとratationを表示
-	ImGui::SliderFloat3("translation", &worldTransform_.translation_.x, 0.0f, 100.0f);
-	ImGui::SliderFloat3("rotation", &worldTransform_.rotation_.x, 0.0f, 50.0f);
-
-	ImGui::End();
 }
 
 

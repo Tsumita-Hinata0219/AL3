@@ -163,7 +163,7 @@ void GameScene::Update() {
 	for (Enemy* enemy : enemys_) {
 		enemy->Update();
 	}
-	// 敵発生スクリプトの実行
+	// 敵キャラ発生スクリプトの実行
 	UpdateEnemyPopCommands();
 
 	// 敵弾の更新処理
@@ -171,7 +171,7 @@ void GameScene::Update() {
 		enemyBullet->Update();
 	}
 
-	// デスフラグの立った敵を削除
+	// デスフラグの立った敵キャラを削除
 	enemys_.remove_if([](Enemy* enemy) {
 		if (enemy->IsDead()) {
 			delete enemy;

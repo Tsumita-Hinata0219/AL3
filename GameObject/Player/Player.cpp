@@ -67,7 +67,6 @@ void Player::Update(ViewProjection viewProjection) {
 	ReticleUpdate(viewProjection);
 
 
-
 	// 行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
 
@@ -75,7 +74,6 @@ void Player::Update(ViewProjection viewProjection) {
 	// アフィン変換行列
 	worldTransform_.matWorld_ = MakeAffineMatrix(
 	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
-
 
 
 	worldTransform_.UpdateMatrix();
@@ -110,12 +108,6 @@ void Player::Update(ViewProjection viewProjection) {
 	ImGui::Text(
 	    "Player:(%+.2f, %+.2f, %+.2f)", worldTransform_.translation_.x,
 	    worldTransform_.translation_.y, worldTransform_.translation_.z);
-
-	ImGui::Text("3DReticle:(%+.2f, %+.2f, %+.2f)", worldTransform3DReticle_.translation_.x, 
-		worldTransform3DReticle_.translation_.y, worldTransform3DReticle_.translation_.z);
-	ImGui::Text("2DReticle:(%f, %f)", position2DReticle_.x, position2DReticle_.y);
-	ImGui::Text("Near:(%+.2f, %+.2f, %+.2f)", posNear_.x, posNear_.y, posNear_.z);
-	ImGui::Text("Far:(%+.2f, %+.2f, %+.2f)", posFar_.x, posFar_.y, posFar_.z);
 
 	ImGui::End();
 

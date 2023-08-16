@@ -10,6 +10,7 @@
 #include "EnemyStates.h"
 #include "EnemyStateApproach.h"
 #include "EnemystateLeave.h"
+#include "TimedCall.h"
 
 
 
@@ -53,7 +54,7 @@ public:
 
 
 	/// <summary>
-	/// 攻撃
+	/// 弾を発射し、タイマーをリセットするコールバッグ関数
 	/// </summary>
 	void Attack();
 
@@ -145,6 +146,10 @@ private:
 	GameScene* gameScene_ = nullptr;
 
 
+	// タイムコール
+	std::list<TimedCall*> timedCalls_;
+
+
 	// 弾
 	EnemyBullet* bullet_ = nullptr; // 弾
 
@@ -159,4 +164,6 @@ private:
 
 	// ステートパターン
 	EnemyStates* state_;
+
+	
 };

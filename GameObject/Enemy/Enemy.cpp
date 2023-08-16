@@ -10,7 +10,13 @@
 /// <summary>
 /// デストラクタ
 /// </summary>
-Enemy::~Enemy() {}
+Enemy::~Enemy() {
+
+	// 解放処理
+	for (TimedCall* timedCall_ : timedCalls_) {
+		delete timedCall_;
+	}
+}
 
 
 
@@ -36,6 +42,10 @@ void Enemy::Initialize(Model* model, Vector3 pos) {
 		
 	//phease_ = Phease::Approach;
 	state_ = new EnemyStateApproach();
+
+	// TimedCall
+	TimedCall* timedcall = new TimedCall(std::bind(&Enemy::Attack, this), kFireInterval_);
+	timedCalls_.push_back(timedcall);
 }
 
 
@@ -45,11 +55,28 @@ void Enemy::Initialize(Model* model, Vector3 pos) {
 /// </summary>
 void Enemy::Update() {
 
+	// ステートパターン
+	state_->Update(this);
+
+	
+	// 範囲forでリストの全要素について回す
+	for (TimedCall* timedCall_ : timedCalls_) {
+		timedCall_->Update();
+	}
+
+
+	// 使用したtimedCallを削除
+	timedCalls_.remove_if([](TimedCall* timedCall_) {
+		if (timedCall_->IsFinished()) {
+			delete timedCall_;
+			return true;
+		}
+		return false;
+	});
+
 
 	// 移動(ベクトルを加算)
 	velocity_ = {0, 0, kCharacterSpeed}; // 敵の移動速度
-
-	state_->Update(this);
 
 
 	// ワールドトラスフォームの更新
@@ -68,25 +95,18 @@ void Enemy::Update() {
 
 
 /// <summary>
-/// 攻撃
+/// 弾を発射し、タイマーをリセットするコールバッグ関数
 /// </summary>
 void Enemy::Attack() {
 
-	// 発射タイマーカウントダウン
-	fireTimer_--;
+	// プレイヤーより前にいたら攻撃
+	if (player_->GetPlayerWorldPosition().z <= worldTransform_.translation_.z) {
 
-	// 指定時間に達した
-	if (fireTimer_ <= 0) {
+		// 弾を発射する
+		Fire();
 
-		// プレイヤーより前にいたら攻撃
-		if (player_->GetPlayerWorldPosition().z <= worldTransform_.translation_.z) {
-			
-			// 弾を発射
-			Fire();
-		}
-
-		// 発射タイマーを初期化
-		fireTimer_ = kFireInterval_;
+		// 発射タイマーをセットして射撃
+		timedCalls_.push_back(new TimedCall(std::bind(&Enemy::Attack, this), kFireInterval_));
 	}
 }
 
