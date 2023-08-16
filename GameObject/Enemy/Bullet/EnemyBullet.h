@@ -70,5 +70,9 @@ private:
 	bool isDead_ = false; // デスフラグ
 
 	const float radius_ = 2.0f; // 半径
+
+	float height_ = 0.0f;
+
+	float velocityZ_ = 0.0f;
 };
 
