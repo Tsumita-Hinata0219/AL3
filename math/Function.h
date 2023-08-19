@@ -1,41 +1,89 @@
 ﻿#pragma once
 
-#include <Matrix4x4.h>
-#include <Vector3.h>
-#include <assert.h>
+#include "Struct.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include <string>
 #include <cmath>
 #include <iostream>
+#include <algorithm>
+#include <cassert>
+#include "imgui.h"
 
 
-float Length(const Vector3& v);
-float Dot(const Vector3& v1, const Vector3& v2);
 
 
+///// 3次元ベクトル
 // 加算
 Vector3 Add(const Vector3 v1, const Vector3 v2);
 
 
 // 減算
-Vector3 Subtract(const Vector3 v1, const Vector3 v2);
+ Vector3 Subtract(const Vector3 v1, const Vector3 v2);
 
 
 // スカラー倍
-Vector3 VecMultiply(const Vector3 v1, const float t);
+Vector3 Multiply(float scalar, const Vector3 v);
 
 
-//　行列の積
+///// 行列4x4
+// 加算
+Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2);
+
+
+// 減算
+Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2);
+
+
+// 乗算
 Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
 
 
-// 拡大縮小行列 (S)
-Matrix4x4 MakeScaleMatrix(const Vector3 scale);
+// 内積
+float Dot(const Vector3 v1, const Vector3 v2);
 
 
-// 各軸の回転行列 (X,Y,Z)
+// 2オブジェクト間の距離を求める
+float ClacDistance(const Vector3& posA, const Vector3& posB);
+
+
+// 長さ
+float Length(const Vector3 v);
+
+
+// 正規化
+Vector3 Normalize(const Vector3 v);
+
+
+// 逆行列
+Matrix4x4 Inverse(const Matrix4x4& m);
+
+
+// 転置行列
+Matrix4x4 Transpose(const Matrix4x4& m);
+
+
+// 単位行列の作成
+Matrix4x4 MakeIdentity4x4();
+
+
+// 平行移動行列
+Matrix4x4 MakeTranslateMatrix(const Vector3 translate);
+
+
+// 座標変換
+Vector3 Transform(const Vector3 vector, const Matrix4x4 matrix);
+
+
+// ベクトル変換
+Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
+
+
+// 拡大縮小行列
+Matrix4x4 MakeScaleMatrix(const Vector3 scele);
+
+
+// 回転行列(X,Y,Z)
 Matrix4x4 MakeRotateXMatrix(float radian);
 
 Matrix4x4 MakeRotateYMatrix(float radian);
@@ -43,49 +91,89 @@ Matrix4x4 MakeRotateYMatrix(float radian);
 Matrix4x4 MakeRotateZMatrix(float radian);
 
 
-// 各軸の合成回転行列 (R)
+// 回転行列(all)
 Matrix4x4 MakeRotateXYZMatrix(float radianX, float radianY, float radianZ);
 
 
-// 並行移動行列 (T)
+// 平行移動行列
 Matrix4x4 MakeTranslateMatrix(const Vector3 translate);
-
-
-// 座標変換
-Vector3 Transform(Vector3 vector, Matrix4x4 matrix);
 
 
 // 3次元アフィン変換行列 (W = SRT)
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
 
 
-// ベクトル変換
-Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
-
-
-// 正規化
-Vector3 Normalize(const Vector3& v);
-
-
-// 2オブジェクト間の距離を求める
-float ClacDistance(const Vector3& posA, const Vector3& posB);
-
-
-// Matrix4x4の逆行列計算
-Matrix4x4 Inverse(const Matrix4x4 m);
-
-
-// perspectiveFovMatrix
+// 透視投影行列
 Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspecrRatio, float nearClip, float farClip);
 
-// orthographicMatrix
+
+// 正射影行列
 Matrix4x4 MakeOrthographicMatrix(
     float left, float top, float right, float bottom, float nearClip, float farClip);
 
-// viewportMatrix
+
+// ビューポート変換行列
 Matrix4x4 MakeViewportMatrix(
     float left, float top, float width, float height, float minDepth, float maxDepth);
+
+
+// クロス積
+Vector3 Cross(const Vector3& v1, const Vector3& v2);
+
+
+// 正射影ベクトル
+Vector3 Project(const Vector3 v1, const Vector3 v2);
+
+
+// 最近接点
+Vector3 ClosestPoint(const Vector3 point, const Segment segment);
+
+
+// 垂直計算
+Vector3 Perpendicular(const Vector3& vector);
+
 
 // 球面線形補間関数
 Vector3 sLerp(Vector3& start, Vector3& end, float t);
 
+
+// 球と球の当たり判定
+namespace SphereSphere {
+
+    bool onCollision(const Sphere& s1, const Sphere& s2);
+}
+
+
+// 球と面の当たり判定
+namespace SpherePlane {
+
+    bool onCollision(const Sphere& s1, const Plane& p1);
+}
+
+
+// 線と平面の衝突判定
+namespace LinePlane {
+
+    bool onCollision(const Segment& s1, const Plane& p1);
+}
+
+
+// 三角形と線の当たり判定
+namespace TriangleLine {
+
+	bool onCollision(const Triangle& t1, const Segment& s1);
+}
+
+
+// AABBとAABBの当たり判定
+namespace AABBAABB {
+
+	bool onCollision(const AABB& aabb1, const AABB& aabb2);
+}
+
+
+// AABBと球の当たり判定
+namespace AABBSphere {
+
+	bool onCollision(const AABB& aabb1, const Sphere& s1);
+}

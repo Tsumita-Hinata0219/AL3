@@ -263,6 +263,9 @@
     <ClInclude Include="GameObject\Player\Bullet\PlayerBullet.h">
       <Filter>ヘッダー ファイル\GameObject\Player\Bullet</Filter>
     </ClInclude>
+    <ClInclude Include="math\Struct.h">
+      <Filter>ヘッダー ファイル\math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\SpritePS.hlsl">
