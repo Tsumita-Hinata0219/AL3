@@ -83,6 +83,5 @@ private:
 	float height_ = 0.0f;
 
 	float velocityZ_ = 0.0f;
-
 };
 
