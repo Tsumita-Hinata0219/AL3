@@ -24,6 +24,16 @@ Vector3 Subtract(const Vector3 v1, const Vector3 v2) {
 }
 
 
+// スカラー倍
+Vector3 VecMultiply(const Vector3 v, const float t) {
+	Vector3 result = {};
+	result.x = v.x * t;
+	result.y = v.y * t;
+	result.z = v.z * t;
+	return result;
+}
+
+
 // 行列の積
 Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 	Matrix4x4 result = {};
@@ -309,7 +319,16 @@ float Length(const Vector3& v) {
 // 正規化
 Vector3 Normalize(const Vector3& v) {
 
-	Vector3 result = {};
+	Vector3 result{};
+	float length = Length(v);
+	if (length != 0.0f) {
+		result.x = v.x / length;
+		result.y = v.y / length;
+		result.z = v.z / length;
+	}
+	return result;
+
+	/*Vector3 result = {};
 
 	float length = sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
 
@@ -323,7 +342,7 @@ Vector3 Normalize(const Vector3& v) {
 		result.z = v.z / length;
 	}
 
-	return result;
+	return result;*/
 }
 
 
@@ -574,3 +593,19 @@ Matrix4x4 MakeViewportMatrix(
 }
 
 
+// 球面線形補間関数
+Vector3 sLerp(Vector3& start, Vector3& end, float t) {
+
+	float dot = Dot(start, end);
+	float theta = std::acos(dot) * t;
+	Vector3 relative = {end.x - start.x * dot, end.y - start.y * dot, end.z - start.z * dot};
+	relative = Normalize(relative);
+	Vector3 result = {
+	    start.x * std::cosf(theta) + relative.x * std::sinf(theta),
+	    start.y * std::cosf(theta) + relative.y * std::sinf(theta),
+	    start.z * std::cosf(theta) + relative.z * std::sinf(theta)
+	};
+
+	return result;
+
+}

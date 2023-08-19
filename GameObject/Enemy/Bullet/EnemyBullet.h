@@ -5,8 +5,13 @@
 #include <Vector3.h>
 #include <WorldTransform.h>
 #include <cassert>
+#include <ImGuiManager.h>
 
 
+
+
+// 自機クラスの前方宣言
+class Player;
 
 
 
@@ -49,12 +54,16 @@ public:
 	bool IsDead() const { return isDead_; }
 
 
-
-	//void SetTextureHandle(uint32_t textureHandle) { textureHandle_ = textureHandle; }
+	// プレイヤーの取得
+	void SetPlayer(Player* player) { player_ = player; }
 	
 
 
 private:
+
+	Player* player_ = nullptr;
+	Vector3 toPlayer_{};
+
 	WorldTransform worldTransform_; // ワールド変換データ
 
 	Model* model_ = nullptr; // モデル
@@ -63,7 +72,7 @@ private:
 
 	Vector3 velocity_; // 速度
 
-	static const int32_t kLifeTimer = 60 * 5; // 寿命<frm>
+	static const int32_t kLifeTimer = 50 * 5; // 寿命<frm>
 
 	int32_t deathTimer_ = kLifeTimer; // デスタイマー
 

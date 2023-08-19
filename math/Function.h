@@ -3,13 +3,13 @@
 #include <Matrix4x4.h>
 #include <Vector3.h>
 #include <assert.h>
-#include <cmath>
-
 
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <string>
 #include <cmath>
+#include <iostream>
+
 
 float Length(const Vector3& v);
 float Dot(const Vector3& v1, const Vector3& v2);
@@ -21,6 +21,10 @@ Vector3 Add(const Vector3 v1, const Vector3 v2);
 
 // 減算
 Vector3 Subtract(const Vector3 v1, const Vector3 v2);
+
+
+// スカラー倍
+Vector3 VecMultiply(const Vector3 v1, const float t);
 
 
 //　行列の積
@@ -81,3 +85,7 @@ Matrix4x4 MakeOrthographicMatrix(
 // viewportMatrix
 Matrix4x4 MakeViewportMatrix(
     float left, float top, float width, float height, float minDepth, float maxDepth);
+
+// 球面線形補間関数
+Vector3 sLerp(Vector3& start, Vector3& end, float t);
+

@@ -100,6 +100,8 @@ public:
 
 	Vector3 GetReticleWorldPosition();
 
+	WorldTransform GetWorldTransform() { return worldTransform_; }
+
 	// 半径を取得
 	float GetRadius() { return radius_; };
 

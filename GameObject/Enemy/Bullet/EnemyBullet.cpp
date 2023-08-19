@@ -1,4 +1,6 @@
 ﻿#include "EnemyBullet.h"
+#include "Player.h"
+
 
 
 
@@ -18,14 +20,6 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 	worldTransform_.scale_.y = 0.5f;
 	worldTransform_.scale_.z = 3.0f;
 
-
-	// 弾をプレイヤーのほうへ回転
-	worldTransform_.rotation_.y = std::atan2(velocity.x, velocity.z);
-	velocityZ_ = sqrt((velocity.x * velocity.x) + (velocity.z * velocity.z));
-	height_ = -velocity.y;
-	worldTransform_.rotation_.x = std::atan2(height_, velocityZ_);
-
-
 	worldTransform_.Initialize();
 
 	// 引数で受け取った初期座標をリセット
@@ -42,12 +36,32 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 /// </summary>
 void EnemyBullet::Update() {
 
-	// ワールドトラスフォームの更新
-	worldTransform_.UpdateMatrix();
+	// 自キャラまでのベクトル
+	toPlayer_ = Subtract(player_->GetPlayerWorldPosition(), worldTransform_.translation_);
+
+	// ベクトルを正規化する
+	Vector3 normalizeToPlayer = Normalize(toPlayer_);
+	Vector3 normalizeVelocity = Normalize(velocity_);
+
+
+	// 球面線形補間により、今の速度と自キャラへのベクトルを内挿し、新たな速度とする
+	velocity_ = sLerp(normalizeVelocity, normalizeToPlayer, 0.05f);
+
+
+	// 弾をプレイヤーのほうへ回転
+	Vector3 kVelocity = velocity_;
+	velocityZ_ = sqrt((kVelocity.x * kVelocity.x) + (kVelocity.z * kVelocity.z));
+	height_ = -kVelocity.y;
+	worldTransform_.rotation_.y = std::atan2(kVelocity.x, kVelocity.z);
+	worldTransform_.rotation_.x = std::atan2(height_, velocityZ_);
 
 	
 	// 座標を移動させる(1フレーム分の移動量を足しこむ)
-	worldTransform_.translation_ = Subtract(worldTransform_.translation_, velocity_);
+	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
+
+	
+	// ワールドトラスフォームの更新
+	worldTransform_.UpdateMatrix();
 
 
 	// 時間経過でデス
@@ -55,6 +69,14 @@ void EnemyBullet::Update() {
 
 		isDead_ = true;
 	}
+
+	// Enemyデバッグ
+	ImGui::Begin("EnemyBullet");
+
+	// float3入力ボックス
+	ImGui::InputFloat3("bulletPosition", &worldTransform_.translation_.x);
+
+	ImGui::End();
 }
 
 
