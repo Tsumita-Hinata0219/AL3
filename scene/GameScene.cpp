@@ -28,7 +28,6 @@ GameScene::~GameScene() {
 	}
 
 
-
 	// 天球の解放
 	delete modelSkydome_;
 	delete skydome_;
@@ -38,6 +37,9 @@ GameScene::~GameScene() {
 	delete railCamera_;
 	// デバッグカメラの解放
 	delete debugCamera_;
+
+	// コライダー
+	delete collisionnManager_;
 }
 
 void GameScene::Initialize() {
@@ -122,6 +124,9 @@ void GameScene::Initialize() {
 	player_->SetParent(&railCamera_->GetWorldTransform());
 
 
+
+	/* ----- RailCamera レールカメラ ----- */
+	collisionnManager_ = new CollisionManager;
 
 
 	// デバッグカメラの生成
@@ -237,119 +242,33 @@ void GameScene::Update() {
 	}
 }
 
-void GameScene::CheckCollisionPair(Collider* colliderA, Collider* colliderB) {
-
-	// 2つのオブジェクトの座標を取得
-	Vector3 posA = colliderA->GetWorldPosition();
-	Vector3 posB = colliderB->GetWorldPosition();
-
-	// 2つのオブジェクト間の距離を求める
-	float distAtoB = CalcDistance(posA, posB);
-
-	float radiusAandB = (colliderA->GetRadius() + colliderB->GetRadius());
-
-	// 衝突フィルタリング
-	if ((colliderA->GetCollisionAttribute() & colliderB->GetCollisionMask()) == 0 ||
-	    (colliderB->GetCollisionAttribute() & colliderA->GetCollisionMask()) == 0) {
-
-		// 像区政判定の時点で当たらないペアの場合は早期リターン
-		return;
-	}
-
-	// 球と球の考査判定
-	if (distAtoB <= (radiusAandB * radiusAandB)) {
-
-		// コライダーAの衝突時コールバックを呼び出す
-		colliderA->onCollision();
-		// コライダーBの衝突時コールバックを呼び出す
-		colliderB->onCollision();
-	}
-}
-
 void GameScene::CheckAllCollision() {
+
+	collisionnManager_->ColliderClear();
 
 	// コライダー
 	std::list<Collider*> colliders_;
 
 	// コライダーをリストに登録
 	// 自キャラ
-	colliders_.push_back(player_);
+	collisionnManager_->ColliderPushBack(player_);
 
 	// 自弾
 	for (PlayerBullet* bullet : playerBullets_) {
-		colliders_.push_back(bullet);
+		collisionnManager_->ColliderPushBack(bullet);
 	}
 
 	// 敵キャラ
 	for (Enemy* enemy : enemys_) {
-		colliders_.push_back(enemy);
+		collisionnManager_->ColliderPushBack(enemy);
 	}
 
 	// 敵弾
 	for (EnemyBullet* bullet : enemyBullets_) {
-		colliders_.push_back(bullet);
+		collisionnManager_->ColliderPushBack(bullet);
 	}
 
-#pragma region 総当たり衝突判定
-
-	// リスト内のペアを総当たり
-	std::list<Collider*>::iterator itrA = colliders_.begin();
-	for (; itrA != colliders_.end(); ++itrA) {
-
-		// イテレータAからコライダーAを取得する
-		Collider* colliderA = *itrA;
-
-		// イテレータBはイテレータAの次の要素から回す(重複判定を回避)
-		std::list<Collider*>::iterator itrB = itrA;
-		itrB++;
-
-		for (; itrB != colliders_.end(); ++itrB) {
-		
-			// イテレータBからコライダーBを取得する
-			Collider* colliderB = *itrB;
-
-			// ペアの当たり判定
-			CheckCollisionPair(colliderA, colliderB);
-		}
-	
-	}
- 
-#pragma endregion
-
-
-//#pragma region 自キャラと敵弾の当たり判定
-//
-//	// 自キャラと敵弾のすべての当たり判定
-//	for (EnemyBullet* enemyBullet : enemyBullets_) {
-//		
-//		CheckCollisionPair(player_, enemyBullet);
-//	}
-//
-//#pragma endregion
-//
-//#pragma region 自弾と敵キャラの当たり判定
-//
-//	// 敵キャラと自弾のすべての当たり判定
-//	for (PlayerBullet* playerBullet : playerBullets_) {
-//		for (Enemy* enemy : enemys_) {
-//
-//			CheckCollisionPair(playerBullet, enemy);
-//		}
-//	}
-//
-//#pragma endregion
-//
-//#pragma region 自弾と敵弾の当たり判定
-//
-//	// 自キャラと敵弾のすべての当たり判定
-//	for (PlayerBullet* playerBullet : playerBullets_) {
-//		for (EnemyBullet* enemyBullet : enemyBullets_) {
-//
-//			CheckCollisionPair(playerBullet, enemyBullet);
-//		}
-//	}
-//
-//#pragma endregion
+	collisionnManager_->CheckAllCollision();
 }
 
 void GameScene::Draw() {

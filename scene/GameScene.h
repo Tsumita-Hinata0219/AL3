@@ -21,6 +21,7 @@
 #include "RailCamera.h"
 #include "Collider.h"
 #include "CollisionConfig.h"
+#include "CollisionManager.h"
 
 
 /// <summary>
@@ -85,14 +86,6 @@ public: // メンバ関数
 
 
 
-private:
-
-	/// <summary>
-	/// コライダー2つの衝突判定と応答
-	/// </summary>
-	void CheckCollisionPair(Collider* colliderA, Collider* colliderB);
-
-
 private: // メンバ変数
 
 	/* ----- テクスチャハンドル ----- */
@@ -103,6 +96,12 @@ private: // メンバ変数
 
 	uint32_t enemyTextureHandle_ = 0;
 	uint32_t enemyBulletTextureHandle_ = 0;
+
+
+
+	/* ----- コライダー ----- */
+
+	CollisionManager* collisionnManager_ = nullptr;
 
 
 

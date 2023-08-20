@@ -121,6 +121,7 @@
     <ClCompile Include="math\Function.cpp" />
     <ClCompile Include="math\WorldTransformEx.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
+    <ClCompile Include="utilities\Collider\CollisionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\ImGuiManager.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="utilities\Collider\Collider.h" />
     <ClInclude Include="utilities\Collider\CollisionConfig.h" />
+    <ClInclude Include="utilities\Collider\CollisionManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\TerrainPS.hlsl">

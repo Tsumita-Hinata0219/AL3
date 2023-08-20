@@ -106,6 +106,12 @@
     <Filter Include="ヘッダー ファイル\utilities\Collider">
       <UniqueIdentifier>{b785b285-d5cf-4f31-a80a-a2e8df59b1b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\utillities">
+      <UniqueIdentifier>{bbf9d2df-aa15-4185-b167-8c79594d4f04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\utillities\Collider">
+      <UniqueIdentifier>{308efc20-a293-4a38-8917-535812e80276}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -152,6 +158,9 @@
     </ClCompile>
     <ClCompile Include="GameObject\Player\Bullet\PlayerBullet.cpp">
       <Filter>ソース ファイル\GameObject\Player\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities\Collider\CollisionManager.cpp">
+      <Filter>ソース ファイル\utillities\Collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -276,6 +285,9 @@
       <Filter>ヘッダー ファイル\utilities\Collider</Filter>
     </ClInclude>
     <ClInclude Include="utilities\Collider\CollisionConfig.h">
+      <Filter>ヘッダー ファイル\utilities\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities\Collider\CollisionManager.h">
       <Filter>ヘッダー ファイル\utilities\Collider</Filter>
     </ClInclude>
   </ItemGroup>
