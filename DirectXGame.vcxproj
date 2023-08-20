@@ -63,7 +63,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;$(ProjectDir)GameObject;$(ProjectDir)GameObject\Player;$(ProjectDir)GameObject\Enemy;$(ProjectDir)GameObject\Skydome;$(ProjectDir)GameObject\RailCamera;$(ProjectDir)GameObject\Enemy\States;$(ProjectDir)GameObject\Player\Bullet;$(ProjectDir)GameObject\Enemy\Bullet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;$(ProjectDir)GameObject;$(ProjectDir)GameObject\Player;$(ProjectDir)GameObject\Enemy;$(ProjectDir)GameObject\Skydome;$(ProjectDir)GameObject\RailCamera;$(ProjectDir)GameObject\Enemy\States;$(ProjectDir)GameObject\Player\Bullet;$(ProjectDir)GameObject\Enemy\Bullet;$(ProjectDir)utilities\Collider;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -86,7 +86,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;$(ProjectDir)GameObject;$(ProjectDir)GameObject\Player;$(ProjectDir)GameObject\Enemy;$(ProjectDir)GameObject\Skydome;$(ProjectDir)GameObject\RailCamera;$(ProjectDir)GameObject\Enemy\States;$(ProjectDir)GameObject\Player\Bullet;$(ProjectDir)GameObject\Enemy\Bullet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;$(ProjectDir)GameObject;$(ProjectDir)GameObject\Player;$(ProjectDir)GameObject\Enemy;$(ProjectDir)GameObject\Skydome;$(ProjectDir)GameObject\RailCamera;$(ProjectDir)GameObject\Enemy\States;$(ProjectDir)GameObject\Player\Bullet;$(ProjectDir)GameObject\Enemy\Bullet;$(ProjectDir)utilities\Collider;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <Optimization>MinSpace</Optimization>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -155,7 +155,6 @@
     <ClInclude Include="GameObject\RailCamera\RailCamera.h" />
     <ClInclude Include="GameObject\Skydome\Skydome.h" />
     <ClInclude Include="input\Input.h" />
-    <ClInclude Include="math\Collider.h" />
     <ClInclude Include="math\Function.h" />
     <ClInclude Include="math\Matrix4x4.h" />
     <ClInclude Include="math\Struct.h" />
@@ -163,6 +162,8 @@
     <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="math\Vector4.h" />
     <ClInclude Include="scene\GameScene.h" />
+    <ClInclude Include="utilities\Collider\Collider.h" />
+    <ClInclude Include="utilities\Collider\CollisionConfig.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\TerrainPS.hlsl">

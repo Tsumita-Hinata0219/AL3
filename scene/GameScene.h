@@ -20,6 +20,7 @@
 #include "Skydome.h"
 #include "RailCamera.h"
 #include "Collider.h"
+#include "CollisionConfig.h"
 
 
 /// <summary>

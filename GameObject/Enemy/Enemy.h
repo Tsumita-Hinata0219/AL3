@@ -11,6 +11,8 @@
 #include "EnemyStateApproach.h"
 #include "EnemystateLeave.h"
 #include "Collider.h"
+#include "CollisionConfig.h"
+
 
 
 

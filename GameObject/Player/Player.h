@@ -9,6 +9,7 @@
 #include <list>
 #include <Sprite.h>
 #include "Collider.h"
+#include "CollisionConfig.h"
 
 
 

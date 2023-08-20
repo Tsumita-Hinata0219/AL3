@@ -20,6 +20,12 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vecto
 
 	// 引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;
+
+	// 衝突属性を設定
+	SetCollisionAttribute(kCollisionAttributePlayer);
+
+	// 省都対象を自分以外に設定
+	SetCollisionMask(kCollisionAttributeEnemy);
 }
 
 

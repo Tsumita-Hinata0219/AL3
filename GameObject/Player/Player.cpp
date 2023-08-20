@@ -49,6 +49,13 @@ void Player::Initialize(Model* model, Vector3 position) {
 	input_ = Input::GetInstance();
 
 	fireTimer_ = IniFireTimer;
+
+
+	// 衝突属性を設定
+	SetCollisionAttribute(kCollisionAttributePlayer);
+
+	// 省都対象を自分以外に設定
+	SetCollisionMask(kCollisionAttributeEnemy);
 }
 
 

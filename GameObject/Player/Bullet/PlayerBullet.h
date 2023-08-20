@@ -6,7 +6,7 @@
 #include <Vector3.h>
 #include <Function.h>
 #include "Collider.h"
-
+#include "CollisionConfig.h"
 
 
 

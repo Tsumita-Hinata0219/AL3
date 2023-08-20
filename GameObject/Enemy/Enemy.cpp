@@ -36,6 +36,13 @@ void Enemy::Initialize(Model* model, Vector3 pos) {
 		
 	//phease_ = Phease::Approach;
 	state_ = new EnemyStateApproach();
+
+
+	// 衝突属性を設定
+	SetCollisionAttribute(kCollisionAttributeEnemy);
+
+	// 省都対象を自分以外に設定
+	SetCollisionMask(kCollisionAttributePlayer);
 }
 
 
@@ -138,7 +145,7 @@ void Enemy::Fire() {
 void Enemy::onCollision() {
 
 	// デスフラグを立てる
-	isDead_ = true;
+	//isDead_ = true;
 }
 
 

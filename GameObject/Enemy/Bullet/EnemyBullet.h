@@ -7,6 +7,7 @@
 #include <cassert>
 #include <ImGuiManager.h>
 #include "Collider.h"
+#include "CollisionConfig.h"
 
 
 
