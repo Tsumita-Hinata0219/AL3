@@ -155,6 +155,7 @@
     <ClInclude Include="GameObject\RailCamera\RailCamera.h" />
     <ClInclude Include="GameObject\Skydome\Skydome.h" />
     <ClInclude Include="input\Input.h" />
+    <ClInclude Include="math\Collider.h" />
     <ClInclude Include="math\Function.h" />
     <ClInclude Include="math\Matrix4x4.h" />
     <ClInclude Include="math\Struct.h" />

@@ -10,6 +10,7 @@
 #include "EnemyStates.h"
 #include "EnemyStateApproach.h"
 #include "EnemystateLeave.h"
+#include "Collider.h"
 
 
 
@@ -23,7 +24,7 @@ class GameScene;
 /// <summary>
 /// 敵キャラ
 /// </summary>
-class Enemy {
+class Enemy : public Collider{
 
 public:
 
@@ -65,17 +66,22 @@ public:
 	void Fire();
 
 
-
-	/// <summary>
-	/// 衝突を検出したら呼び出されるコールバッグ関数
-	/// </summary>
-	void onCollision();
-
-
 	/// <summary>
 	/// フェーズを変更する
 	/// </summary>
 	void ChangeState(EnemyStates* newState);
+
+
+	/// <summary>
+	/// 衝突を検出したら呼び出されるコールバッグ関数
+	/// </summary>
+	void onCollision() override;
+
+	
+	/// <summary>
+	/// ワールド座標を取得
+	/// </summary>
+	Vector3 GetWorldPosition() override;
 	
 
 
@@ -89,8 +95,6 @@ public:
 	// インライン関数
 	Vector3 GetVelocity() { return velocity_; };
 
-	// ワールド座標を取得
-	Vector3 GetWorldPosition();
 
 	// 弾リストを取得
 	const std::list<EnemyBullet*>& GetBullet() { return bullets_; };

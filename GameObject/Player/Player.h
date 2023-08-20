@@ -8,6 +8,7 @@
 #include <PlayerBullet.h>
 #include <list>
 #include <Sprite.h>
+#include "Collider.h"
 
 
 
@@ -19,7 +20,7 @@ class GameScene;
 /// <summary>
 /// 自キャラ
 /// </summary>
-class Player {
+class Player : public Collider {
 
 public:
 
@@ -72,12 +73,6 @@ public:
 
 
 	/// <summary>
-	/// 衝突を検出したら呼び出されるコールバッグ関数
-	/// </summary>
-	void onCollision();
-
-
-	/// <summary>
 	/// 3Dレティクルの更新処理
 	/// </summary>
 	void ReticleUpdate(ViewProjection viewProjection);
@@ -92,11 +87,19 @@ public:
 	/// </summary>
 	void ReticleMove();
 
+	
+	/// <summary>
+	/// 衝突を検出したら呼び出されるコールバッグ関数
+	/// </summary>
+	void onCollision() override;
 
 
+	/// <summary>
+	/// ワールド座標を取得
+	/// </summary>
+	Vector3 GetWorldPosition() override;
 
-	// ワールド座標を取得
-	Vector3 GetPlayerWorldPosition();
+
 
 	Vector3 GetReticleWorldPosition();
 

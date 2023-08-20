@@ -79,7 +79,7 @@ void Enemy::Attack() {
 	if (fireTimer_ <= 0) {
 
 		// プレイヤーより前にいたら攻撃
-		if (player_->GetPlayerWorldPosition().z <= worldTransform_.translation_.z) {
+		if (player_->GetWorldPosition().z <= worldTransform_.translation_.z) {
 			
 			// 弾を発射
 			Fire();
@@ -100,7 +100,7 @@ void Enemy::Fire() {
 	assert(player_);
 
 	// 自キャラのワールド座標を取得する
-	playerWorldPos_ = player_->GetPlayerWorldPosition(); 
+	playerWorldPos_ = player_->GetWorldPosition(); 
 
 	// 敵キャラのワールド座標を取得
 	enemyWorldPos_ = GetWorldPosition();
@@ -182,13 +182,13 @@ void Enemy::Draw(ViewProjection viewProjection) {
 /// </summary>
 Vector3 Enemy::GetWorldPosition() {
 	
-	// ワールド座標を入れる変数
+	// ワールド座標を取得
 	Vector3 worldPos{};
 
 	// ワールド行列の平行移動成分を取得(ワールド座標)
-	worldPos.x = worldTransform_.translation_.x;
-	worldPos.y = worldTransform_.translation_.y;
-	worldPos.z = worldTransform_.translation_.z;
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
 }

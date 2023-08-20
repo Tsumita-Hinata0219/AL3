@@ -153,7 +153,7 @@ float Dot(const Vector3 v1, const Vector3 v2) {
 
 
 // 2オブジェクト間の距離を求める
-float ClacDistance(const Vector3& posA, const Vector3& posB) {
+float CalcDistance(const Vector3& posA, const Vector3& posB) {
 
 	float dist = 
 		(posB.x - posA.x) * (posB.x - posA.x) + 

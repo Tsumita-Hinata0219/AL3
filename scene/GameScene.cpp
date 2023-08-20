@@ -115,7 +115,7 @@ void GameScene::Initialize() {
 	// RailCamera
 	Vector3 rotation = {0.0f, 0.0f, 0.0f};
 	railCamera_ = new RailCamera();
-	railCamera_->Initialize(player_->GetPlayerWorldPosition(), rotation);
+	railCamera_->Initialize(player_->GetWorldPosition(), rotation);
 
 	// 親子関係を結ぶ
 	// 自キャラとレールカメラの親子関係を結ぶ
@@ -237,36 +237,35 @@ void GameScene::Update() {
 	}
 }
 
+void GameScene::CheckCollisionPair(Collider* colliderA, Collider* colliderB) {
+
+	// 2つのオブジェクトの座標を取得
+	Vector3 posA = colliderA->GetWorldPosition();
+	Vector3 posB = colliderB->GetWorldPosition();
+
+	// 2つのオブジェクト間の距離を求める
+	float distAtoB = CalcDistance(posA, posB);
+
+	float radiusAandB = (colliderA->GetRadius() + colliderB->GetRadius());
+
+	// 球と球の考査判定
+	if (distAtoB <= (radiusAandB * radiusAandB)) {
+
+		// コライダーAの衝突時コールバックを呼び出す
+		colliderA->onCollision();
+		// コライダーBの衝突時コールバックを呼び出す
+		colliderB->onCollision();
+	}
+}
+
 void GameScene::CheckAllCollision() {
-
-	// 判定対象AとBの座標
-	Vector3 posA, posB;
-
 
 #pragma region 自キャラと敵弾の当たり判定
 
-	// 自キャラの座標
-	posA = player_->GetPlayerWorldPosition();
-
 	// 自キャラと敵弾のすべての当たり判定
 	for (EnemyBullet* enemyBullet : enemyBullets_) {
-		// 敵弾の座標
-		posB = enemyBullet->GetWorldPosition();
-
-		// 座標Aと座標Bの距離を求める
-		float distAB = ClacDistance(posA, posB);
-
-		float radiusAB = (player_->GetRadius() + enemyBullet->GetRadius());
-
-		// 球と球の交差判定
-		if (distAB <= radiusAB) {
-
-			// 自キャラの衝突時コールバックを呼び出す
-			player_->onCollision();
-
-			// 敵弾の衝突時コールバックを呼び出す
-			enemyBullet->onCollision();
-		}
+		
+		CheckCollisionPair(player_, enemyBullet);
 	}
 
 #pragma endregion
@@ -277,25 +276,7 @@ void GameScene::CheckAllCollision() {
 	for (PlayerBullet* playerBullet : playerBullets_) {
 		for (Enemy* enemy : enemys_) {
 
-			// 自弾の座標
-			posA = playerBullet->GetWorldPosition();
-			// 敵キャラの座標
-			posB = enemy->GetWorldPosition();
-
-			// 座標Aと座標Bの距離を求める
-			float distAB = ClacDistance(posA, posB);
-
-			float radiusAB = (enemy->GetRadius() + playerBullet->GetRadius());
-
-			// 球と球の交差判定
-			if (distAB <= radiusAB) {
-
-				// 自弾の衝突判定時コールバックを呼び出す
-				playerBullet->onCollision();
-
-				// 敵キャラの衝突時コールバックを呼び出す
-				enemy->onCollision();
-			}
+			CheckCollisionPair(playerBullet, enemy);
 		}
 	}
 
@@ -307,26 +288,7 @@ void GameScene::CheckAllCollision() {
 	for (PlayerBullet* playerBullet : playerBullets_) {
 		for (EnemyBullet* enemyBullet : enemyBullets_) {
 
-			// 自弾の座標
-			posA = playerBullet->GetWorldPosition();
-
-			// 敵弾の座標
-			posB = enemyBullet->GetWorldPosition();
-
-			// 座標Aと座標Bを求める
-			float distAB = ClacDistance(posA, posB);
-
-			float radiusAB = (playerBullet->GetRadius() + enemyBullet->GetRadius());
-
-			// 球と球の交差判定
-			if (distAB <= radiusAB) {
-
-				// 自弾の衝突時コールバックを呼び出す
-				playerBullet->onCollision();
-
-				// 敵弾の衝突時コールバックを呼び出す
-				enemyBullet->onCollision();
-			}
+			CheckCollisionPair(playerBullet, enemyBullet);
 		}
 	}
 

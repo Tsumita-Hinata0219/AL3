@@ -19,6 +19,7 @@
 #include "DebugCamera.h"
 #include "Skydome.h"
 #include "RailCamera.h"
+#include "Collider.h"
 
 
 /// <summary>
@@ -80,6 +81,15 @@ public: // メンバ関数
 	void UpdateEnemyPopCommands();
 
 	void generatedEnemy(Vector3 pos);
+
+
+
+private:
+
+	/// <summary>
+	/// コライダー2つの衝突判定と応答
+	/// </summary>
+	void CheckCollisionPair(Collider* colliderA, Collider* colliderB);
 
 
 private: // メンバ変数

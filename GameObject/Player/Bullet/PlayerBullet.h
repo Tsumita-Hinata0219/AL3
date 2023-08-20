@@ -5,12 +5,13 @@
 #include <WorldTransform.h>
 #include <Vector3.h>
 #include <Function.h>
+#include "Collider.h"
 
 
 
 
 
-class PlayerBullet {
+class PlayerBullet : public Collider {
 
 public:
 
@@ -33,18 +34,19 @@ public:
 	void Draw(const ViewProjection& viewProjection);
 
 
+	/// <summary>
+	/// 衝突を検出したら呼び出されるコールバッグ関数
+	/// </summary>
+	void onCollision() override;
+
+
 	// ワールド座標を取得
-	Vector3 GetWorldPosition();
+	Vector3 GetWorldPosition() override;
 
 	
 	// 半径を取得
 	float GetRadius() { return radius_; };
 
-
-	/// <summary>
-	/// 衝突を検出したら呼び出されるコールバッグ関数
-	/// </summary>
-	void onCollision();
 
 	//void SetTextureHandle(uint32_t textureHandle) { textureHandle_ = textureHandle; }
 

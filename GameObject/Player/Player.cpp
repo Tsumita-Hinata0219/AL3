@@ -118,16 +118,6 @@ void Player::Update(ViewProjection viewProjection) {
 	ImGui::Text("Far:(%+.2f, %+.2f, %+.2f)", posFar_.x, posFar_.y, posFar_.z);
 
 	ImGui::End();
-
-	// レティクルデバッグ
-	ImGui::Begin("ReticleDebug1");
-
-	// float3入力ボックス
-	ImGui::InputFloat3("ReticlePosition", &worldTransform3DReticle_.translation_.x);
-	// float3スライダー
-	ImGui::SliderFloat3("ReticleSlider", &worldTransform3DReticle_.translation_.x, 0.0f, 50.0f);
-
-	ImGui::End();
 }
 
 
@@ -151,7 +141,7 @@ void Player::Rotate() {
 void Player::Attack() {
 
 	// 自機から照準オブジェクトのベクトル
-	velocity_ = Subtract(GetReticleWorldPosition(), GetPlayerWorldPosition());
+	velocity_ = Subtract(GetReticleWorldPosition(), GetWorldPosition());
 	velocity_ = Normalize(velocity_);
 
 	velocity_ = { 
@@ -166,7 +156,7 @@ void Player::Attack() {
 	
 	// 弾を生成し、初期化
 	PlayerBullet* newBullet = new PlayerBullet();
-	newBullet->Initialize(model_, GetPlayerWorldPosition(), velocity_);
+	newBullet->Initialize(model_, GetWorldPosition(), velocity_);
 
 	// 弾をGameSceneに登録する
 	gameScene_->AddPlayerBullet(newBullet);
@@ -249,7 +239,7 @@ void Player::ReticleUpdate(ViewProjection viewProjection) {
 	    Normalize(offset).y * kDistancePlayerTo3DReticle,
 	    Normalize(offset).z * kDistancePlayerTo3DReticle,
 	};
-	Vector3 newOffset = Add(offset, GetPlayerWorldPosition());
+	Vector3 newOffset = Add(offset, GetWorldPosition());
 	// 3Dベクトルの座標を設定
 	worldTransform3DReticle_.translation_ = newOffset;
 	worldTransform3DReticle_.UpdateMatrix();
@@ -354,7 +344,7 @@ void Player::DrawUI() {
 
 
 
-Vector3 Player::GetPlayerWorldPosition() {
+Vector3 Player::GetWorldPosition() {
 
 	// ワールド座標を取得
 	Vector3 worldPos{};

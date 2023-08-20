@@ -37,7 +37,7 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 void EnemyBullet::Update() {
 
 	// 自キャラまでのベクトル
-	toPlayer_ = Subtract(player_->GetPlayerWorldPosition(), worldTransform_.translation_);
+	toPlayer_ = Subtract(player_->GetWorldPosition(), worldTransform_.translation_);
 
 	// ベクトルを正規化する
 	Vector3 normalizeToPlayer = Normalize(toPlayer_);
@@ -108,9 +108,9 @@ Vector3 EnemyBullet::GetWorldPosition() {
 	Vector3 worldPos{};
 
 	// ワールド行列の平行移動成分を取得(ワールド座標)
-	worldPos.x = worldTransform_.translation_.x;
-	worldPos.y = worldTransform_.translation_.y;
-	worldPos.z = worldTransform_.translation_.z;
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
 }

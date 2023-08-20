@@ -6,6 +6,7 @@
 #include <WorldTransform.h>
 #include <cassert>
 #include <ImGuiManager.h>
+#include "Collider.h"
 
 
 
@@ -15,7 +16,7 @@ class Player;
 
 
 
-class EnemyBullet {
+class EnemyBullet : public Collider{
 
 public:
 	/// <summary>
@@ -35,20 +36,19 @@ public:
 	/// </summary>
 	void Draw(const ViewProjection& viewProjection);
 
-	
-	// ワールド座標を取得
-	Vector3 GetWorldPosition();
-
-	
-	// 半径を取得
-	float GetRadius() { return radius_; };
-
 
 	/// <summary>
 	/// 衝突を検出したら呼び出されるコールバッグ関数
 	/// </summary>
-	void onCollision();
+	void onCollision() override;
 
+	
+	// ワールド座標を取得
+	Vector3 GetWorldPosition() override;
+
+	
+	// 半径を取得
+	float GetRadius() { return radius_; };
 
 
 	bool IsDead() const { return isDead_; }
