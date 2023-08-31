@@ -1,4 +1,5 @@
 ﻿#include <PlayerBullet.h>
+#include "Player.h"
 
 
 
@@ -13,6 +14,7 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vecto
 	model_ = model;
 	textureHandle_ = TextureManager::Load("/picture/Bullet.png");
 
+
 	worldTransform_.Initialize();
 
 	// 引数で受け取った初期座標をリセット
@@ -26,6 +28,7 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vecto
 
 	// 省都対象を自分以外に設定
 	SetCollisionMask(kCollisionAttributeEnemy);
+
 }
 
 
@@ -47,6 +50,7 @@ void PlayerBullet::Update() {
 
 		isDead_ = true;
 	}
+
 }
 
 
@@ -55,6 +59,9 @@ void PlayerBullet::onCollision() {
 
 	// デスフラグを立てる
 	isDead_ = true;
+	
+	player_->SetKillCount(player_->GetKillCount() + 1);
+	
 }
 
 

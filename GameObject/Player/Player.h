@@ -129,6 +129,10 @@ public:
 	WorldTransform GetRethicle() { return worldTransform3DReticle_; };
 
 
+	uint32_t GetKillCount() { return killCount_; }
+	void SetKillCount(uint32_t count) { killCount_ = count; }
+
+
 
 private:
 
@@ -151,7 +155,7 @@ private:
 	std::list<PlayerBullet*> bullets_; // 弾
 
 	// 弾の速度
-	const float kBulletSpeed_ = 8.0f;
+	const float kBulletSpeed_ = 10.0f;
 	Vector3 velocity_ = {0.0f, 0.0f, 0.0f};
 
 	int32_t fireTimer_ = 0; // 発射タイマー
@@ -228,5 +232,15 @@ private:
 	XINPUT_STATE joyState_;
 
 
+	/* ----- Sprite スプライト ----- */
+
+	Sprite* hitDamageSprite_ = nullptr;
+	uint32_t hitDamageTexture_ = 0;
+	bool hitDamage_ = 0;
+	uint32_t hitDamageDrawTimer_;
+	const uint32_t hittimer = 4;
+
+
+	uint32_t killCount_;
 };
 

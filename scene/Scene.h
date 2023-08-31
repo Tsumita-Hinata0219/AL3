@@ -1,4 +1,5 @@
 #pragma once
+#include <Sprite.h>
 
 
 
@@ -6,10 +7,10 @@ class DrawScene {
 
 public:
 
-	void Title();
+	void Title(Sprite* sprite);
 
-	void CLEAR();
+	void CLEAR(Sprite* sprite);
 
-	void Over();
+	void Over(Sprite* sprite);
 
 };

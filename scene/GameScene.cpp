@@ -3,7 +3,9 @@
 #include "TextureManager.h"
 #include <cassert>
 
-GameScene::GameScene() {}
+GameScene::GameScene() {
+
+}
 
 GameScene::~GameScene() {
 
@@ -31,6 +33,10 @@ GameScene::~GameScene() {
 	// 天球の解放
 	delete modelSkydome_;
 	delete skydome_;
+
+	// 地面の解放
+	delete modelGround_;
+	delete ground_;
 
 	// レールカメラの解放
 	delete railCamera_;
@@ -67,6 +73,23 @@ void GameScene::Initialize() {
 	sound_.plaDie = audio_->LoadWave("/sound/playerdead.wav");
 	sound_.shoot1 = audio_->LoadWave("/sound/shoot2.wav");
 
+	gameBGMHandle_ = audio_->PlayWave(sound_.game, true);
+
+
+	scene_ = TITLE;
+
+	// Sprite
+	titleTextureHandle_ = TextureManager::Load("/picture/title.png");
+	clearTextureHandle_ = TextureManager::Load("/picture/Clear.png");
+	overTextureHandle_ = TextureManager::Load("/picture/GameOver.png");
+	pushATextureHandle_ = TextureManager::Load("/picture/pushA.png");
+	pushBTextureHandle_ = TextureManager::Load("/picture/pushB.png");
+	titleSprite_ = Sprite::Create(titleTextureHandle_, {0.0f, 0.0f});
+	clearSprite_ = Sprite::Create(clearTextureHandle_, {0.0f, 0.0f});
+	overSprite_ = Sprite::Create(overTextureHandle_, {0.0f, 0.0f});
+	pushASprite_ = Sprite::Create(pushATextureHandle_, {448.0f, 473.0f});
+	pushBSprite_ = Sprite::Create(pushBTextureHandle_, {448.0f, 473.0f});
+
 
 	/* ----- キャラクターの生成・初期化 ----- */
 
@@ -77,6 +100,7 @@ void GameScene::Initialize() {
 	player_->Initialize(model_, playerPosition, sound_);
 	// 自キャラにゲームシーンを渡す
 	player_->SetGameScene(this);
+
 
 	/* ----- Enemy 敵キャラ ----- */
 
@@ -98,6 +122,13 @@ void GameScene::Initialize() {
 	modelSkydome_ = Model::CreateFromOBJ("Skydome", true);
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_);
+
+
+	/* ----- Ground 地面 ----- */
+
+	modelGround_ = Model::CreateFromOBJ("Ground", true);
+	ground_ = new Ground();
+	ground_->Initialize(modelGround_);
 
 
 	/* ----- RailCamera レールカメラ ----- */
@@ -135,10 +166,6 @@ void GameScene::Update() {
 			if (!Input::GetInstance()->GetJoystickState(0, joyState_)) {
 				return;
 			}
-		    if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
-
-			    audio_->PauseWave(sound_.decision);
-		    }
 		    if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
 
 				audio_->PauseWave(sound_.decision);
@@ -150,8 +177,6 @@ void GameScene::Update() {
 
 		case GAME:
 
-			gameBGMHandle_ = audio_->PlayWave(sound_.game, true);
-			
 	/* ----- Player 自キャラ ----- */
 
 		    // 自キャラの更新処理
@@ -218,23 +243,61 @@ void GameScene::Update() {
 		    // 天球の更新処理
 		    skydome_->Update();
 
+			// 地面の更新処理
+		    ground_->Update();
+
 		    // 衝突判定処理
 		    CheckAllCollision();
 
+
+			if (player_->GetKillCount() >= 15) {
+			    scene_ = CLEARRESULT;
+			}
+			if (!Input::GetInstance()->GetJoystickState(0, joyState_)) {
+			    return;
+		    }
+		    if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_Y) {
+
+			    audio_->PauseWave(sound_.decision);
+			    scene_ = CLEARRESULT;
+		    }
+		    if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_X) {
+
+			    audio_->PauseWave(sound_.decision);
+			    scene_ = OVERRESULT;
+		    }
 
 			break;
 
 
 		case CLEARRESULT:
 
-			clearBGMHandle_ = audio_->PlayWave(sound_.clear, true);
+			if (!Input::GetInstance()->GetJoystickState(0, joyState_)) {
+			    return;
+		    }
+		    if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
+
+			    audio_->PauseWave(sound_.decision);
+			    audio_->StopWave(gameBGMHandle_);
+			    Initialize();
+			    scene_ = TITLE;
+		    }
 
 			break;
 
 
 		case OVERRESULT:
 
-			overBGMHandle_ = audio_->PlayWave(sound_.over, true);
+			if (!Input::GetInstance()->GetJoystickState(0, joyState_)) {
+			    return;
+		    }
+		    if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
+
+			    audio_->PauseWave(sound_.decision);
+			    audio_->StopWave(gameBGMHandle_);
+			    Initialize();
+			    scene_ = TITLE;
+		    }
 
 			break;
 	}
@@ -322,15 +385,18 @@ void GameScene::Draw() {
 	switch (scene_) {
 
 	case TITLE:
-		drawScene_.Title();
+		drawScene_.Title(titleSprite_);
+		pushASprite_->Draw();
 		break;
 
 	case CLEARRESULT:
-		drawScene_.CLEAR();
+		drawScene_.CLEAR(clearSprite_);
+		pushBSprite_->Draw();
 		break;
 
 	case OVERRESULT:
-		drawScene_.Over();
+		drawScene_.Over(overSprite_);
+		pushBSprite_->Draw();
 		break;
 	}
 
@@ -388,6 +454,12 @@ void GameScene::Draw() {
 
 		    // 天球の描画処理
 		    skydome_->Draw(viewProjection_);
+
+
+		    /* ----- Ground 地面 ----- */
+
+			// 地面の描画処理
+		    ground_->Draw(viewProjection_);
 
 			break;
 	}

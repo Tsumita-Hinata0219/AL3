@@ -7,9 +7,11 @@
 #include <Function.h>
 #include "Collider.h"
 #include "CollisionConfig.h"
+#include <Sprite.h>
 
 
-
+// 自機クラスの前方宣言
+class Player;
 
 class PlayerBullet : public Collider {
 
@@ -35,6 +37,12 @@ public:
 
 
 	/// <summary>
+	/// UI描画
+	/// </summary>
+	void DrawUI();
+
+
+	/// <summary>
 	/// 衝突を検出したら呼び出されるコールバッグ関数
 	/// </summary>
 	void onCollision() override;
@@ -53,6 +61,10 @@ public:
 
 	bool IsDead() const { return isDead_; }
 
+	// プレイヤーの取得
+	Player* GetPlayer() { return player_; }
+	void SetPlayer(Player* player) { player_ = player; }
+
 
 public:
 
@@ -60,6 +72,8 @@ public:
 
 private:
 
+	// 自キャラ
+	Player* player_ = nullptr;
 	
 	WorldTransform worldTransform_; // ワールド変換データ
 
@@ -76,5 +90,5 @@ private:
 
 	const float radius_ = 4.0f; // 半径
 
-
+	uint32_t killCount_;
 };

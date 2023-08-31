@@ -21,6 +21,7 @@ Player::~Player() {
 
 	// スプライトの解放
 	delete sprite2DReticle_;
+	delete hitDamageSprite_;
 
 }
 
@@ -37,6 +38,7 @@ void Player::Initialize(Model* model, Vector3 position, Sound sound) {
 	this->sound_ = sound;
 	playerTextureHandle_ = TextureManager::Load("/picture/Player.png");
 	ReticleTextureHandle_ = TextureManager::Load("/picture/reticle.png");
+	hitDamageTexture_ = TextureManager::Load("/picture/hitDamage.png");
 
 	// プレイヤー
 	worldTransform_.translation_ = position;
@@ -47,10 +49,15 @@ void Player::Initialize(Model* model, Vector3 position, Sound sound) {
 	    Sprite::Create(ReticleTextureHandle_, {640.0f, 500.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.5f, 0.5f});
 	worldTransform3DReticle_.Initialize();
 
+	hitDamageSprite_ = Sprite::Create(hitDamageTexture_, {0.0f, 0.0f});
+	hitDamageDrawTimer_ = hittimer;
+
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
 
 	fireTimer_ = IniFireTimer;
+
+	killCount_ = 0;
 
 
 	// 衝突属性を設定
@@ -113,20 +120,31 @@ void Player::Update(ViewProjection viewProjection) {
 	}
 
 
-	// プレイヤーデバッグ
-	ImGui::Begin("PlayerDebug1");
 
-	ImGui::Text(
-	    "Player:(%+.2f, %+.2f, %+.2f)", worldTransform_.translation_.x,
-	    worldTransform_.translation_.y, worldTransform_.translation_.z);
+	if (hitDamage_) {
+		hitDamageDrawTimer_--;
 
-	ImGui::Text("3DReticle:(%+.2f, %+.2f, %+.2f)", worldTransform3DReticle_.translation_.x, 
-		worldTransform3DReticle_.translation_.y, worldTransform3DReticle_.translation_.z);
-	ImGui::Text("2DReticle:(%f, %f)", position2DReticle_.x, position2DReticle_.y);
-	ImGui::Text("Near:(%+.2f, %+.2f, %+.2f)", posNear_.x, posNear_.y, posNear_.z);
-	ImGui::Text("Far:(%+.2f, %+.2f, %+.2f)", posFar_.x, posFar_.y, posFar_.z);
+		if (hitDamageDrawTimer_ <= 0) {
+			hitDamage_ = false;
+			hitDamageDrawTimer_ = hittimer;
+		}
+	}
 
-	ImGui::End();
+
+	//// プレイヤーデバッグ
+	//ImGui::Begin("PlayerDebug1");
+
+	//ImGui::Text(
+	//    "Player:(%+.2f, %+.2f, %+.2f)", worldTransform_.translation_.x,
+	//    worldTransform_.translation_.y, worldTransform_.translation_.z);
+
+	//ImGui::Text("3DReticle:(%+.2f, %+.2f, %+.2f)", worldTransform3DReticle_.translation_.x, 
+	//	worldTransform3DReticle_.translation_.y, worldTransform3DReticle_.translation_.z);
+	//ImGui::Text("2DReticle:(%f, %f)", position2DReticle_.x, position2DReticle_.y);
+	//ImGui::Text("Near:(%+.2f, %+.2f, %+.2f)", posNear_.x, posNear_.y, posNear_.z);
+	//ImGui::Text("Far:(%+.2f, %+.2f, %+.2f)", posFar_.x, posFar_.y, posFar_.z);
+
+	//ImGui::End();
 }
 
 
@@ -166,6 +184,7 @@ void Player::Attack() {
 	// 弾を生成し、初期化
 	PlayerBullet* newBullet = new PlayerBullet();
 	newBullet->Initialize(model_, GetWorldPosition(), velocity_);
+	newBullet->SetPlayer(this);
 
 	// 弾をGameSceneに登録する
 	gameScene_->AddPlayerBullet(newBullet);
@@ -175,7 +194,8 @@ void Player::Attack() {
 
 void Player::onCollision() { 
 
-	audio_->PlayWave(sound_.plaDamage); 
+	audio_->PlayWave(sound_.plaDamage);
+	hitDamage_ = true;
 }
 
 
@@ -209,8 +229,8 @@ void Player::PlayerMove() {
 	}
 
 	// 移動限界座標
-	const float kMoveLimitX = 27.0f;
-	const float kMoveLimitY = 14.0f;
+	const float kMoveLimitX = 13.0f;
+	const float kMoveLimitY = 7.0f;
 
 	// 範囲を超えない処理
 	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
@@ -352,6 +372,9 @@ void Player::DrawUI() {
 
 	// 2Dレティクル描画
 	sprite2DReticle_->Draw(); 
+	if (hitDamage_) {
+		hitDamageSprite_->Draw();
+	}
 }
 
 

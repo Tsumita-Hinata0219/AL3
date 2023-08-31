@@ -1,16 +1,14 @@
-﻿#include "Skydome.h"
+﻿#include "Ground.h"
 
 
 
-// 初期化処理
-void Skydome::Initialize(Model* model) {
-
+void Ground::Initialize(Model* model) {
 	// NULLポインタチェック
 	assert(model);
 
 	this->model_ = model;
 
-	worldTransform_.translation_.y = 60.0f;
+	worldTransform_.translation_.y = -50.0f;
 
 	worldTransform_.scale_.x = 500.0f;
 	worldTransform_.scale_.y = 500.0f;
@@ -18,24 +16,18 @@ void Skydome::Initialize(Model* model) {
 	worldTransform_.Initialize();
 }
 
-// 更新処理
-void Skydome::Update() {
 
-	
+void Ground::Update() {
 	// アフィン変換行列
 	worldTransform_.matWorld_ = MakeAffineMatrix(
 	    worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
-
-
 
 	// 行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
 }
 
 
-// 描画処理
-void Skydome::Draw(ViewProjection viewProjection) {
-
+void Ground::Draw(ViewProjection viewProjection) {
 	// 3Dモデルの描画
 	model_->Draw(worldTransform_, viewProjection);
 }

@@ -68,13 +68,13 @@ void Enemy::Update() {
 	worldTransform_.UpdateMatrix();
 
 
-	// Enemyデバッグ
-	ImGui::Begin("EnemyDebug1");
+	//// Enemyデバッグ
+	//ImGui::Begin("EnemyDebug1");
 
-	// float3入力ボックス
-	ImGui::InputFloat3("EnemyPosition", &worldTransform_.translation_.x);
+	//// float3入力ボックス
+	//ImGui::InputFloat3("EnemyPosition", &worldTransform_.translation_.x);
 
-	ImGui::End();
+	//ImGui::End();
 }
 
 
@@ -188,7 +188,7 @@ void Enemy::FireChaseBullet() {
 void Enemy::onCollision() {
 
 	// デスフラグを立てる
-	audio_->PlayWave(sound_.eneDie);
+	audio_->PlayWave(sound_.plaDie);
 	isDead_ = true;
 }
 

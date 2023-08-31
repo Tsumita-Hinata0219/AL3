@@ -25,6 +25,7 @@
 #include "CollisionConfig.h"
 #include "CollisionManager.h"
 #include "Scene.h"
+#include "Ground.h"
 
 
 enum Scene {
@@ -165,6 +166,11 @@ private: // メンバ変数
 	Model* modelSkydome_ = nullptr;
 
 
+	/* ----- Ground 地面 ----- */
+
+	Ground* ground_ = nullptr;
+	Model* modelGround_ = nullptr;
+
 
 	/* ----- Camera カメラ ----- */
 
@@ -188,6 +194,8 @@ private: // メンバ変数
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 
+	uint32_t playerKillCount_;
+
 
 	DrawScene drawScene_;
 	Scene scene_;
@@ -201,6 +209,20 @@ private: // メンバ変数
 
 	// ゲームパッドの状態を得る変数(XINPUT)
 	XINPUT_STATE joyState_;
+
+
+
+	// Sprite 
+	Sprite* titleSprite_ = nullptr;
+	Sprite* clearSprite_ = nullptr;
+	Sprite* overSprite_ = nullptr;
+	Sprite* pushASprite_ = nullptr;
+	Sprite* pushBSprite_ = nullptr;
+	uint32_t titleTextureHandle_;
+	uint32_t clearTextureHandle_;
+	uint32_t overTextureHandle_;
+	uint32_t pushATextureHandle_;
+	uint32_t pushBTextureHandle_;
 
 
 	/// <summary>

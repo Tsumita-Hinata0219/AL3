@@ -2,18 +2,12 @@
 
 
 
-void DrawScene::Title() {
-
-}
+void DrawScene::Title(Sprite* sprite) { sprite->Draw(); }
 
 
 
-void DrawScene::CLEAR() {
-
-}
+void DrawScene::CLEAR(Sprite* sprite) { sprite->Draw(); }
 
 
 
-void DrawScene::Over() {
-
-}
+void DrawScene::Over(Sprite* sprite) { sprite->Draw(); }
