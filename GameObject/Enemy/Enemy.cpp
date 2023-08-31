@@ -24,6 +24,8 @@ void Enemy::Initialize(Model* model, Vector3 pos) {
 
 	this->model_ = model;
 	textureHandle_ = TextureManager::Load("/picture/Enemy.png");
+	enemyNormalBulletModel_ = Model::CreateFromOBJ("EnemyBullet1", true);
+	enemyChaseBulletModel_ = Model::CreateFromOBJ("EnemyBullet2", true);
 
 	worldTransform_.Initialize();
 	worldTransform_.translation_.x = pos.x;
@@ -80,34 +82,47 @@ void Enemy::Update() {
 void Enemy::Attack() {
 
 	// 発射タイマーカウントダウン
-	fireTimer_--;
+	NormalBulletFireTimer_--;
+	ChaseBulletFireTimer_--;
 
 	// 指定時間に達した
-	if (fireTimer_ <= 0) {
+	if (NormalBulletFireTimer_ <= 0) {
 
 		// プレイヤーより前にいたら攻撃
 		if (player_->GetWorldPosition().z <= worldTransform_.translation_.z) {
-			
+
 			// 弾を発射
-			Fire();
+			FireNormalBullet();
 		}
 
 		// 発射タイマーを初期化
-		fireTimer_ = kFireInterval_;
+		NormalBulletFireTimer_ = kNormalBulletFireInterval_;
+	}
+	if (ChaseBulletFireTimer_ <= 0) {
+
+		// プレイヤーより前にいたら攻撃
+		if (player_->GetWorldPosition().z <= worldTransform_.translation_.z) {
+
+			// 弾を発射
+			FireChaseBullet();
+		}
+
+		// 発射タイマーを初期化
+		ChaseBulletFireTimer_ = kChaseBulletFireInterval_;
 	}
 }
 
 
 
 /// <summary>
-/// 弾の射撃処理
+/// 射撃準備処理
 /// </summary>
-void Enemy::Fire() {
+void Enemy::FirePreparation() {
 
 	assert(player_);
 
 	// 自キャラのワールド座標を取得する
-	playerWorldPos_ = player_->GetWorldPosition(); 
+	playerWorldPos_ = player_->GetWorldPosition();
 
 	// 敵キャラのワールド座標を取得
 	enemyWorldPos_ = GetWorldPosition();
@@ -127,16 +142,39 @@ void Enemy::Fire() {
 
 	// 速度ベクトルを自機の向きに合わせて回転させる
 	velocity_ = TransformNormal(velocity_, worldTransform_.matWorld_);
+}
+
+
+
+/// <summary>
+/// 弾の射撃処理
+/// </summary>
+void Enemy::FireNormalBullet() {
+
+	// 射撃準備
+	FirePreparation();
 
 	// 弾を生成し、初期化
-	EnemyBullet* newBullet = new EnemyBullet();
-	newBullet->Initialize(model_, worldTransform_.translation_, velocity_);
+	EnemyNormalBullet* newBullet = new EnemyNormalBullet();
+	newBullet->Initialize(enemyNormalBulletModel_, worldTransform_.translation_, velocity_);
 	newBullet->SetPlayer(player_);
 
 	// 弾をGameSceneに登録する
-	gameScene_->AddEnemyBullet(newBullet);
+	gameScene_->AddEnemyNormalBullet(newBullet);
 }
+void Enemy::FireChaseBullet() {
 
+	// 射撃準備
+	FirePreparation();
+
+	// 弾を生成し、初期化
+	EnemyChaseBullet* newBullet = new EnemyChaseBullet();
+	newBullet->Initialize(enemyChaseBulletModel_, worldTransform_.translation_, velocity_);
+	newBullet->SetPlayer(player_);
+
+	// 弾をGameSceneに登録する
+	gameScene_->AddEnemyChaseBullet(newBullet);
+}
 
 
 /// <summary>

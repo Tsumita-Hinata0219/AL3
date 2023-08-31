@@ -9,7 +9,6 @@ GameScene::~GameScene() {
 
 	delete model_;
 
-
 	// 自キャラの解放
 	delete player_;
 	// 自弾リストの解放
@@ -17,21 +16,21 @@ GameScene::~GameScene() {
 		delete playerBullet;
 	}
 
-
 	// 敵キャラの解放
 	for (Enemy* enemy : enemys_) {
 		delete enemy;
 	}
 	// 敵弾リストの解放
-	for (EnemyBullet* enemyBullet : enemyBullets_) {
+	for (EnemyNormalBullet* enemyBullet : enemyNormalBullets_) {
 		delete enemyBullet;
 	}
-
+	for (EnemyChaseBullet* enemyBullet : enemyChaseBullets_) {
+		delete enemyBullet;
+	}
 
 	// 天球の解放
 	delete modelSkydome_;
 	delete skydome_;
-
 
 	// レールカメラの解放
 	delete railCamera_;
@@ -56,39 +55,18 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 
 
-
-	/* ----- テクスチャ読み込み ----- */
-
-	//// 自機
-	//playerTextureHandle_ = TextureManager::Load("/picture/Player.png");
-	//// 自機の弾
-	//playerBulletTextureHandle_ = TextureManager::Load("/picture/Bullet.png");
-	//// レティクル
-	//playerReticleTextureHandle_ = TextureManager::Load("/picture/reticle.png");
-
-	//// 敵機
-	//enemyTextureHandle_ = TextureManager::Load("/picture/Enemy.png");
-	//// 敵機の弾
-	//enemyBulletTextureHandle_ = TextureManager::Load("/picture/eneBullet.png");
-
-
-
 	/* ----- キャラクターの生成・初期化 ----- */
 
 	/* ----- Player 自キャラ ----- */
 
-	// Player
 	player_ = new Player();
 	Vector3 playerPosition(0.0f, -5.0f, 30.0f);
 	player_->Initialize(model_, playerPosition);
 	// 自キャラにゲームシーンを渡す
 	player_->SetGameScene(this);
 
-
-
 	/* ----- Enemy 敵キャラ ----- */
 
-	// Enemy
 	enemy_ = new Enemy();
 	Vector3 enemyPosition(20.0f, 2.0f, 50.0f);
 	enemy_->Initialize(model_, enemyPosition);
@@ -102,19 +80,15 @@ void GameScene::Initialize() {
 	LoadEnemyPopDate();
 
 
-
 	/* ----- Skydome 天球 ----- */
 
-	// Skydome
 	modelSkydome_ = Model::CreateFromOBJ("Skydome", true);
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_);
 
 
-
 	/* ----- RailCamera レールカメラ ----- */
 
-	// RailCamera
 	Vector3 rotation = {0.0f, 0.0f, 0.0f};
 	railCamera_ = new RailCamera();
 	railCamera_->Initialize(player_->GetWorldPosition(), rotation);
@@ -124,8 +98,7 @@ void GameScene::Initialize() {
 	player_->SetParent(&railCamera_->GetWorldTransform());
 
 
-
-	/* ----- RailCamera レールカメラ ----- */
+	/* ----- Collider コライダー ----- */
 	collisionnManager_ = new CollisionManager;
 
 
@@ -136,7 +109,6 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetVisible(true);
 	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
-
 }
 
 void GameScene::Update() {
@@ -160,8 +132,6 @@ void GameScene::Update() {
 		return false;
 	});
 
-
-
 	/* ----- Enemy 敵キャラ ----- */
 
 	// 敵キャラの更新処理
@@ -172,7 +142,10 @@ void GameScene::Update() {
 	UpdateEnemyPopCommands();
 
 	// 敵弾の更新処理
-	for (EnemyBullet* enemyBullet : enemyBullets_) {
+	for (EnemyNormalBullet* enemyBullet : enemyNormalBullets_) {
+		enemyBullet->Update();
+	}
+	for (EnemyChaseBullet* enemyBullet : enemyChaseBullets_) {
 		enemyBullet->Update();
 	}
 
@@ -184,9 +157,16 @@ void GameScene::Update() {
 		}
 		return false;
 	});
-	
+
 	// デスフラグの立った弾を削除
-	enemyBullets_.remove_if([](EnemyBullet* bullet) {
+	enemyNormalBullets_.remove_if([](EnemyNormalBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+	});
+	enemyChaseBullets_.remove_if([](EnemyChaseBullet* bullet) {
 		if (bullet->IsDead()) {
 			delete bullet;
 			return true;
@@ -194,19 +174,13 @@ void GameScene::Update() {
 		return false;
 	});
 
-
-
 	/* ----- Skydome 天球 ----- */
 
 	// 天球の更新処理
 	skydome_->Update();
 
-
-
 	// 衝突判定処理
 	CheckAllCollision();
-
-
 
 	/* ----- Camera カメラ ----- */
 
@@ -264,7 +238,10 @@ void GameScene::CheckAllCollision() {
 	}
 
 	// 敵弾
-	for (EnemyBullet* bullet : enemyBullets_) {
+	for (EnemyNormalBullet* bullet : enemyNormalBullets_) {
+		collisionnManager_->ColliderPushBack(bullet);
+	}
+	for (EnemyChaseBullet* bullet : enemyChaseBullets_) {
 		collisionnManager_->ColliderPushBack(bullet);
 	}
 
@@ -298,8 +275,6 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-
-
 	/* ----- Player 自キャラ ----- */
 
 	// 自キャラの描画
@@ -310,8 +285,6 @@ void GameScene::Draw() {
 		playerBullet->Draw(viewProjection_);
 	}
 
-
-
 	/* ----- Enemy 敵キャラ ----- */
 
 	// 敵キャラの描画処理
@@ -319,19 +292,18 @@ void GameScene::Draw() {
 		enemy->Draw(viewProjection_);
 	}
 	// 敵弾リストの描画処理処理
-	for (EnemyBullet* enemyBullet : enemyBullets_) {
+	for (EnemyNormalBullet* enemyBullet : enemyNormalBullets_) {
 		enemyBullet->Draw(viewProjection_);
 	}
-
+	for (EnemyChaseBullet* enemyBullet : enemyChaseBullets_) {
+		enemyBullet->Draw(viewProjection_);
+	}
 
 
 	/* ----- Skydome 天球 ----- */
 
 	// 天球の描画処理
 	skydome_->Draw(viewProjection_);
-
-
-
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
@@ -345,11 +317,9 @@ void GameScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
-
 	/* ----- Player 自キャラ ----- */
 
 	player_->DrawUI();
-
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -357,21 +327,24 @@ void GameScene::Draw() {
 #pragma endregion
 }
 
-
 // ゲームシーンに弾を登録する
 void GameScene::AddPlayerBullet(PlayerBullet* playerBullet) {
-	
+
 	// リストに登録する
 	playerBullets_.push_back(playerBullet);
 }
 
-void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
+void GameScene::AddEnemyNormalBullet(EnemyNormalBullet* enemyBullet) {
 
 	// リストに登録する
-	enemyBullets_.push_back(enemyBullet);
+	enemyNormalBullets_.push_back(enemyBullet);
 }
 
+void GameScene::AddEnemyChaseBullet(EnemyChaseBullet* enemyBullet) {
 
+	// リストに登録する
+	enemyChaseBullets_.push_back(enemyBullet);
+}
 
 void GameScene::LoadEnemyPopDate() {
 
@@ -458,8 +431,6 @@ void GameScene::UpdateEnemyPopCommands() {
 		}
 	}
 }
-
-
 
 void GameScene::generatedEnemy(Vector3 pos) {
 

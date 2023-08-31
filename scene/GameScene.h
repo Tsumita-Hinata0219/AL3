@@ -16,6 +16,8 @@
 #include "PlayerBullet.h"
 #include "Enemy.h"
 #include "EnemyBullet.h"
+#include "EnemyNormalBullet.h"
+#include "EnemyChaseBullet.h"
 #include "DebugCamera.h"
 #include "Skydome.h"
 #include "RailCamera.h"
@@ -70,7 +72,13 @@ public: // メンバ関数
 	/// 敵弾を追加する
 	/// </summary>
 	/// <param name="enemyBullet">敵弾</param>
-	void AddEnemyBullet(EnemyBullet* enemyBullet);
+	void AddEnemyNormalBullet(EnemyNormalBullet* enemyBullet);
+
+	/// <summary>
+	/// 敵弾を追加する
+	/// </summary>
+	/// <param name="enemyBullet">敵弾</param>
+	void AddEnemyChaseBullet(EnemyChaseBullet* enemyBullet);
 
 	/// <summary>
 	/// 敵発生データの読み込み
@@ -129,11 +137,16 @@ private: // メンバ変数
 	// 待機タイマー
 	uint32_t enemyStayTimer = 0;
 
-	// 敵弾
-	EnemyBullet* enemyBullet_ = nullptr;
+	// 敵通常弾
+	EnemyNormalBullet* enemyNormalBullet_ = nullptr;
 	// 敵弾リスト
-	std::list<EnemyBullet*> enemyBullets_;
+	std::list<EnemyNormalBullet*> enemyNormalBullets_;
 
+	// 敵追尾弾
+	EnemyChaseBullet* enemyChaseBullet_ = nullptr;
+	// 敵弾リスト
+	std::list<EnemyChaseBullet*> enemyChaseBullets_;
+	Model* enemyNormalBulletModel_ = nullptr;
 
 
 	/* ----- SkyDome 天球 ----- */

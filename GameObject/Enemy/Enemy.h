@@ -7,6 +7,8 @@
 #include <list>
 #include "Function.h"
 #include "EnemyBullet.h"
+#include "EnemyNormalBullet.h"
+#include "EnemyChaseBullet.h"
 #include "EnemyStates.h"
 #include "EnemyStateApproach.h"
 #include "EnemystateLeave.h"
@@ -63,9 +65,17 @@ public:
 
 
 	/// <summary>
+	/// 射撃準備処理
+	/// </summary>
+	void FirePreparation();
+
+
+	/// <summary>
 	/// 弾の射撃処理
 	/// </summary>
-	void Fire();
+	void FireNormalBullet();
+	void FireChaseBullet();
+
 
 
 	/// <summary>
@@ -97,9 +107,6 @@ public:
 	// インライン関数
 	Vector3 GetVelocity() { return velocity_; };
 
-
-	// 弾リストを取得
-	const std::list<EnemyBullet*>& GetBullet() { return bullets_; };
 
 	// 半径を取得
 	float GetRadius() { return radius_; };
@@ -152,15 +159,30 @@ private:
 
 
 	// 弾
-	EnemyBullet* bullet_ = nullptr; // 弾
-
-	std::list<EnemyBullet*> bullets_; // 弾リスト
-
-	static const int kFireInterval_ = 60; // 発射間隔の設定
-
-	int32_t fireTimer_ = 0; // 発射タイマー
-
 	const float kBulletSpeed_ = 1.0f; // 弾の速度
+
+	// 通常弾
+	Model* enemyNormalBulletModel_ = nullptr;
+
+	EnemyNormalBullet* NormalBullet_ = nullptr; // 弾
+
+	std::list<EnemyNormalBullet*> NormalBullets_; // 弾リスト
+
+	static const int kNormalBulletFireInterval_ = 60; // 発射間隔の設定
+
+	int32_t NormalBulletFireTimer_ = 5; // 発射タイマー
+
+
+	// 追尾弾
+	Model* enemyChaseBulletModel_ = nullptr;
+
+	EnemyChaseBullet* ChaseBullet_ = nullptr; // 弾
+
+	std::list<EnemyChaseBullet*> ChaseBullets_; // 弾リスト
+
+	static const int kChaseBulletFireInterval_ = 200; // 発射間隔の設定
+
+	int32_t ChaseBulletFireTimer_ = 30; // 発射タイマー
 
 
 	// ステートパターン

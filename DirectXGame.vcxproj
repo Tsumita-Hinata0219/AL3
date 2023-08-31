@@ -110,6 +110,8 @@
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="GameObject\Enemy\Bullet\EnemyBullet.cpp" />
+    <ClCompile Include="GameObject\Enemy\Bullet\EnemyChaseBullet.cpp" />
+    <ClCompile Include="GameObject\Enemy\Bullet\EnemyNormalBullet.cpp" />
     <ClCompile Include="GameObject\Enemy\Enemy.cpp" />
     <ClCompile Include="GameObject\Enemy\States\EnemyStateApproach.cpp" />
     <ClCompile Include="GameObject\Enemy\States\EnemyStateLeave.cpp" />
@@ -147,6 +149,8 @@
     <ClInclude Include="base\TextureManager.h" />
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="GameObject\Enemy\Bullet\EnemyBullet.h" />
+    <ClInclude Include="GameObject\Enemy\Bullet\EnemyChaseBullet.h" />
+    <ClInclude Include="GameObject\Enemy\Bullet\EnemyNormalBullet.h" />
     <ClInclude Include="GameObject\Enemy\Enemy.h" />
     <ClInclude Include="GameObject\Enemy\States\EnemyStateApproach.h" />
     <ClInclude Include="GameObject\Enemy\States\EnemystateLeave.h" />
