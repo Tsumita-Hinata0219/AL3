@@ -14,6 +14,8 @@
 #include "EnemystateLeave.h"
 #include "Collider.h"
 #include "CollisionConfig.h"
+#include "Audio.h"
+
 
 
 
@@ -41,7 +43,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(Model* model, Vector3 pos);
+	void Initialize(Model* model, Vector3 pos, Sound sound);
 
 
 	/// <summary>
@@ -120,11 +122,14 @@ public:
 
 	// 死亡判定
 	bool IsDead() const { return isDead_; }
+
+	WorldTransform GetRethicle() { return rethicle_; }
 	
 
-
-
 private:
+
+	Sound sound_;
+	Audio* audio_ = nullptr;
 
 	// 敵キャラ
 	WorldTransform worldTransform_; // ワールド変換データ
@@ -146,6 +151,8 @@ private:
 	bool isDead_ = false; // デスフラグ
 
 	Vector3 EnePlaVector_; // 敵キャラと自キャラの差分ベクトル
+
+	WorldTransform rethicle_;
 
 
 	// 自キャラ

@@ -24,6 +24,15 @@
 #include "Collider.h"
 #include "CollisionConfig.h"
 #include "CollisionManager.h"
+#include "Scene.h"
+
+
+enum Scene {
+	TITLE,
+	GAME,
+	CLEARRESULT,
+	OVERRESULT,
+};
 
 
 /// <summary>
@@ -178,6 +187,21 @@ private: // メンバ変数
 
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
+
+
+	DrawScene drawScene_;
+	Scene scene_;
+	Sound sound_;
+	uint32_t gameBGMHandle_ = 0;
+	uint32_t clearBGMHandle_ = 0;
+	uint32_t overBGMHandle_ = 0;
+	uint32_t bossBGMHandle_ = 0;
+
+	/* ----- GamePad ゲームパッド ----- */
+
+	// ゲームパッドの状態を得る変数(XINPUT)
+	XINPUT_STATE joyState_;
+
 
 	/// <summary>
 	/// ゲームシーン用

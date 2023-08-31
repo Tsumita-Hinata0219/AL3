@@ -26,15 +26,17 @@ Player::~Player() {
 
 
 
-void Player::Initialize(Model* model, Vector3 position) {
+void Player::Initialize(Model* model, Vector3 position, Sound sound) {
+
+	audio_ = Audio::GetInstance();
 
 	// NULLポインタチェック
 	assert(model);
 
 	this->model_ = model;
+	this->sound_ = sound;
 	playerTextureHandle_ = TextureManager::Load("/picture/Player.png");
 	ReticleTextureHandle_ = TextureManager::Load("/picture/reticle.png");
-
 
 	// プレイヤー
 	worldTransform_.translation_ = position;
@@ -62,7 +64,6 @@ void Player::Initialize(Model* model, Vector3 position) {
 
 void Player::Update(ViewProjection viewProjection) {
 
-	
 	// 自キャラの移動処理
 	PlayerMove();
 
@@ -105,6 +106,7 @@ void Player::Update(ViewProjection viewProjection) {
 		
 		// 攻撃
 		Attack();
+		audio_->PlayWave(sound_.shoot1);
 
 		// タイマーをリセット
 		fireTimer_ = kFireInterval_;
@@ -171,7 +173,10 @@ void Player::Attack() {
 
 
 
-void Player::onCollision() {}
+void Player::onCollision() { 
+
+	audio_->PlayWave(sound_.plaDamage); 
+}
 
 
 

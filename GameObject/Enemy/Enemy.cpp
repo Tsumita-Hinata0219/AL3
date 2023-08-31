@@ -17,12 +17,15 @@ Enemy::~Enemy() {}
 /// <summary>
 /// 初期化
 /// </summary>
-void Enemy::Initialize(Model* model, Vector3 pos) {
+void Enemy::Initialize(Model* model, Vector3 pos, Sound sound) {
+
+	audio_ = Audio::GetInstance();
 
 	// NULLポインタチェック
 	assert(model);
 
 	this->model_ = model;
+	this->sound_ = sound;
 	textureHandle_ = TextureManager::Load("/picture/Enemy.png");
 	enemyNormalBulletModel_ = Model::CreateFromOBJ("EnemyBullet1", true);
 	enemyChaseBulletModel_ = Model::CreateFromOBJ("EnemyBullet2", true);
@@ -80,6 +83,8 @@ void Enemy::Update() {
 /// 攻撃
 /// </summary>
 void Enemy::Attack() {
+
+	rethicle_.translation_ = player_->GetReticleWorldPosition();
 
 	// 発射タイマーカウントダウン
 	NormalBulletFireTimer_--;
@@ -183,7 +188,8 @@ void Enemy::FireChaseBullet() {
 void Enemy::onCollision() {
 
 	// デスフラグを立てる
-	//isDead_ = true;
+	audio_->PlayWave(sound_.eneDie);
+	isDead_ = true;
 }
 
 

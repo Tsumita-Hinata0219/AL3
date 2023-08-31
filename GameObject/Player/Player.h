@@ -10,6 +10,7 @@
 #include <Sprite.h>
 #include "Collider.h"
 #include "CollisionConfig.h"
+#include "Audio.h"
 
 
 
@@ -41,7 +42,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(Model* model, Vector3 position);
+	void Initialize(Model* model, Vector3 position, Sound sound);
 
 
 	/// <summary>
@@ -125,16 +126,17 @@ public:
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
 
-	/*void SetTextureHandle(uint32_t playerTexture, uint32_t reticleTextuer) {
-		playerTextureHandle_ = playerTexture;
-		ReticleTextureHandle_ = reticleTextuer;
-	}*/
+	WorldTransform GetRethicle() { return worldTransform3DReticle_; };
+
 
 
 private:
 
 	// ゲームシーン
 	GameScene* gameScene_ = nullptr;
+
+	Sound sound_;
+	Audio* audio_ = nullptr;
 
 	WorldTransform worldTransform_; // ワールド変換データ
 
@@ -149,7 +151,7 @@ private:
 	std::list<PlayerBullet*> bullets_; // 弾
 
 	// 弾の速度
-	const float kBulletSpeed_ = 5.0f;
+	const float kBulletSpeed_ = 8.0f;
 	Vector3 velocity_ = {0.0f, 0.0f, 0.0f};
 
 	int32_t fireTimer_ = 0; // 発射タイマー
@@ -171,7 +173,7 @@ private:
 	WorldTransform worldTransform3DReticle_;
 
 	// 自機から3Dレティクルへの距離
-	const float kDistancePlayerTo3DReticle = 70.0f;
+	const float kDistancePlayerTo3DReticle = 15.0f;
 
 	// 自機から3Dレティクルへのオフセット(Z+向き)
 	Vector3 offset = {0.0f, 0.0f, 1.0f};

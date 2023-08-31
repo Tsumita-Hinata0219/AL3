@@ -55,13 +55,26 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 
 
+
+	// サウンド
+	sound_.game = audio_->LoadWave("/sound/game.wav");
+	sound_.clear = audio_->LoadWave("/sound/clear.wav");
+	sound_.over = audio_->LoadWave("/sound/over.wav");
+	sound_.boss = audio_->LoadWave("/sound/boss.wav");
+	sound_.decision = audio_->LoadWave("/sound/decision.wav");
+	sound_.eneDie = audio_->LoadWave("/sound/enemydead.wav");
+	sound_.plaDamage = audio_->LoadWave("/sound/playerdamage.wav");
+	sound_.plaDie = audio_->LoadWave("/sound/playerdead.wav");
+	sound_.shoot1 = audio_->LoadWave("/sound/shoot2.wav");
+
+
 	/* ----- キャラクターの生成・初期化 ----- */
 
 	/* ----- Player 自キャラ ----- */
 
 	player_ = new Player();
-	Vector3 playerPosition(0.0f, -5.0f, 30.0f);
-	player_->Initialize(model_, playerPosition);
+	Vector3 playerPosition(0.0f, -5.0f, 20.0f);
+	player_->Initialize(model_, playerPosition, sound_);
 	// 自キャラにゲームシーンを渡す
 	player_->SetGameScene(this);
 
@@ -69,7 +82,7 @@ void GameScene::Initialize() {
 
 	enemy_ = new Enemy();
 	Vector3 enemyPosition(20.0f, 2.0f, 50.0f);
-	enemy_->Initialize(model_, enemyPosition);
+	enemy_->Initialize(model_, enemyPosition, sound_);
 	// 敵キャラにゲームシーンを渡す
 	enemy_->SetGameScene(this);
 	// 敵キャラに自キャラのアドレスを渡す
@@ -113,74 +126,119 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
+	// サウンドのループBGM
+
+	switch (scene_) {
+
+		case TITLE:
+
+			if (!Input::GetInstance()->GetJoystickState(0, joyState_)) {
+				return;
+			}
+		    if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
+
+			    audio_->PauseWave(sound_.decision);
+		    }
+		    if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
+
+				audio_->PauseWave(sound_.decision);
+			    scene_ = GAME;
+			}
+
+			break;
+
+
+		case GAME:
+
+			gameBGMHandle_ = audio_->PlayWave(sound_.game, true);
+			
 	/* ----- Player 自キャラ ----- */
 
-	// 自キャラの更新処理
-	player_->Update(viewProjection_);
+		    // 自キャラの更新処理
+		    player_->Update(viewProjection_);
 
-	// 自弾の更新処理
-	for (PlayerBullet* playerBullet : playerBullets_) {
-		playerBullet->Update();
+		    // 自弾の更新処理
+		    for (PlayerBullet* playerBullet : playerBullets_) {
+			    playerBullet->Update();
+		    }
+
+		    // デスフラグの立った弾を削除
+		    playerBullets_.remove_if([](PlayerBullet* bullet) {
+			    if (bullet->IsDead()) {
+				    delete bullet;
+				    return true;
+			    }
+			    return false;
+		    });
+
+		    /* ----- Enemy 敵キャラ ----- */
+
+		    // 敵キャラの更新処理
+		    for (Enemy* enemy : enemys_) {
+			    enemy->Update();
+		    }
+		    // 敵発生スクリプトの実行
+		    UpdateEnemyPopCommands();
+
+		    // 敵弾の更新処理
+		    for (EnemyNormalBullet* enemyBullet : enemyNormalBullets_) {
+			    enemyBullet->Update();
+		    }
+		    for (EnemyChaseBullet* enemyBullet : enemyChaseBullets_) {
+			    enemyBullet->Update();
+		    }
+
+		    // デスフラグの立った敵を削除
+		    enemys_.remove_if([](Enemy* enemy) {
+			    if (enemy->IsDead()) {
+				    delete enemy;
+				    return true;
+			    }
+			    return false;
+		    });
+
+		    // デスフラグの立った弾を削除
+		    enemyNormalBullets_.remove_if([](EnemyNormalBullet* bullet) {
+			    if (bullet->IsDead()) {
+				    delete bullet;
+				    return true;
+			    }
+			    return false;
+		    });
+		    enemyChaseBullets_.remove_if([](EnemyChaseBullet* bullet) {
+			    if (bullet->IsDead()) {
+				    delete bullet;
+				    return true;
+			    }
+			    return false;
+		    });
+
+		    /* ----- Skydome 天球 ----- */
+
+		    // 天球の更新処理
+		    skydome_->Update();
+
+		    // 衝突判定処理
+		    CheckAllCollision();
+
+
+			break;
+
+
+		case CLEARRESULT:
+
+			clearBGMHandle_ = audio_->PlayWave(sound_.clear, true);
+
+			break;
+
+
+		case OVERRESULT:
+
+			overBGMHandle_ = audio_->PlayWave(sound_.over, true);
+
+			break;
 	}
 
-	// デスフラグの立った弾を削除
-	playerBullets_.remove_if([](PlayerBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
-
-	/* ----- Enemy 敵キャラ ----- */
-
-	// 敵キャラの更新処理
-	for (Enemy* enemy : enemys_) {
-		enemy->Update();
-	}
-	// 敵発生スクリプトの実行
-	UpdateEnemyPopCommands();
-
-	// 敵弾の更新処理
-	for (EnemyNormalBullet* enemyBullet : enemyNormalBullets_) {
-		enemyBullet->Update();
-	}
-	for (EnemyChaseBullet* enemyBullet : enemyChaseBullets_) {
-		enemyBullet->Update();
-	}
-
-	// デスフラグの立った敵を削除
-	enemys_.remove_if([](Enemy* enemy) {
-		if (enemy->IsDead()) {
-			delete enemy;
-			return true;
-		}
-		return false;
-	});
-
-	// デスフラグの立った弾を削除
-	enemyNormalBullets_.remove_if([](EnemyNormalBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
-	enemyChaseBullets_.remove_if([](EnemyChaseBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
-
-	/* ----- Skydome 天球 ----- */
-
-	// 天球の更新処理
-	skydome_->Update();
-
-	// 衝突判定処理
-	CheckAllCollision();
 
 	/* ----- Camera カメラ ----- */
 
@@ -261,6 +319,24 @@ void GameScene::Draw() {
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
 
+	switch (scene_) {
+
+	case TITLE:
+		drawScene_.Title();
+		break;
+
+	case CLEARRESULT:
+		drawScene_.CLEAR();
+		break;
+
+	case OVERRESULT:
+		drawScene_.Over();
+		break;
+	}
+
+
+
+
 	// スプライト描画後処理
 	Sprite::PostDraw();
 	// 深度バッファクリア
@@ -275,35 +351,46 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-	/* ----- Player 自キャラ ----- */
+	switch (scene_) {
 
-	// 自キャラの描画
-	player_->Draw3D(viewProjection_);
+		case TITLE:
 
-	// 自弾リストの描画処理
-	for (PlayerBullet* playerBullet : playerBullets_) {
-		playerBullet->Draw(viewProjection_);
+			break;
+
+
+		case GAME:
+
+			/* ----- Player 自キャラ ----- */
+
+		    // 自キャラの描画
+		    player_->Draw3D(viewProjection_);
+
+		    // 自弾リストの描画処理
+		    for (PlayerBullet* playerBullet : playerBullets_) {
+			playerBullet->Draw(viewProjection_);
+		    }
+
+		    /* ----- Enemy 敵キャラ ----- */
+
+		    // 敵キャラの描画処理
+		    for (Enemy* enemy : enemys_) {
+			enemy->Draw(viewProjection_);
+		    }
+		    // 敵弾リストの描画処理処理
+		    for (EnemyNormalBullet* enemyBullet : enemyNormalBullets_) {
+			enemyBullet->Draw(viewProjection_);
+		    }
+		    for (EnemyChaseBullet* enemyBullet : enemyChaseBullets_) {
+			enemyBullet->Draw(viewProjection_);
+		    }
+
+		    /* ----- Skydome 天球 ----- */
+
+		    // 天球の描画処理
+		    skydome_->Draw(viewProjection_);
+
+			break;
 	}
-
-	/* ----- Enemy 敵キャラ ----- */
-
-	// 敵キャラの描画処理
-	for (Enemy* enemy : enemys_) {
-		enemy->Draw(viewProjection_);
-	}
-	// 敵弾リストの描画処理処理
-	for (EnemyNormalBullet* enemyBullet : enemyNormalBullets_) {
-		enemyBullet->Draw(viewProjection_);
-	}
-	for (EnemyChaseBullet* enemyBullet : enemyChaseBullets_) {
-		enemyBullet->Draw(viewProjection_);
-	}
-
-
-	/* ----- Skydome 天球 ----- */
-
-	// 天球の描画処理
-	skydome_->Draw(viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
@@ -317,9 +404,15 @@ void GameScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 
-	/* ----- Player 自キャラ ----- */
+	switch (scene_) {
+	case GAME:
 
-	player_->DrawUI();
+		/* ----- Player 自キャラ ----- */
+
+		player_->DrawUI();
+
+		break;
+	}
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -435,7 +528,7 @@ void GameScene::UpdateEnemyPopCommands() {
 void GameScene::generatedEnemy(Vector3 pos) {
 
 	enemy_ = new Enemy();
-	enemy_->Initialize(model_, pos);
+	enemy_->Initialize(model_, pos, sound_);
 	// 敵キャラにゲームシーンを渡す
 	enemy_->SetGameScene(this);
 	// 敵キャラに自キャラのアドレスを渡す

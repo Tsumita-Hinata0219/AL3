@@ -12,7 +12,7 @@ void EnemyStateApproach::Update(Enemy* pEnemy) {
 
 
 	// 規定の位置に到達したらstate_変更
-	if (pEnemy->GetWorldPosition().z < -30.0f) {
+	if (pEnemy->GetWorldPosition().z < 30) {
 
 		// Approach -> Leave
 		pEnemy->ChangeState(new EnemyStateLeave());

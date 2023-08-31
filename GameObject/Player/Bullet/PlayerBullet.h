@@ -74,7 +74,7 @@ private:
 
 	bool isDead_ = false; // デスフラグ
 
-	const float radius_ = 2.0f; // 半径
+	const float radius_ = 4.0f; // 半径
 
 
 };

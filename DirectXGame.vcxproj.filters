@@ -162,6 +162,15 @@
     <ClCompile Include="utilities\Collider\CollisionManager.cpp">
       <Filter>ソース ファイル\utillities\Collider</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject\Enemy\Bullet\EnemyChaseBullet.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Enemy\Bullet\EnemyNormalBullet.cpp">
+      <Filter>ソース ファイル\GameObject\Enemy\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\Scene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\ViewProjection.h">
@@ -289,6 +298,15 @@
     </ClInclude>
     <ClInclude Include="utilities\Collider\CollisionManager.h">
       <Filter>ヘッダー ファイル\utilities\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Enemy\Bullet\EnemyChaseBullet.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Enemy\Bullet\EnemyNormalBullet.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\Scene.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
