@@ -250,9 +250,6 @@ void GameScene::Update() {
 		    CheckAllCollision();
 
 
-			if (player_->GetKillCount() >= 15) {
-			    scene_ = CLEARRESULT;
-			}
 			if (!Input::GetInstance()->GetJoystickState(0, joyState_)) {
 			    return;
 		    }
