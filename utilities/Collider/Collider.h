@@ -58,3 +58,4 @@ private:
 	uint32_t collisionMask_ = 0xffffffff;
 
 };
+

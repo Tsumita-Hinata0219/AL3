@@ -59,9 +59,6 @@ void PlayerBullet::onCollision() {
 
 	// デスフラグを立てる
 	isDead_ = true;
-	
-	player_->SetKillCount(player_->GetKillCount() + 1);
-	
 }
 
 

@@ -605,3 +605,5 @@ void GameScene::generatedEnemy(Vector3 pos) {
 	// 敵を登録する
 	enemys_.push_back(enemy_);
 }
+
+
